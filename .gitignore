@@ -1,0 +1,114 @@
+####################################
+# GENERAL
+####################################
+# Node dependencies
+node_modules/
+**/node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+pnpm-error.log*
+lerna-debug.log*
+logs/
+*.log
+
+####################################
+# ENVIRONMENT VARIABLES
+####################################
+.env
+.env.*
+!.env.example
+
+####################################
+# NEXT.JS
+####################################
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.vercel/
+frontend/.turbo/
+
+# Next.js cache
+**/.next/
+**/.swc/
+
+####################################
+# EXPRESS / BACKEND
+####################################
+backend/dist/
+backend/build/
+backend/tmp/
+backend/coverage/
+
+####################################
+# DATABASE
+####################################
+*.sqlite
+*.sqlite3
+*.db
+*.mdb
+*.sql
+
+####################################
+# OS GENERATED FILES
+####################################
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Icon?
+
+####################################
+# IDE / EDITOR FILES
+####################################
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+
+.idea/
+*.iml
+
+####################################
+# TESTING / COVERAGE
+####################################
+coverage/
+.nyc_output/
+
+####################################
+# PACKAGE MANAGER FILES
+####################################
+.pnpm-store/
+.yarn/
+.cache/
+
+####################################
+# TYPESCRIPT
+####################################
+*.tsbuildinfo
+
+####################################
+# SECURITY
+####################################
+*.pem
+*.key
+*.crt
+
+####################################
+# DOCKER
+####################################
+docker-compose.override.yml
+
+####################################
+# VERCEL / DEPLOYMENT
+####################################
+.vercel
+
+####################################
+# MISC
+####################################
+temp/
+.tmp/
