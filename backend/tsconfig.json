@@ -4,10 +4,10 @@
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,  
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "outDir": "./dist"
   },
-  "include": ["src/**/*.ts", "api/**/*.ts"],
+  "include": ["backend/**/*.ts"],  
   "exclude": ["node_modules"]
 }
