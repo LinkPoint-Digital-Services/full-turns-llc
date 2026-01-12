@@ -6,8 +6,9 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "rootDir": "./backend"
   },
-  "include": ["backend/**/*.ts"],  
-  "exclude": ["node_modules"]
+  "include": ["backend/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }
