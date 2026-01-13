@@ -3,6 +3,7 @@ import multer, { FileFilterCallback } from 'multer';
 import path from 'path';
 import { promises as fs } from 'fs';
 import { sendOrderEmail, OrderData } from '../lib/email';
+import { envConfig } from '../config/env.config';
 
 const router = Router();
 
@@ -23,7 +24,7 @@ const storage = multer.diskStorage({
     cb(null, `order-${uniqueSuffix}${fileExtension}`);
   },
 });
-
+    
 // File filter to accept only images
 const fileFilter = (
   req: Request,
@@ -97,7 +98,7 @@ router.post('/', upload.array('images', 3), async (req: Request, res: Response) 
     tempFiles.push(...files.map((file) => file.path));
 
     // Configure the fixed recipient email address
-    const recipientEmail = process.env.ORDER_RECIPIENT_EMAIL || 'your-email@example.com';
+    const recipientEmail = envConfig.ORDER_RECIPIENT_EMAIL || 'your-email@example.com';
 
     // Send email with order data and images
     await sendOrderEmail({

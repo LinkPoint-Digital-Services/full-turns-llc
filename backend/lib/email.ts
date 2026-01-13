@@ -2,13 +2,13 @@ import nodemailer from 'nodemailer';
 import type {Attachment} from 'nodemailer/lib/mailer';
 import {readFileSync} from 'fs';
 import path from 'path';
-
+import {envConfig} from '../config/env.config';
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail', 
+  service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS 
+    user: envConfig.EMAIL_USER,
+    pass: envConfig.EMAIL_PASSWORD
   }
 });
 
@@ -22,7 +22,7 @@ export interface OrderData {
 interface SendOrderEmailParams {
   orderData: OrderData;
   imageAttachments: Attachment[];
-  recipientEmail: string; 
+  recipientEmail: string;
 }
 
 function getEmailTemplate(orderData: OrderData): string {
@@ -91,7 +91,7 @@ export async function sendOrderEmail({
   const emailHtml = getEmailTemplate(orderData);
 
   await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: envConfig.EMAIL_USER,
     to: recipientEmail, // Fixed recipient email
     subject: `New Order from ${orderData.name}`,
     text: emailContent,
