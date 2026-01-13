@@ -42,6 +42,8 @@ backend/dist/
 backend/build/
 backend/tmp/
 backend/coverage/
+backend/endpoints.md
+backend/endpoints
 
 ####################################
 # DATABASE
