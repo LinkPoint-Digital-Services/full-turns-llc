@@ -11,7 +11,10 @@ export const forgotPassword = asyncHandler(
   async (req: Request, res: Response) => {
     const {type, email_address} = req.body;
 
-    const result = await forgotPasswordService.findUserByEmail({type, email_address});
+    const result = await forgotPasswordService.findUserByEmail({
+      type,
+      email_address
+    });
 
     res.status(200).json(result);
   }
