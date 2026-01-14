@@ -1,27 +1,21 @@
-import {Document, Types} from 'mongoose';
+import { Document, Types } from 'mongoose';
 
-// Base user properties
+export type UserRole = 'manager' | 'admin' | 'superadmin';
+
 export interface IUser {
-  username: string;
-  email: string;
-  password: string;
   first_name: string;
   last_name: string;
-  birthdate?: Date;
-  city?: string;
-  school?: string;
-  profilePicture?: string;
-  bio?: string;
-  course?: String;
-  joinedGroups?: [Types.ObjectId];
-  followers: Types.ObjectId[];
-  following: Types.ObjectId[];
-  createdAt?: Date;
-  updatedAt?: Date;
+  account_type?: 'solo' | 'company';   
+  company_name?: string;           
+  email_address: string;
+  contact_no: string;
+  password: string;
+  role: UserRole;              
+  created_at?: Date;
+  updated_at?: Date;
   verificationCode?: string;
 }
 
-// Model type that includes _id and mongoose document fields
 export interface IUserDocument extends IUser, Document {
   _id: Types.ObjectId;
 }

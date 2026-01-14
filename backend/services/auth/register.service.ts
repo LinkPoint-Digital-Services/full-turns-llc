@@ -1,33 +1,43 @@
-import bcrypt from "bcryptjs";
-import {UserRepository} from "../../repositories/user.repository";
-import {IUserDocument} from "../../interfaces/user/IUser";
-
+import bcrypt from 'bcryptjs';
+import {UserRepository} from '../../repositories/user.repository';
+import {IUserDocument} from '../../interfaces/user/IUser';
 
 export class RegisterService {
-  private userRepository: UserRepository;
-  constructor() {
-    this.userRepository = new UserRepository();
-  }
-
   async registerUser(data: IUserDocument): Promise<IUserDocument> {
-    const {username, birthdate, email, password} = data;
+    const {
+      first_name,
+      last_name,
+      email_address,
+      account_type,
+      company_name,
+      contact_no,
+      password,
+      role
+    } = data;
 
-    if(!username || !birthdate || !email || !password) {
-      throw new Error("All fields are required");
+    if (!first_name || !last_name || !email_address || !password || !role) {
+      throw new Error('All required fields must be provided');
     }
 
-    const existingUser = await this.userRepository.findEmail(email);
-    if(existingUser) {
-      throw new Error("User with this email already exists");
+    // repository tied to the role
+    const userRepository = new UserRepository(role);
+
+    const existingUser = await userRepository.findEmail(email_address);
+    if (existingUser) {
+      throw new Error('User with this email already exists');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    return this.userRepository.createUser({
-      username,
-      birthdate,
-      email,
-      password: hashedPassword
-    })
+    return userRepository.createUser({
+      first_name,
+      last_name,
+      email_address,
+      account_type,
+      company_name,
+      contact_no,
+      password: hashedPassword,
+      role
+    });
   }
 }

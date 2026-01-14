@@ -3,89 +3,50 @@ import {IForgotResponse} from '../../interfaces/auth/IForgotPasswordResponse';
 import {IUserEmailParams} from '../../interfaces/auth/IAuthResponse';
 import {
   verifyEmailTemplate,
-  resetPasswordTemplate
 } from '../../utils/emailTemplates';
-import {verifyEmail, successResetPasswordEmail} from '../../utils/mailer';
-import bcrypt from 'bcryptjs';
+import {verifyEmail} from '../../utils/mailer';
 
 export class ForgotPasswordService {
   private userRepository: UserRepository;
 
-  constructor() {
-    this.userRepository = new UserRepository();
+  constructor(role: 'manager' | 'admin' | 'superadmin') {
+    // repository tied to role
+    this.userRepository = new UserRepository(role);
   }
 
   async findUserByEmail(data: IUserEmailParams): Promise<IForgotResponse> {
-    const user = await this.userRepository.findEmail(data.email);
+    const user = await this.userRepository.findEmail(data.email_address);
     if (!user) {
-      throw new Error('Email is not exists');
+      throw new Error('Email does not exist');
     }
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
 
     await verifyEmail(
-      data.email,
+      data.email_address,
       'Verify Email',
       verifyEmailTemplate(code),
       verifyEmailTemplate(code)
     );
-    await this.userRepository.updateResetPasswordCode(data.email, code);
+
+    await this.userRepository.updateResetPasswordCode(data.email_address, code);
+
+    const userResponse: any = {
+      _id: user._id,
+      email_address: user.email_address,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      role: user.role
+    };
+
+    if (user.role === 'manager') {
+      userResponse.account_type = user.account_type;
+      userResponse.company_name = user.company_name;
+    }
 
     return {
       message: 'Check your email for verification code',
-      user: {
-        _id: user._id,
-        email: user.email,
-        username: user.username
-      }
-    };
-  }
-}
-
-// Service for resetting password
-export class ResetPasswordService {
-  private userRepository: UserRepository;
-
-  constructor() {
-    this.userRepository = new UserRepository();
-  }
-
-  async resetPassword(data: any): Promise<IForgotResponse> {
-    const {email, type, code, newPassword} = data;
-    const user = await this.userRepository.findEmail(email);
-
-    if (!user) {
-      throw new Error('Email is not existing');
-    }
-
-    if (type === 'verify_code') {
-      const dbCode = await this.userRepository.getResetPasswordCode(email);
-
-      if (dbCode?.verificationCode !== code) {
-        throw new Error('Code is incorrect');
-      }
-
-      await this.userRepository.updateResetPasswordCode(email, '');
-    }
-
-    if (type === 'newPassword') {
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      await this.userRepository.createNewPasswrd(email, hashedPassword);
-      successResetPasswordEmail(
-        email,
-        'Password reset successful',
-        resetPasswordTemplate(),
-        resetPasswordTemplate()
-      );
-    }
-
-    return {
-      message: type === 'verify_code' ? 'Code verified successfully' : 'Password reset successfully',
-      user: {
-        _id: user._id,
-        email: user.email,
-        username: user.username
-      }
+      user: userResponse
     };
   }
 }

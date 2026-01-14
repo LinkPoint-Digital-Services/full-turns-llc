@@ -7,5 +7,5 @@ export interface IAuthResponse {
 
 export interface IUserEmailParams {
   type: string;
-  email: string;
+  email_address: string;
 }

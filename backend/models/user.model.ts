@@ -1,25 +1,23 @@
-import {Schema, model} from 'mongoose';
-import {IUserDocument} from '../interfaces/user/IUser';
+import { Schema, model } from 'mongoose';
+import { IUserDocument } from '../interfaces/user/IUser';
 
-const UserSchema = new Schema<IUserDocument>(
+// Base schema shared by all roles
+const BaseUserSchema = new Schema<IUserDocument>(
   {
-    username: {type: String, required: true, unique: true, trim: true},
-    email: {type: String, required: true, unique: true, lowercase: true},
-    password: {type: String, required: true, select: false},
-    first_name: {type: String, required: false, default: ''},
-    last_name: {type: String, required: false},
-    birthdate: {type: Date, required: true},
-    city: {type: String, required: false},
-    profilePicture: {type: String},
-    bio: {type: String, default: ''},
-    course: {type: String, default: ''},
-    school: {type: String, default: ''},
-    joinedGroups: [{type: Schema.Types.ObjectId, ref: 'Group'}],
-    followers: [{type: Schema.Types.ObjectId, ref: 'User'}],
-    following: [{type: Schema.Types.ObjectId, ref: 'User'}],
-    verificationCode: {type: String, default: ''}
+    first_name: { type: String, required: true },
+    last_name: { type: String, required: true },
+    email_address: { type: String, required: true, unique: true },
+    contact_no: { type: String, required: true },
+    password: { type: String, required: true, select: false },
+    role: { type: String, enum: ['manager', 'admin', 'superadmin'], required: true },
+    account_type: { type: String, enum: ['solo', 'company'] }, // only relevant for managers
+    company_name: { type: String },
+    verificationCode: { type: String }
   },
-  {timestamps: true}
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
-export const UserModel = model<IUserDocument>('User', UserSchema);
+// Seperated collections
+export const ManagerModel = model<IUserDocument>('managers', BaseUserSchema);
+export const AdminModel   = model<IUserDocument>('admins', BaseUserSchema);
+export const SuperAdminModel = model<IUserDocument>('superadmins', BaseUserSchema);
