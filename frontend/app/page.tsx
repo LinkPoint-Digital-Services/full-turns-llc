@@ -1,6 +1,13 @@
+import Hero from '@/features/home/components/Hero';
+import HomepageHeader from '@/components/layout/HomepageHeader';
+import Footer from '@/components/layout/Footer';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div>DEVELOPMENT</div>
+    <main className='min-h-screen flex flex-col'>
+      <HomepageHeader />
+      <Hero />
+      <Footer />
+    </main>
   );
 }
