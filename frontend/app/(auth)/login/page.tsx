@@ -8,13 +8,19 @@ import LoginForm from '@/features/auth/components/LoginForm';
 
 export default function LoginPage() {
   return (
-    <div>
-      <h1 className="text-2xl font-bold">Log in to your account</h1>
-      <h2>
-        Don&apos;t have an account?{' '}
-        <span className="text-orange-500">Sign Up</span>
-      </h2>
-      <LoginForm />
-    </div>
+    <main className="w-full h-screen flex items-center justify-center">
+      <div className="w-full flex flex-col items-center justify-center">
+        <h1 className="text-2xl font-bold">Log in to your account</h1>
+        <h2>
+          Don&apos;t have an account?{' '}
+          <span className="text-orange-500">Sign Up</span>
+        </h2>
+        <LoginForm />
+      </div>
+
+      <div className="w-full flex flex-col items-center justify-center mt-10">
+        <h1>FULL TURN LLC</h1>
+      </div>
+    </main>
   );
 }
