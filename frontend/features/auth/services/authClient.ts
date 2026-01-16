@@ -3,7 +3,7 @@ import type {
   LoginRequest,
   RegisterRequest,
   VerifyEmailRequest,
-  VerifyCodeRequest,
+  VerifyCodeRequest
 } from '../types/auth.types';
 import {User} from '../types/user.types';
 import {MsgResponse} from '@/features/shared/types/api.types';
