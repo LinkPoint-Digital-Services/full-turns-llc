@@ -1,5 +1,6 @@
 import React from 'react';
 import LoginForm from '@/features/auth/components/LoginForm';
+import Link from 'next/link';
 
 /*
   Basic input only please ignore styles and other components for now
@@ -13,7 +14,7 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold">Log in to your account</h1>
         <h2>
           Don&apos;t have an account?{' '}
-          <span className="text-orange-500">Sign Up</span>
+          <Link href="/signup" className="text-blue-500 underline">Sign up</Link>
         </h2>
         <LoginForm />
       </div>

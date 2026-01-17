@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {useState} from 'react';
 import {AuthFormFields} from '../types/authForm.types';
@@ -10,6 +10,7 @@ export function useAuthForm() {
     email_address: '',
     contact_no: '',
     password: '',
+    confirm_password: '',
     role: 'manager',
     account_type: 'solo',
     company_name: '',

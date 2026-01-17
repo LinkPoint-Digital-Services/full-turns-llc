@@ -9,7 +9,7 @@ import {User} from '../types/user.types';
 import {MsgResponse} from '@/features/shared/types/api.types';
 
 export const authClient = {
-  register: (payload: RegisterRequest) =>
+  signup: (payload: RegisterRequest) =>
     api.post<MsgResponse>('/auth/register', payload).then(res => res.data),
 
   login: (payload: LoginRequest) =>
