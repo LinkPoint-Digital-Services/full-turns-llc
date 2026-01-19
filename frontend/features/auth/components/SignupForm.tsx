@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {useState} from 'react';
 import InputField from './AuthInputField';
 import {Button} from '@/components/ui/button';
 import {
@@ -15,22 +15,43 @@ import {useAuthForm} from '../hooks/useAuthForm';
 import {usePasswordToggle} from '../hooks/usePasswordToggle';
 import {useAppMutation} from '@/features/shared/hooks/useAppMutation';
 import {authClient} from '../services/authClient';
+import {toast} from 'sonner';
+import {RegisterRequest} from '../types/auth.types';
 
 export default function SignupForm() {
   const {fields, updateField} = useAuthForm();
   const passwordToggle = usePasswordToggle();
-  const [accountType, setAccountType] = React.useState('');
+  const [accountType, setAccountType] = useState<'solo' | 'company'>('solo');
 
   const mutation = useAppMutation({
     mutationFn: authClient.signup,
-    onSuccessRedirect: '/dashboard',
+    onSuccessRedirect: '/property-manager',
     successMessage: 'Signup successful!',
     errorMessage: 'Signup failed. Please try again.'
   });
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // payload and validation logic here
+
+    const ispasswordMatch =
+      fields.password && fields.password === fields.confirm_password;
+
+    if (!ispasswordMatch) {
+      toast.error('Passwords do not match.');
+      return;
+    }
+
+    const payload: RegisterRequest = {
+      first_name: fields.first_name || '',
+      last_name: fields.last_name || '',
+      account_type: accountType,
+      email_address: fields.email_address,
+      contact_no: fields.contact_no || '',
+      password: fields.password,
+      role: fields.role
+    };
+
+    mutation.mutate(payload);
   };
 
   return (
@@ -58,7 +79,10 @@ export default function SignupForm() {
 
       <div>
         <label className="block text-sm font-medium mb-2">Account Type</label>
-        <Select value={accountType} onValueChange={setAccountType}>
+        <Select
+          value={accountType}
+          onValueChange={(value: 'solo' | 'company') => setAccountType(value)}
+        >
           <SelectTrigger id="accountType">
             <SelectValue placeholder="Select account type" />
           </SelectTrigger>
@@ -68,6 +92,18 @@ export default function SignupForm() {
           </SelectContent>
         </Select>
       </div>
+
+      {accountType === 'company' && (
+        <InputField
+          label="Company Name"
+          htmlFor="companyName"
+          id="companyName"
+          type="text"
+          value={fields.company_name || ''}
+          onChange={e => updateField('company_name', e.target.value)}
+          placeholder="LinkPoint Corporation"
+        />
+      )}
 
       <InputField
         label="Email Address"
