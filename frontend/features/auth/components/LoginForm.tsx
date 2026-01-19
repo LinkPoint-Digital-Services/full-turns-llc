@@ -17,7 +17,7 @@ export default function LoginForm() {
   // test - modify the (dashboard) into dashboard/ to make a dynamic redirect for property managers and admin
   const mutation = useAppMutation({
     mutationFn: authClient.login,
-    onSuccessRedirect: '/property-manager',
+    onSuccessRedirect: '/dashboard',
     successMessage: 'Login successful!',
     errorMessage: 'Login failed. Please try again.'
   });

@@ -11,6 +11,8 @@ export default function DashboardLayout() {
   const {data: userData, isLoading, isError} = useMe();
   console.log('Dashboard Layout User Data:', userData);
 
+  //DON'T RENDER useMe(), it render the previous and cache user not the new logged in user
+
   if (isLoading) return <Loading />;
   if (isError || !userData?.user?._id) return <Unauthorized />;
 
