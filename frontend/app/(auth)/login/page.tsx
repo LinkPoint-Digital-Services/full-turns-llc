@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import LoginForm from '@/features/auth/components/LoginForm';
 import Link from 'next/link';
 

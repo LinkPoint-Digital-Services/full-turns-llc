@@ -7,7 +7,7 @@ import {useRouter} from 'next/navigation';
 
 type MutationOptions<T, R> = {
   mutationFn: (data: T) => Promise<R>;
-  onSuccessRedirect?: string | ((data: R) => string);
+  onSuccessRedirect?: string;
   successMessage?: string;
   errorMessage?: string;
   resetForm?: () => void;
@@ -28,15 +28,9 @@ export function useAppMutation<T, R>({
     if (successMessage) toast.success(successMessage);
     resetForm?.();
     onSuccessExtra?.(data);
-    if (onSuccessRedirect) {
-      const redirectPath =
-        typeof onSuccessRedirect === 'function'
-          ? onSuccessRedirect(data)
-          : onSuccessRedirect;
-      router.push(redirectPath);
-    }
+    if (onSuccessRedirect)
+      setTimeout(() => router.push(onSuccessRedirect), 500);
   };
-
   const handleError = (error: AxiosError<{message: string}>) => {
     const errMsg =
       error.response?.data.message ||
