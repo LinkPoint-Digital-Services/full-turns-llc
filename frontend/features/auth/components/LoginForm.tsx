@@ -14,6 +14,7 @@ export default function LoginForm() {
   const {fields, updateField} = useAuthForm();
   const passwordToggle = usePasswordToggle();
 
+  // test - modify the (dashboard) into dashboard/ to make a dynamic redirect for property managers and admin
   const mutation = useAppMutation({
     mutationFn: authClient.login,
     onSuccessRedirect: '/property-manager',
