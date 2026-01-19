@@ -32,4 +32,4 @@ export const authClient = {
 
   logout: () =>
     api.post<{message: string}>(Endpoint.auth.logout).then(res => res.data)
-};
+}

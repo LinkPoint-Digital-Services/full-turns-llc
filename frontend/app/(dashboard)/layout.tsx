@@ -9,6 +9,7 @@ import Unauthorized from '../unauthorized';
 
 export default function DashboardLayout() {
   const {data: userData, isLoading, isError} = useMe();
+  console.log('Dashboard Layout User Data:', userData);
 
   if (isLoading) return <Loading />;
   if (isError || !userData?.user?._id) return <Unauthorized />;

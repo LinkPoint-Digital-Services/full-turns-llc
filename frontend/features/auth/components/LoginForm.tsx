@@ -14,8 +14,6 @@ export default function LoginForm() {
   const {fields, updateField} = useAuthForm();
   const passwordToggle = usePasswordToggle();
 
-  //redirection manager and admin to different dashboard can be handled here
-
   const mutation = useAppMutation({
     mutationFn: authClient.login,
     onSuccessRedirect: '/property-manager',

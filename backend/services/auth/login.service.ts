@@ -1,28 +1,29 @@
-import {IAuthResponse} from '../../interfaces/auth/IAuthResponse';
-import {UserRepository} from '../../repositories/user.repository';
+import { IAuthResponse } from '../../interfaces/auth/IAuthResponse';
+import { UserRepository } from '../../repositories/user.repository';
 import bcrypt from 'bcryptjs';
-import {generateAccessToken} from '../../utils/jwt.utils';
-import {LogindData} from '../../interfaces/auth/IAuthUser';
-import {IAuthUser} from '../../interfaces/auth/IAuthUser';
+import { generateAccessToken } from '../../utils/jwt.utils';
+import { LogindData } from '../../interfaces/auth/IAuthUser';
+import { IAuthUser } from '../../interfaces/auth/IAuthUser';
 
 export class LoginService {
   async loginUser(data: LogindData): Promise<IAuthResponse> {
-    const {email_address, password} = data;
+    const { email_address, password } = data;
 
     if (!email_address || !password) {
       throw new Error('Email and password are required');
     }
-    let userRepository = new UserRepository('manager');
-    let user = await userRepository.findEmail(email_address);
 
-    if (!user) {
-      userRepository = new UserRepository('admin');
-      user = await userRepository.findEmail(email_address);
-    }
+    // Search across all roles
+    const roles = ['superadmin', 'admin', 'manager'] as const;
+    let user: any = null;
 
-    if (!user) {
-      userRepository = new UserRepository('superadmin');
-      user = await userRepository.findEmail(email_address);
+    for (const role of roles) {
+      const repo = new UserRepository(role);
+      const found = await repo.findEmail(email_address);
+      if (found) {
+        user = found;
+        break;
+      }
     }
 
     if (!user) {
