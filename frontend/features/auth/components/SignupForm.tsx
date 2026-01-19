@@ -33,7 +33,7 @@ export default function SignupForm() {
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const ispasswordMatch =
+    const ispasswordMatch = 
       fields.password && fields.password === fields.confirm_password;
 
     if (!ispasswordMatch) {

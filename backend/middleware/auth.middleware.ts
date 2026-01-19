@@ -20,12 +20,18 @@ export const authenticateToken = (
   }
 
   const decoded = verifyAccessToken(token);
-  
+
   if (!decoded) {
     return res.status(403).json({message: 'Invalid or expired token'});
   }
 
-  const {userId, email_address, first_name, last_name} = decoded as any;
-  req.user = {_id: userId, email_address, first_name, last_name, role: decoded.role};
+  req.user = {
+    _id: decoded.userId, 
+    email_address: decoded.email_address,
+    first_name: decoded.first_name,
+    last_name: decoded.last_name,
+    role: decoded.role
+  };
+
   next();
 };

@@ -8,15 +8,17 @@ import {useAuthForm} from '../hooks/useAuthForm';
 import {usePasswordToggle} from '../hooks/usePasswordToggle';
 import {useAppMutation} from '@/features/shared/hooks/useAppMutation';
 import {authClient} from '../services/authClient';
-
+import {LoginRequest} from '../types/auth.types';
 
 export default function LoginForm() {
   const {fields, updateField} = useAuthForm();
   const passwordToggle = usePasswordToggle();
 
+  //redirection manager and admin to different dashboard can be handled here
+
   const mutation = useAppMutation({
     mutationFn: authClient.login,
-    onSuccessRedirect: '/dashboard',
+    onSuccessRedirect: '/property-manager',
     successMessage: 'Login successful!',
     errorMessage: 'Login failed. Please try again.'
   });
@@ -24,7 +26,12 @@ export default function LoginForm() {
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    //payload and validation logic here
+    const payload: LoginRequest = {
+      email_address: fields.email_address,
+      password: fields.password
+    };
+
+    mutation.mutate(payload);
   };
 
   return (

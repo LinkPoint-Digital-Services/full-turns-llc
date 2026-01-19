@@ -12,9 +12,6 @@ export class LoginService {
     if (!email_address || !password) {
       throw new Error('Email and password are required');
     }
-
-    // Since role is determined from DB, we can query all collections
-    // For simplicity, try managers, admins, superadmins in sequence
     let userRepository = new UserRepository('manager');
     let user = await userRepository.findEmail(email_address);
 
