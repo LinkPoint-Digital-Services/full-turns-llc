@@ -1,4 +1,3 @@
-import React from "react";
 import bg from "@/public/assets/images/homepage/hero-bg.png";
 import man from "@/public/assets/images/homepage/man-waving.png"
 import ladderMan from "@/public/assets/images/homepage/ladderman.png"

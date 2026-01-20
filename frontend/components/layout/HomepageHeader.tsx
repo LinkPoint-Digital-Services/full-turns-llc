@@ -24,7 +24,7 @@ export default function HomepageHeader() {
 
   return (
     <header className="w-full text-white py-3 md:py-4 backdrop-blur-md bg-black/20 fixed z-50">
-      <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
+      <div className="container mx-auto flex items-center justify-between">
         
         <Link href={"/"} className="shrink-0">
           <Image 
