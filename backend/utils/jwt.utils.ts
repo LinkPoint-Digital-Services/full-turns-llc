@@ -1,7 +1,7 @@
 import jwt, {JwtPayload} from 'jsonwebtoken';
 import { envConfig } from '../config/env.config';
 
-const ACCESSTOKEN_EXPIRES_IN = '7d' // 7 days
+const ACCESSTOKEN_EXPIRES_IN = '60d' // 60 days
 
 interface TokenPayload {
   userId: string;

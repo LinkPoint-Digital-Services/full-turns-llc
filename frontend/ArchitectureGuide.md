@@ -22,10 +22,6 @@ app/
 ├── globals.css
 
 ├── (public)/
-│   ├── layout.tsx
-│   ├── page.tsx                # Home
-│   ├── about/page.tsx
-│   ├── services/page.tsx
 │   ├── blogs/
 │   │   ├── page.tsx
 │   │   └── [slug]/page.tsx

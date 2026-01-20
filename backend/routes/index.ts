@@ -1,11 +1,10 @@
 import authRoutes from './auth.routes';
+import userRoutes from './user.routes';
 import Router from 'express';
 
 const router = Router();
 
 router.use('/auth', authRoutes); //authRoutes
-
-
-//add routes for property manager and admin later here
+router.use('/user', userRoutes); //userRoutes
 
 export default router;

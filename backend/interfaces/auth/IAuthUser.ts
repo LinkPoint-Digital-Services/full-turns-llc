@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export interface IAuthUser {
-  _id?: Types.ObjectId | string;
+  _id: Types.ObjectId | string;
   email_address: string;
   first_name: string;
   last_name: string;
