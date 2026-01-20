@@ -7,15 +7,21 @@ import {useRouter} from 'next/navigation';
 import {AxiosError} from 'axios';
 import {useMe} from '@/features/auth/hooks/useMe';
 import Loading from '@/app/loading';
+import {useQueryClient} from '@tanstack/react-query';
 
 export default function ManagerPage() {
   const router = useRouter();
   const {data: userData, isLoading, isError} = useMe();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (isLoading) return;
 
     const role = userData?.user?.role;
+    if(role === 'admin') {
+      router.replace('/dashboard/admin');
+      return;
+    }
     if (isError || role !== 'manager') {
       router.replace('/login');
     }
@@ -25,6 +31,7 @@ export default function ManagerPage() {
     try {
       const result = await authClient.logout();
       if (result.message) {
+        queryClient.removeQueries({ queryKey: ['auth', 'me'] });
         router.push('/login');
       }
     } catch (error) {
