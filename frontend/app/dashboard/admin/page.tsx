@@ -15,6 +15,14 @@ export default function AdminPage() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isLoading) router.replace('/login');
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [isLoading, router]);
+
+  useEffect(() => {
     if (isLoading) return;
 
     // Only run redirect logic if we actually have a user object
@@ -40,7 +48,7 @@ export default function AdminPage() {
     try {
       const result = await authClient.logout();
       if (result.message) {
-        queryClient.removeQueries({ queryKey: ['auth', 'me'] });
+        queryClient.removeQueries({queryKey: ['auth', 'me']});
         router.push('/login');
       }
     } catch (error) {

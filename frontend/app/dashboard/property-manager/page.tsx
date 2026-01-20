@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, {useEffect} from 'react';
 import {authClient} from '@/features/auth/services/authClient';
@@ -15,10 +15,18 @@ export default function ManagerPage() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isLoading) router.replace('/login');
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [isLoading, router]);
+
+  useEffect(() => {
     if (isLoading) return;
 
     const role = userData?.user?.role;
-    if(role === 'admin') {
+    if (role === 'admin') {
       router.replace('/dashboard/admin');
       return;
     }
@@ -31,7 +39,7 @@ export default function ManagerPage() {
     try {
       const result = await authClient.logout();
       if (result.message) {
-        queryClient.removeQueries({ queryKey: ['auth', 'me'] });
+        queryClient.removeQueries({queryKey: ['auth', 'me']});
         router.push('/login');
       }
     } catch (error) {
