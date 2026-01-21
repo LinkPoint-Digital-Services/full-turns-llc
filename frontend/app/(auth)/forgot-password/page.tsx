@@ -13,13 +13,14 @@ import {authClient} from '@/features/auth/services/authClient';
 import {useAppMutation} from '@/features/shared/hooks/useAppMutation';
 import {FormEvent} from 'react';
 import {Button} from '@/components/ui/button';
+import {useForgotPassword} from '@/stores/auth/password-recovery';
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState<string>('');
+  const {email, setUser: setEmail} = useForgotPassword();
   const [isSent, setIsSent] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [code, setCode] = useState('');
-  
+
   const onSubmitEmail = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     VerifyEmailMutation.mutate({email_address: email.toLowerCase().trim()});
@@ -49,7 +50,7 @@ export default function ForgotPasswordPage() {
 
   const VerifyCodeMutation = useAppMutation({
     mutationFn: authClient.verifyCode,
-    onSuccessRedirect: '/forgot-password/reset-password',
+    onSuccessRedirect: '/reset-password',
     successMessage: 'Code verified successfully',
     errorMessage: 'Invalid code'
   });
@@ -71,7 +72,11 @@ export default function ForgotPasswordPage() {
               <InputOTPSlot index={5} />
             </InputOTPGroup>
           </InputOTP>
-          <Button type="submit" className="w-full mt-4" disabled={VerifyCodeMutation.isPending}>
+          <Button
+            type="submit"
+            className="w-full mt-4"
+            disabled={VerifyCodeMutation.isPending}
+          >
             {VerifyCodeMutation.isPending ? 'Submitting...' : 'Submit'}
           </Button>
         </form>

@@ -4,6 +4,7 @@ export type AuthFormFields = {
   email_address: string;
   contact_no: string;
   password: string;
+  newPassword?: string;
   confirm_password?: string;  
   role: "manager" | "admin" | "superadmin";
   account_type?: "solo" | "company";

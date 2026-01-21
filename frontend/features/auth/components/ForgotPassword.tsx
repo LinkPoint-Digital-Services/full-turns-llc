@@ -6,7 +6,7 @@ interface ForgotPasswordProps {
   email?: string;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 
-  setEmail?: React.Dispatch<React.SetStateAction<string>>;
+  setEmail?: (email: string) => void;
   isSubmitting: boolean;
 }
 

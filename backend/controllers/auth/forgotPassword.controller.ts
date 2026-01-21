@@ -21,11 +21,10 @@ export const forgotPassword = asyncHandler(
 
 export const resetPassword = asyncHandler(
   async (req: Request, res: Response) => {
-    const {user, message} = await resetPasswordService.resetPassword(req.body);
+    const {message} = await resetPasswordService.resetPassword(req.body);
 
     res.status(200).json({
       message,
-      user
     });
   }
 );

@@ -24,9 +24,6 @@ export class ResetPasswordService {
         email_address
       );
 
-      console.log('DB Code:', dbCode?.verificationCode);
-      console.log('Provided Code:', code);
-
       if (dbCode?.verificationCode !== code) {
         throw new Error('Code is incorrect');
       }
@@ -49,17 +46,11 @@ export class ResetPasswordService {
       );
     }
 
-    const userResponse: any = {
-      _id: user._id,
-      email_address: user.email_address,
-    };
-
     return {
       message:
         type === 'verify_code'
           ? 'Code verified successfully'
-          : 'Password reset successfully',
-      user: userResponse
+          : 'Password reset successfully'
     };
   }
 }
