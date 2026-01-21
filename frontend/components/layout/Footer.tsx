@@ -12,7 +12,7 @@ export default function Footer() {
     { label: 'Blogs', href: '/blogs' },
   ]
 
-  const currentYear = new Date().getFullYear()
+  // const currentYear = new Date().getFullYear()
 
   return (
     <footer className="bg-primary">
