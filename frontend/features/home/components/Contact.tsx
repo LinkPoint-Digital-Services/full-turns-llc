@@ -34,10 +34,10 @@ export default function Contact() {
   return (
     <section className="py-30 px-4 relative overflow-hidden">
   {/* Background images */}
-  <div className="absolute -left-20 -bottom-10 w-70 lg:w-100 z-0">
+  <div data-aos="zoom-in" className="absolute -left-20 -bottom-10 w-70 lg:w-100 z-0">
     <Image src={livingroom} alt="Living room" />
   </div>
-  <div className="absolute -right-16 -top-10 w-72 lg:w-100 z-0">
+  <div data-aos="zoom-in" className="absolute -right-16 -top-10 w-72 lg:w-100 z-0">
     <Image src={bathroom} alt="Bathroom" />
   </div>
 
@@ -49,7 +49,7 @@ export default function Contact() {
     <div className="flex flex-col lg:flex-row gap-8 items-start lg:items-center justify-center">
       {/* Form Section */}
       <div className="w-full lg:flex-1 lg:max-w-lg">
-        <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg relative z-10">
+        <div data-aos="zoom-in" className="bg-white p-6 md:p-8 rounded-lg shadow-lg relative z-10">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -117,7 +117,7 @@ export default function Contact() {
       {/* Toolboxman Image Section */}
       <div className="hidden lg:flex w-full lg:flex-1 items-center justify-center relative z-10">
         <div className="w-full rounded-lg flex items-center justify-center">
-          <Image src={toolboxman} alt="toolboxman" width={350} priority />
+          <Image data-aos="zoom-in" src={toolboxman} alt="toolboxman" width={350} priority />
         </div>
       </div>
     </div>

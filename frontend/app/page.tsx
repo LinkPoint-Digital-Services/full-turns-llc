@@ -1,3 +1,5 @@
+'use client'
+
 import Hero from '@/features/home/components/Hero';
 import HomepageHeader from '@/components/layout/HomepageHeader';
 import Footer from '@/components/layout/Footer';
@@ -6,8 +8,18 @@ import Stats from '@/features/home/components/Stats';
 import AboutUs from '@/features/home/components/AboutUs';
 import Blogs from '@/features/home/components/Blogs';
 import Contact from '@/features/home/components/Contact';
+import { useEffect } from 'react';
+import AOS from 'aos'
 
 export default function HomePage() {
+    useEffect(() => {
+      AOS.init({
+        duration: 800,
+        easing: "ease-in-out",
+      });
+      // Refresh in case new elements are added dynamically later
+      AOS.refresh();
+    }, []);
   return (
     <main className='min-h-screen flex flex-col bg-[#1a1a1a]'>
       <HomepageHeader />

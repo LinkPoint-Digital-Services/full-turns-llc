@@ -22,7 +22,7 @@ export default function Blogs() {
 
         <article className="flex flex-col my-10 gap-5">
           <header>
-            <h3 className="text-3xl font-bold text-primary text-center lg:text-left">
+            <h3 data-aos="fade-right" className="text-3xl font-bold text-primary text-center lg:text-left">
               Complete Unit Turnover Services: Preparing Your Property for the
               Next Tenant
             </h3>
@@ -32,6 +32,7 @@ export default function Blogs() {
             {/* Image */}
             <div className="w-full lg:w-1/3">
               <Image
+              data-aos="zoom-in"
                 src={imgArticle}
                 alt="alt text"
                 className="rounded-md w-full h-auto"
@@ -40,13 +41,13 @@ export default function Blogs() {
 
             {/* Text */}
             <div className="w-full lg:w-1/2 flex flex-col gap-3">
-              <h4 className="text-2xl font-medium text-center lg:text-left">
+              <h4 data-aos="fade-right" data-aos-delay="200" className="text-2xl font-medium text-center lg:text-left">
                 Jayson Samathy
               </h4>
-              <p className="flex items-center text-primary gap-3 justify-center lg:justify-start">
+              <p data-aos="fade-right" data-aos-delay="200" className="flex items-center text-primary gap-3 justify-center lg:justify-start">
                 <Calendar /> Jan 13, 2026
               </p>
-              <p className="text-lg mt-3 text-center lg:text-left">
+              <p data-aos="fade-right" data-aos-delay="400" className="text-lg mt-3 text-center lg:text-left">
                 When a tenant moves out, the condition of your unit directly
                 affects how fast you can lease it again. Delays, poor finishing,
                 or missed repairs can lead to lost income and negative
@@ -57,7 +58,7 @@ export default function Blogs() {
 
             {/* Arrow vertically centered */}
             <div className="flex w-full lg:w-auto justify-center lg:justify-start">
-              <div className="flex items-center h-full lg:h-60">
+              <div data-aos="fade-right" data-aos-delay="600" className="flex items-center h-full lg:h-60">
                 <CircleArrowRight className="text-white" size={40} />
               </div>
             </div>
