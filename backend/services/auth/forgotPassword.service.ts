@@ -10,11 +10,11 @@ export class ForgotPasswordService {
   private userRepository: UserRepository;
 
   constructor(role: 'manager' | 'admin' | 'superadmin') {
-    // repository tied to role
     this.userRepository = new UserRepository(role);
   }
 
   async findUserByEmail(data: IUserEmailParams): Promise<IForgotResponse> {
+
     const user = await this.userRepository.findEmail(data.email_address);
     if (!user) {
       throw new Error('Email does not exist');

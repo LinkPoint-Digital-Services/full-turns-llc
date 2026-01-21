@@ -9,10 +9,9 @@ const resetPasswordService = new ResetPasswordService('manager');
 
 export const forgotPassword = asyncHandler(
   async (req: Request, res: Response) => {
-    const {type, email_address} = req.body;
+    const {email_address} = req.body;
 
     const result = await forgotPasswordService.findUserByEmail({
-      type,
       email_address
     });
 

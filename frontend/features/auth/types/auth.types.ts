@@ -26,7 +26,8 @@ export interface VerifyEmailRequest {
   email_address: string;
 }
 
+
 export interface VerifyCodeRequest {
   email_address: string;
-  verificationCode: string;
+  type: string;
 }
