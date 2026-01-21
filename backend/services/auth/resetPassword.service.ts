@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs';
 export class ResetPasswordService {
   private userRepository: UserRepository;
 
-  constructor(role: 'manager' | 'admin' | 'superadmin') {
+  constructor(role: 'manager') {
     this.userRepository = new UserRepository(role);
   }
 
@@ -46,25 +46,11 @@ export class ResetPasswordService {
       );
     }
 
-    const userResponse: any = {
-      _id: user._id,
-      email_address: user.email_address,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      role: user.role
-    };
-
-    if (user.role === 'manager') {
-      userResponse.account_type = user.account_type;
-      userResponse.company_name = user.company_name;
-    }
-
     return {
       message:
         type === 'verify_code'
           ? 'Code verified successfully'
-          : 'Password reset successfully',
-      user: userResponse
+          : 'Password reset successfully'
     };
   }
 }

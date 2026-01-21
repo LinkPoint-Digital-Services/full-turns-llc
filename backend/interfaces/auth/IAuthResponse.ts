@@ -6,6 +6,10 @@ export interface IAuthResponse {
 }
 
 export interface IUserEmailParams {
-  type: string;
   email_address: string;
+}
+
+export interface IResetPasswordParams {
+  email_address: string;
+  type: string;
 }

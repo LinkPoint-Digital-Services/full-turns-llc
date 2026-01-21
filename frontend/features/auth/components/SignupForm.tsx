@@ -25,7 +25,7 @@ export default function SignupForm() {
 
   const mutation = useAppMutation({
     mutationFn: authClient.signup,
-    onSuccessRedirect: '/property-manager',
+    onSuccessRedirect: '/login',
     successMessage: 'Signup successful!',
     errorMessage: 'Signup failed. Please try again.'
   });
