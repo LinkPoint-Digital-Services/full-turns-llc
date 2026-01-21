@@ -11,7 +11,7 @@ export default function Services() {
   return (
     <section className='w-full flex flex-col md:flex-row md:justify-end select-none'>
         {services.map((service, index) => (
-          <div onClick={() => setActiveIndex(index)} key={index} className={`${activeIndex == index && "md:w-full h-150"} transition-all duration-500 ease-in-out relative md:h-200 h-25 cursor-pointer w-full md:w-40 overflow-hidden`}>
+          <div onClick={() => setActiveIndex(index)} key={index} className={`${activeIndex == index && "md:w-full h-120"} transition-all duration-500 ease-in-out relative md:h-200 h-25 cursor-pointer w-full md:w-40 overflow-hidden`}>
             <Image 
               src={service.image}
               alt={service.alt}
@@ -27,7 +27,7 @@ export default function Services() {
                 </div>
                 <div className={`flex md:w-[35vw] mt-10 md:mt-0 flex-col items-center md:items-end top-20 transition-all duration-800 ease-in-out ${activeIndex === index ? "lg:right-20 right-5 opacity-100" : "lg:-right-96 opacity-0"}`}>
                     <div className='bg-primary aspect-video w-full md:w-full'></div>
-                    <p className='w-full text-left text-white text-lg md:text-2xl font-medium mt-10 '>{service.description}</p>
+                    <p className='w-full text-left text-white text-lg md:3xl lg:text-4xl font-medium mt-10 '>{service.description}</p>
                 </div>
             </div>
           </div>

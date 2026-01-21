@@ -16,7 +16,7 @@ export default function Hero() {
             <h1 className="text-5xl md:text-6xl lg:text-8xl font-bold">
               Every Unit. <span className="text-primary">Fully Turned.</span>
             </h1>
-            <p className="max-w-165">
+            <p className="max-w-165 text-xl">
               Professional cleaning, painting, refinishing, maintenance, and renovations delivering fast, reliable, rent-ready results for property owners and managers.
             </p>
           </span>

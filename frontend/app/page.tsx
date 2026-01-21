@@ -4,6 +4,8 @@ import Footer from '@/components/layout/Footer';
 import Services from '@/features/home/components/Services';
 import Stats from '@/features/home/components/Stats';
 import AboutUs from '@/features/home/components/AboutUs';
+import Blogs from '@/features/home/components/Blogs';
+import Contact from '@/features/home/components/Contact';
 
 export default function HomePage() {
   return (
@@ -13,6 +15,8 @@ export default function HomePage() {
       <Services/>
       <Stats/>
       <AboutUs/>
+      <Blogs/>
+      <Contact/>
       <Footer />
     </main>
   );
