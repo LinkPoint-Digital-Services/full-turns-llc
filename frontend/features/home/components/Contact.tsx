@@ -27,10 +27,6 @@ export default function Contact() {
     },
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
-
   return (
     <section className="py-30 px-4 relative overflow-hidden">
   {/* Background images */}
@@ -52,7 +48,6 @@ export default function Contact() {
         <div data-aos="zoom-in" className="bg-white p-6 md:p-8 rounded-lg shadow-lg relative z-10">
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
               className="flex flex-col gap-6"
             >
               <FormField
