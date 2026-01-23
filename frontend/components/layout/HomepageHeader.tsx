@@ -15,15 +15,15 @@ export default function HomepageHeader() {
   }
 
   const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/services', label: 'Services' },
-    { href: '/about-us', label: 'About Us' },
-    { href: '/blogs', label: 'Blogs' },
-    { href: '/contact-us', label: 'Contact Us' },
+    { href: '#home', label: 'Home' },
+    { href: '#services', label: 'Services' },
+    { href: '#about-us', label: 'About Us' },
+    { href: '#blogs', label: 'Blogs' },
+    { href: '#contacts', label: 'Contact Us' },
   ]
 
   return (
-    <header className="w-full text-white py-3 md:py-4 backdrop-blur-md bg-black/20 fixed z-50">
+    <header className="w-full text-white py-3 md:py-4 backdrop-blur-md bg-black/20 fixed z-50 md:px-10">
       <div className="container mx-auto flex items-center justify-between">
         
         <Link href={"/"} className="shrink-0">

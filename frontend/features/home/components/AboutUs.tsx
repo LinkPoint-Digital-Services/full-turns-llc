@@ -4,7 +4,7 @@ import SectionHeader from "./ui/SectionHeader";
 
 export default function AboutUs() {
   return (
-    <section className="flex flex-col px-4 md:flex-row mx-auto container py-30 justify-between gap-15">
+    <section id="about-us" className="flex flex-col px-4 md:flex-row mx-auto container py-40 justify-between gap-15 md:px-10">
       <div className="text-white">
        <SectionHeader title="About Full Turns LLC" style="-top-1" />
         <div className="flex flex-col gap-7 mt-10 md:text-lg">

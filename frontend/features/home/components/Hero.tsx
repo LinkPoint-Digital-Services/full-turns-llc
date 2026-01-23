@@ -7,7 +7,8 @@ import Image from "next/image";
 export default function Hero() {
   return (
     <section
-      className="min-h-screen bg-cover bg-center flex items-center relative before:absolute before:inset-0 before:bg-black/30 overflow-hidden"
+    id="hero"
+      className="h-screen min-h-140 md:min-h-230 md:px-10 bg-cover bg-center flex items-center relative before:absolute before:inset-0 before:bg-black/30 overflow-hidden"
       style={{ backgroundImage: `url(${bg.src})` }}
     >
       <div className="mx-auto container flex flex-col md:flex-row text-center md:text-left items-center justify-between relative z-10">

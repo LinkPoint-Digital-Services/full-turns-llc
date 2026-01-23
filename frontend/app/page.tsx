@@ -16,6 +16,7 @@ export default function HomePage() {
       AOS.init({
         duration: 800,
         easing: "ease-in-out",
+        offset: 200
       });
       // Refresh in case new elements are added dynamically later
       AOS.refresh();
