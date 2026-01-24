@@ -12,23 +12,33 @@ export default function Services() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
+          // start animation
           setLineWipe(true);
-          setTimeout(() => {
-            setStartWipe(true);
-          }, 700);
 
-          observer.disconnect();
+          // optional delay for startWipe
+          timeoutId = setTimeout(() => setStartWipe(true), 700);
+        } else {
+          // reset animation when out of view
+          setLineWipe(false);
+          setStartWipe(false);
+
+          if (timeoutId) clearTimeout(timeoutId);
         }
       },
-      {threshold: 0.8},
+      {threshold: 0.01},
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
 
-    return () => observer.disconnect();
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      observer.disconnect();
+    };
   }, []);
 
   return (
@@ -40,16 +50,14 @@ export default function Services() {
       {/* SECTION WIPE OVERLAY */}
       <div
         className={`absolute inset-0 z-50 bg-[#1a1a1a] flex flex-col items-center justify-center
-          ${startWipe ? "animate-wipe-horizontal" : ""}
-        `}
+          ${startWipe ? "animate-wipe-horizontal" : ""}`}
       >
         <h1 className="text-primary text-4xl md:text-7xl font-bold tracking-wide relative">
           SERVICES
           {/* Line underneath the title */}
           <span
             className={`block h-1 bg-primary mt-2 w-0 transition-all duration-1000 ease-in-out
-              ${lineWipe ? "w-full" : ""}
-            `}
+              ${lineWipe ? "w-full" : ""}`}
           />
         </h1>
       </div>
@@ -60,7 +68,7 @@ export default function Services() {
           key={index}
           onClick={() => setActiveIndex(index)}
           className={`${
-            activeIndex === index && "md:w-full h-120"
+            activeIndex === index ? "md:w-full h-120" : ""
           } transition-all duration-500 ease-in-out relative md:h-screen h-25 cursor-pointer w-full md:w-40 overflow-hidden`}
         >
           <Image
@@ -71,7 +79,7 @@ export default function Services() {
             priority={index === 0}
           />
 
-          <div className="flex flex-col items-center md:items-start md:flex-row justify-between relative px-10 p-32">
+          <div className="flex flex-col items-center md:items-start md:flex-row justify-between relative p-10 md:px-10 md:p-32">
             <div className="flex md:flex-col leading-none text-3xl md:text-4xl lg:text-5xl items-center font-bold text-white z-20">
               {service.title
                 .toUpperCase()

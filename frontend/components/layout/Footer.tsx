@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {Phone, Mail} from "lucide-react";
+import toolboxman from "@/public/assets/images/contact/toolboxman.png";
 
 export default function Footer() {
   const generalLinks = [
@@ -14,19 +15,18 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-primary">
+    <footer className="bg-primary overflow-hidden relative">
       <div className="container mx-auto px-4 py-8 md:py-12 lg:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Logo Section */}
           <div className="flex flex-col items-center sm:items-start justify-center mb-6 sm:mb-0">
             <Link href="/" className="mb-4 transition-opacity hover:opacity-80">
               <Image
-                src="/assets/images/homepage/logo.png"
+                src="/assets/images/homepage/logo_for_orange.png"
                 alt="Full Turns LLC Logo"
-                width={180}
+                width={270}
                 height={50}
                 priority
-                className="h-auto w-auto max-w-xs"
               />
             </Link>
           </div>
@@ -51,30 +51,37 @@ export default function Footer() {
             </ul>
           </div>
 
+          <Image
+            src={toolboxman}
+            className="absolute right-20 hidden md:block z-10"
+            alt={"man with toolbox"}
+            width={180}
+          ></Image>
+
           {/* Contact Info */}
-          <div className="flex flex-col items-center sm:items-start justify-center gap-3">
-            <div className="flex items-center gap-3 bg-primary px-4 py-2 sm:px-5 sm:py-3 rounded-full w-fit">
+          <div className="flex flex-col items-center sm:items-start justify-center gap-3 z-20">
+            <div className="flex items-center gap-3 bg-primary/20 px-4 py-2 sm:px-5 sm:py-3 rounded-full w-fit backdrop-blur-md">
               <Phone className="w-5 h-5 text-black fill-black stroke-0" />
               <span className="font-medium text-black text-sm sm:text-base">
                 +1 (443) 683-9520
               </span>
             </div>
 
-            <div className="flex items-center gap-3 bg-primary px-4 py-2 sm:px-5 sm:py-3 rounded-full w-fit">
+            <div className="flex items-center gap-3 bg-primary/20 backdrop-blur-md px-4 py-2 sm:px-5 sm:py-3 rounded-full w-fit">
               <Phone className="w-5 h-5 text-black fill-black stroke-0" />
               <span className="font-medium text-black text-sm sm:text-base">
                 (443) 481-0809
               </span>
             </div>
 
-            <div className="flex items-center gap-3 bg-primary px-4 py-2 sm:px-5 sm:py-3 rounded-full w-fit">
+            <div className="flex items-center gap-3 bg-primary/20 backdrop-blur-md px-4 py-2 sm:px-5 sm:py-3 rounded-full w-fit">
               <Mail className="w-5 h-5 text-black" />
               <span className="font-medium text-black text-sm sm:text-base">
                 david@fullturns.com
               </span>
             </div>
 
-            <div className="flex items-center gap-3 bg-primary px-4 py-2 sm:px-5 sm:py-3 rounded-full w-fit">
+            <div className="flex items-center gap-3 bg-primary/20 backdrop-blur-md px-4 py-2 sm:px-5 sm:py-3 rounded-full w-fit">
               <Mail className="w-5 h-5 text-black" />
               <span className="font-medium text-black text-sm sm:text-base">
                 fullturnsllc@gmail.com

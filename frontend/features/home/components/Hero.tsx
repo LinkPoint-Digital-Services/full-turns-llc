@@ -3,6 +3,7 @@ import man from "@/public/assets/images/homepage/man-waving.png";
 import ladderMan from "@/public/assets/images/homepage/ladderman.png";
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -37,7 +38,7 @@ export default function Hero() {
             variant={"default"}
             className="w-fit h-12"
           >
-            Get Started Now
+            <Link href={"/login"}>Get Started Now</Link>
           </Button>
         </div>
 

@@ -66,9 +66,9 @@ export default function Contact() {
                     name="name"
                     render={({field}) => (
                       <FormItem className="flex flex-col gap-2">
-                        <FormLabel>Name</FormLabel>
+                        <FormLabel>First Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Value" {...field} />
+                          <Input placeholder="John" {...field} />
                         </FormControl>
                       </FormItem>
                     )}
@@ -78,9 +78,9 @@ export default function Contact() {
                     name="surname"
                     render={({field}) => (
                       <FormItem className="flex flex-col gap-2">
-                        <FormLabel>Surname</FormLabel>
+                        <FormLabel>Last Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Value" {...field} />
+                          <Input placeholder="Doe" {...field} />
                         </FormControl>
                       </FormItem>
                     )}
@@ -92,7 +92,11 @@ export default function Contact() {
                       <FormItem className="flex flex-col gap-2">
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input type="email" placeholder="Value" {...field} />
+                          <Input
+                            type="email"
+                            placeholder="johndoe@email.com"
+                            {...field}
+                          />
                         </FormControl>
                       </FormItem>
                     )}
@@ -104,7 +108,10 @@ export default function Contact() {
                       <FormItem className="flex flex-col gap-2">
                         <FormLabel>Message</FormLabel>
                         <FormControl>
-                          <Textarea placeholder="Value" {...field} />
+                          <Textarea
+                            placeholder="I’d like to get in touch regarding your services…"
+                            {...field}
+                          />
                         </FormControl>
                       </FormItem>
                     )}

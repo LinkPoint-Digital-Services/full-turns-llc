@@ -3,7 +3,7 @@
 import React, {useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "@/public/assets/images/homepage/logo.png";
+import logo from "@/public/assets/images/homepage/logo_for_dark.png";
 import {Button} from "../ui/button";
 
 export default function HomepageHeader() {
@@ -22,11 +22,19 @@ export default function HomepageHeader() {
   ];
 
   return (
-    <header className="w-full text-white py-3 md:py-4 backdrop-blur-md bg-black/20 fixed z-50 md:px-10">
+    <header className="w-full text-white p-3 md:p-4 backdrop-blur-md bg-black/20 fixed z-50 md:px-10">
       <div className="container mx-auto flex items-center justify-between">
-        <Link href={"/"} className="shrink-0">
-          <Image src={logo} alt={"logo"} priority></Image>
-        </Link>
+        <div className="flex flex-col items-center sm:items-start justify-center mb-6 sm:mb-0">
+          <Link href="/" className="transition-opacity hover:opacity-80">
+            <Image
+              src="/assets/images/homepage/logo_for_dark.png"
+              alt="Full Turns LLC Logo"
+              width={150}
+              height={50}
+              priority
+            />
+          </Link>
+        </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:block">
@@ -35,7 +43,8 @@ export default function HomepageHeader() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="hover:text-gray-300 transition-colors text-sm lg:text-base font-semibold"
+                  className="relative text-sm lg:text-base font-semibold text-white
+                 after:block after:h-0.75 after:rounded-full after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
                 >
                   {link.label}
                 </Link>
@@ -46,7 +55,7 @@ export default function HomepageHeader() {
 
         {/* Desktop Button */}
         <Button variant={"default"} className="hidden md:block">
-          Order Now
+          <Link href={"/login"}>Order Now</Link>
         </Button>
 
         {/* Mobile Menu Button */}
