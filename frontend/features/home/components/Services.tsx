@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import {useEffect, useRef, useState} from 'react';
-import Image from 'next/image';
-import {services} from '../data';
+import {useEffect, useRef, useState} from "react";
+import Image from "next/image";
+import {services} from "../data";
 
 export default function Services() {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -23,7 +23,7 @@ export default function Services() {
           observer.disconnect();
         }
       },
-      {threshold: 0.8}
+      {threshold: 0.8},
     );
 
     if (sectionRef.current) observer.observe(sectionRef.current);
@@ -40,7 +40,7 @@ export default function Services() {
       {/* SECTION WIPE OVERLAY */}
       <div
         className={`absolute inset-0 z-50 bg-[#1a1a1a] flex flex-col items-center justify-center
-          ${startWipe ? 'animate-wipe-horizontal' : ''}
+          ${startWipe ? "animate-wipe-horizontal" : ""}
         `}
       >
         <h1 className="text-primary text-4xl md:text-7xl font-bold tracking-wide relative">
@@ -48,7 +48,7 @@ export default function Services() {
           {/* Line underneath the title */}
           <span
             className={`block h-1 bg-primary mt-2 w-0 transition-all duration-1000 ease-in-out
-              ${lineWipe ? 'w-full' : ''}
+              ${lineWipe ? "w-full" : ""}
             `}
           />
         </h1>
@@ -60,7 +60,7 @@ export default function Services() {
           key={index}
           onClick={() => setActiveIndex(index)}
           className={`${
-            activeIndex === index && 'md:w-full h-120'
+            activeIndex === index && "md:w-full h-120"
           } transition-all duration-500 ease-in-out relative md:h-screen h-25 cursor-pointer w-full md:w-40 overflow-hidden`}
         >
           <Image
@@ -75,7 +75,7 @@ export default function Services() {
             <div className="flex md:flex-col leading-none text-3xl md:text-4xl lg:text-5xl items-center font-bold text-white z-20">
               {service.title
                 .toUpperCase()
-                .split('')
+                .split("")
                 .map((char, i) => (
                   <span key={i}>{char}</span>
                 ))}
@@ -84,8 +84,8 @@ export default function Services() {
             <div
               className={`flex md:w-[35vw] mt-10 md:mt-0 flex-col items-center md:items-end top-20 transition-all duration-800 ease-in-out ${
                 activeIndex === index
-                  ? 'lg:right-20 right-5 opacity-100'
-                  : 'lg:-right-96 opacity-0'
+                  ? "lg:right-20 right-5 opacity-100"
+                  : "lg:-right-96 opacity-0"
               }`}
             >
               <div className="bg-primary aspect-video w-full md:w-full" />

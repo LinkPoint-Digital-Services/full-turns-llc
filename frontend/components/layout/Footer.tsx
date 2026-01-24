@@ -2,15 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Phone, Mail } from "lucide-react";
+import {Phone, Mail} from "lucide-react";
 
 export default function Footer() {
   const generalLinks = [
-    { href: '#home', label: 'Home' },
-    { href: '#services', label: 'Services' },
-    { href: '#about-us', label: 'About Us' },
-    { href: '#blogs', label: 'Blogs' },
-    { href: '#contacts', label: 'Contact Us' },
+    {href: "#home", label: "Home"},
+    {href: "#services", label: "Services"},
+    {href: "#about-us", label: "About Us"},
+    {href: "#blogs", label: "Blogs"},
+    {href: "#contacts", label: "Contact Us"},
   ];
 
   return (

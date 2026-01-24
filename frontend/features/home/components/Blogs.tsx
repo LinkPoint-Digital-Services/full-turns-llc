@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Calendar, CircleArrowRight } from "lucide-react";
+import {useState} from "react";
+import {Calendar, CircleArrowRight} from "lucide-react";
 import Image from "next/image";
 import SectionHeader from "./ui/SectionHeader";
 
@@ -45,7 +45,7 @@ const blogs = [
   },
 ];
 
-function PaginationDots({ activeIndex }: { activeIndex: number }) {
+function PaginationDots({activeIndex}: {activeIndex: number}) {
   return (
     <div className="flex items-center gap-4.75">
       {blogs.map((_, i) => (
@@ -93,7 +93,6 @@ export default function Blogs() {
                 height={500}
                 className="rounded-md w-full h-[340px] object-cover"
               />
-
             </div>
 
             <div className="w-full lg:w-1/2 flex flex-col gap-3">
