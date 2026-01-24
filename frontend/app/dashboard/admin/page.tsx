@@ -1,14 +1,21 @@
 'use client';
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {useMe} from '@/features/auth/hooks/useMe';
 import Loading from '@/app/loading';
 import DashboardHeader from '@/components/layout/DashboardHeader';
+import {Button} from '@/components/ui/button';
+import BuffersPage from './buffers/page';
+import BlogsPage from './blogs/page';
+import ServicesPage from './services/page';
+import BackupPage from './backup/page';
 
 export default function AdminPage() {
   const router = useRouter();
   const {data: userData, isLoading, isError} = useMe();
+  type AdminTab = 'buffers' | 'blogs' | 'services' | 'backup' | null;
+  const [activeTab, setActiveTab] = useState<AdminTab>('buffers');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -43,11 +50,62 @@ export default function AdminPage() {
   return (
     <>
       <DashboardHeader />
-      <main className='p-4'>
-        <h1 className='text-2xl font-semibold'>Admin Dashboard</h1>
-        <p>Manage property managers, blogs, services, and data backups</p>
+      <main className="p-4">
+        <div>
+          <h1 className="text-2xl font-semibold">Admin Dashboard</h1>
+          <p>Manage property managers, blogs, services, and data backups</p>
+        </div>
 
-        di
+        <div className="mt-10">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              onClick={() => setActiveTab('buffers')}
+              className={
+                activeTab === 'buffers' ? 'bg-orange-500 text-white' : ''
+              }
+            >
+              Buffers
+            </Button>
+
+            <Button
+              variant="outline"
+              onClick={() => setActiveTab('blogs')}
+              className={
+                activeTab === 'blogs' ? 'bg-orange-500 text-white' : ''
+              }
+            >
+              Blogs
+            </Button>
+
+            <Button
+              variant="outline"
+              onClick={() => setActiveTab('services')}
+              className={
+                activeTab === 'services' ? 'bg-orange-500 text-white' : ''
+              }
+            >
+              Services
+            </Button>
+
+            <Button
+              variant="outline"
+              onClick={() => setActiveTab('backup')}
+              className={
+                activeTab === 'backup' ? 'bg-orange-500 text-white' : ''
+              }
+            >
+              Backup
+            </Button>
+          </div>
+
+          <div>
+            {activeTab === 'buffers' && <BuffersPage />}
+            {activeTab === 'blogs' && <BlogsPage />}
+            {activeTab === 'services' && <ServicesPage />}
+            {activeTab === 'backup' && <BackupPage />}
+          </div>
+        </div>
       </main>
     </>
   );
