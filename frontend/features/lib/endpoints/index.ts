@@ -13,5 +13,11 @@ export const Endpoint = {
 
   user: {
     me: build(process.env.NEXT_PUBLIC_USER_ME)
+  },
+
+  admin: {
+    addBuffer: build(process.env.NEXT_PUBLIC_ADMIN_ADD_BUFFER),
+    deleteBuffer: build(process.env.NEXT_PUBLIC_ADMIN_DELETE_BUFFER),
+    getBuffer: build(process.env.NEXT_PUBLIC_ADMIN_GET_BUFFER),
   }
 } as const;
