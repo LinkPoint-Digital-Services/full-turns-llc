@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default function page() {
+export default function BuffersPage() {
   return (
-    <div>page</div>
+    <div>Buffers area</div>
   )
 }
