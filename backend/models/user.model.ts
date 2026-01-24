@@ -1,6 +1,7 @@
 import {Schema, model} from 'mongoose';
 import {IUserDocument} from '../interfaces/user/IUser';
 import {BufferSchema} from './admin/buffer.model';
+import {BlogSchema} from './admin/blog.model';
 
 // Base schema shared by all roles
 const BaseUserSchema = new Schema<IUserDocument>(
@@ -18,7 +19,7 @@ const BaseUserSchema = new Schema<IUserDocument>(
     account_type: {type: String, enum: ['solo', 'company']},
     company_name: {type: String},
     buffers: [BufferSchema],
-    blogs: [{type: Schema.Types.ObjectId, ref: 'blogs'}],
+    blogs: [BlogSchema],
     services: [{type: Schema.Types.ObjectId, ref: 'services'}],
     verificationCode: {type: String}
   },
