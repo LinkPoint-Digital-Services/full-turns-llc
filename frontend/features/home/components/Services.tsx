@@ -1,37 +1,39 @@
-'use client'
+'use client';
 
-import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import { services } from '../data'
+import {useEffect, useRef, useState} from 'react';
+import Image from 'next/image';
+import {services} from '../data';
 
 export default function Services() {
-  const [activeIndex, setActiveIndex] = useState<number>(0)
-  const [startWipe, setStartWipe] = useState(false)
-  const [lineWipe, setLineWipe] = useState(false)
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [startWipe, setStartWipe] = useState(false);
+  const [lineWipe, setLineWipe] = useState(false);
 
-  const sectionRef = useRef<HTMLElement | null>(null)
+  const sectionRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setLineWipe(true)
-          setTimeout(() => {setStartWipe(true)}, 700)
+          setLineWipe(true);
+          setTimeout(() => {
+            setStartWipe(true);
+          }, 700);
 
-          observer.disconnect()
+          observer.disconnect();
         }
       },
-      { threshold: .8 }
-    )
+      {threshold: 0.8}
+    );
 
-    if (sectionRef.current) observer.observe(sectionRef.current)
+    if (sectionRef.current) observer.observe(sectionRef.current);
 
-    return () => observer.disconnect()
-  }, [])
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
-    id='services'
+      id="services"
       ref={sectionRef}
       className="relative w-full flex flex-col md:flex-row md:justify-end select-none overflow-hidden"
     >
@@ -69,7 +71,7 @@ export default function Services() {
             priority={index === 0}
           />
 
-          <div className="flex flex-col items-center md:items-start md:flex-row justify-between relative p-10">
+          <div className="flex flex-col items-center md:items-start md:flex-row justify-between relative px-10 p-32">
             <div className="flex md:flex-col leading-none text-3xl md:text-4xl lg:text-5xl items-center font-bold text-white z-20">
               {service.title
                 .toUpperCase()
@@ -95,5 +97,5 @@ export default function Services() {
         </div>
       ))}
     </section>
-  )
+  );
 }

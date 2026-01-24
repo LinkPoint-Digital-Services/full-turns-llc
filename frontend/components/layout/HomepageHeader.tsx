@@ -41,7 +41,7 @@ export default function HomepageHeader() {
               <li key={link.href}>
                 <Link 
                   href={link.href}
-                  className="hover:text-gray-300 transition-colors text-sm lg:text-base"
+                  className="hover:text-gray-300 transition-colors text-sm lg:text-base font-semibold"
                 >
                   {link.label}
                 </Link>

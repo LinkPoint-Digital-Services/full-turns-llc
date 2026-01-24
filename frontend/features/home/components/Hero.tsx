@@ -22,7 +22,7 @@ export default function Hero() {
             </p>
           </span>
 
-          <Button data-aos="fade-right" data-aos-delay="400" variant={"default"} className="w-fit">Get Started Now</Button>
+          <Button data-aos="fade-right" data-aos-delay="400" variant={"default"} className="w-fit h-12">Get Started Now</Button>
         </div>
 
         <div className="relative w-85 h-96 md:flex hidden items-center justify-center">
