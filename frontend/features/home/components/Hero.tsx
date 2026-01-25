@@ -1,7 +1,6 @@
 import bg from '@/public/assets/images/homepage/hero-bg.png';
 import man from '@/public/assets/images/homepage/man-waving.png';
 import ladderMan from '@/public/assets/images/homepage/ladderman.png';
-import {Button} from '@/components/ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 
