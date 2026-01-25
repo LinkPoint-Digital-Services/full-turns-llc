@@ -1,28 +1,15 @@
 'use client';
 
-import {useState} from 'react';
-import {Button} from '@/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog';
-import {Input} from '@/components/ui/input';
-import {Label} from '@/components/ui/label';
-import {Textarea} from '@/components/ui/textarea';
-import {UploadCloud, Trash2, Pencil} from 'lucide-react';
+import React, {useState} from 'react';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
+import {useMe} from '@/features/auth/hooks/useMe';
 import {useAppMutation} from '@/features/shared/hooks/useAppMutation';
 import {adminClient} from '@/features/admin/adminClient';
-import {useQueryClient, useQuery} from '@tanstack/react-query';
-import {useMe} from '@/features/auth/hooks/useMe';
-import Image from 'next/image';
 import {GetBlogResponse} from '@/features/shared/types/api.types';
 import {uploadToCloudinary} from '@/lib/cloudinary';
+
+import BlogFormDialog from '@/features/admin/blogs/components/BlogFormDialog';
+import BlogTable from '@/features/admin/blogs/components/BlogTable';
 
 type Blog = GetBlogResponse['data'][0];
 
@@ -31,6 +18,7 @@ export default function BlogsPage() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+
   const queryClient = useQueryClient();
   const {data: userData} = useMe();
 
@@ -90,12 +78,7 @@ export default function BlogsPage() {
       updateBlogMutation.mutate({
         admin_id: userData?.user._id || '',
         blogId: selectedBlog.blog_id,
-        updateData: {
-          title,
-          description,
-          content,
-          featured_image: imageUrl
-        }
+        updateData: {title, description, content, featured_image: imageUrl}
       });
     } else {
       addBlogMutation.mutate({
@@ -113,218 +96,43 @@ export default function BlogsPage() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setPreviewImage(URL.createObjectURL(file));
-    }
+    if (file) setPreviewImage(URL.createObjectURL(file));
   };
 
   return (
     <main>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-semibold">Blog Posts</h1>
-
-        <Dialog open={isBlogModalOpen} onOpenChange={setIsBlogModalOpen}>
-          <DialogTrigger asChild>
-            <Button
-              variant="default"
-              onClick={() => {
-                setSelectedBlog(null); // reset for create
-                setPreviewImage(null);
-              }}
-            >
-              Create Blog Post
-            </Button>
-          </DialogTrigger>
-
-          <DialogContent className="sm:max-w-150">
-            <form onSubmit={onSubmitBlog}>
-              <DialogHeader>
-                <DialogTitle>
-                  {selectedBlog ? 'Edit Blog Post' : 'Create New Blog Post'}
-                </DialogTitle>
-                <DialogDescription>
-                  {selectedBlog
-                    ? 'Update the fields below to edit your blog entry.'
-                    : 'Fill out the fields below to publish a new blog entry.'}
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="grid gap-4 py-4">
-                {/* IMAGE */}
-                <div className="grid gap-2">
-                  <Label htmlFor="featured_image">Featured Image</Label>
-                  <div className="relative flex flex-col items-center justify-center border border-dashed border-gray-300 rounded-md h-40 cursor-pointer hover:border-gray-400 transition overflow-hidden">
-                    {previewImage || selectedBlog?.featured_image ? (
-                      <Image
-                        src={
-                          previewImage ||
-                          (selectedBlog?.featured_image as string)
-                        }
-                        alt="Preview"
-                        fill
-                        className="object-cover rounded-md"
-                      />
-                    ) : (
-                      <>
-                        <UploadCloud className="w-8 h-8 text-gray-500" />
-                        <span className="text-sm text-gray-500 mt-2">
-                          Upload Photo
-                        </span>
-                      </>
-                    )}
-
-                    {/* Hidden file input */}
-                    <input
-                      id="featured_image"
-                      name="featured_image"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    />
-
-                    {/* Change Photo button (only show when editing and image exists) */}
-                    {(selectedBlog || previewImage) && (
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="sm"
-                        className="absolute top-2 right-2 z-10"
-                        onClick={() => {
-                          // trigger the file input click
-                          document.getElementById('featured_image')?.click();
-                        }}
-                      >
-                        Change Photo
-                      </Button>
-                    )}
-                  </div>
-                </div>
-
-                {/* TITLE */}
-                <div className="grid gap-2">
-                  <Label htmlFor="title">Title</Label>
-                  <Input
-                    id="title"
-                    name="title"
-                    defaultValue={selectedBlog?.title}
-                    placeholder="Enter blog title"
-                  />
-                </div>
-
-                {/* DESCRIPTION */}
-                <div className="grid gap-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Input
-                    id="description"
-                    name="description"
-                    defaultValue={selectedBlog?.description}
-                    placeholder="Brief description"
-                  />
-                </div>
-
-                {/* CONTENT */}
-                <div className="grid gap-2">
-                  <Label htmlFor="content">Content</Label>
-                  <Textarea
-                    id="content"
-                    name="content"
-                    defaultValue={selectedBlog?.content}
-                    placeholder="Full blog post content"
-                    rows={6}
-                  />
-                </div>
-              </div>
-
-              <DialogFooter>
-                <DialogClose asChild>
-                  <Button variant="outline" type="button">
-                    Cancel
-                  </Button>
-                </DialogClose>
-                <Button
-                  type="submit"
-                  disabled={
-                    addBlogMutation.isPending ||
-                    updateBlogMutation.isPending ||
-                    isUploading
-                  }
-                >
-                  {selectedBlog
-                    ? updateBlogMutation.isPending || isUploading
-                      ? 'Updating...'
-                      : 'Update Blog Post'
-                    : addBlogMutation.isPending || isUploading
-                    ? 'Creating...'
-                    : 'Create Blog Post'}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <BlogFormDialog
+          isOpen={isBlogModalOpen}
+          setIsOpen={setIsBlogModalOpen}
+          selectedBlog={selectedBlog}
+          setSelectedBlog={setSelectedBlog}
+          previewImage={previewImage}
+          setPreviewImage={setPreviewImage}
+          isUploading={isUploading}
+          onSubmitBlog={onSubmitBlog}
+          handleImageChange={handleImageChange}
+          addBlogMutation={addBlogMutation}
+          updateBlogMutation={updateBlogMutation}
+        />
       </div>
 
-      {/* Blog List */}
-      {isLoading ? (
-        <p>Loading blog posts...</p>
-      ) : blogs?.data.length === 0 ? (
-        <p className="text-muted-foreground text-center py-6">
-          No blog posts found.
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogs?.data.map(blog => (
-            <div
-              key={blog._id}
-              className="border rounded-md overflow-hidden shadow-sm hover:shadow-md transition"
-            >
-              <div className="relative h-40 w-full">
-                <Image
-                  src={blog.featured_image}
-                  alt={blog.featured_image}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="p-4 space-y-2">
-                <h2 className="text-lg font-semibold">{blog.title}</h2>
-                <p className="text-sm text-muted-foreground">
-                  {blog.description}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {new Date(blog.created_at).toLocaleDateString()}
-                </p>
-                <div className="flex justify-end gap-2 pt-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => {
-                      setSelectedBlog(blog);
-                      setPreviewImage(null);
-                      setIsBlogModalOpen(true);
-                    }}
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-red-500 hover:text-red-700"
-                    onClick={() =>
-                      deleteBlogMutation.mutate({
-                        admin_id: userData?.user._id || '',
-                        blog_id: blog.blog_id
-                      })
-                    }
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      <BlogTable
+        blogs={blogs?.data || []}
+        isLoading={isLoading}
+        onEdit={blog => {
+          setSelectedBlog(blog);
+          setPreviewImage(null);
+          setIsBlogModalOpen(true);
+        }}
+        onDelete={blogId =>
+          deleteBlogMutation.mutate({
+            admin_id: userData?.user._id || '',
+            blog_id: blogId
+          })
+        }
+      />
     </main>
   );
 }
