@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default function page() {
+export default function BackupPage() {
   return (
-    <div>page</div>
+    <div>Backup part - After manager orders dashboard done</div>
   )
 }
