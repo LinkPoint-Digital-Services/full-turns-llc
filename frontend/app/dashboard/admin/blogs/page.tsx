@@ -24,10 +24,13 @@ import Image from 'next/image';
 import {GetBlogResponse} from '@/features/shared/types/api.types';
 import {uploadToCloudinary} from '@/lib/cloudinary';
 
+type Blog = GetBlogResponse['data'][0];
+
 export default function BlogsPage() {
   const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
   const queryClient = useQueryClient();
   const {data: userData} = useMe();
 
@@ -47,11 +50,30 @@ export default function BlogsPage() {
     }
   });
 
+  const updateBlogMutation = useAppMutation({
+    mutationFn: adminClient.updateBlog,
+    successMessage: 'Blog post updated successfully',
+    errorMessage: 'Failed to update blog post',
+    onSuccessExtra: () => {
+      setIsBlogModalOpen(false);
+      setPreviewImage(null);
+      setSelectedBlog(null);
+      queryClient.invalidateQueries({queryKey: ['blogs']});
+    }
+  });
+
+  const deleteBlogMutation = useAppMutation({
+    mutationFn: adminClient.deleteBlog,
+    successMessage: 'Blog post deleted successfully',
+    errorMessage: 'Failed to delete blog post',
+    onSuccessExtra: () => {
+      queryClient.invalidateQueries({queryKey: ['blogs']});
+    }
+  });
+
   const onSubmitBlog = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
-    const blog_id = crypto.randomUUID();
     const featured_image = formData.get('featured_image') as File;
     const title = formData.get('title') as string;
     const description = formData.get('description') as string;
@@ -64,18 +86,29 @@ export default function BlogsPage() {
       setIsUploading(false);
     }
 
-    const payload = {
-      admin_id: userData?.user._id || '',
-      blog: {
-        blog_id,
-        featured_image: imageUrl,
-        title,
-        description,
-        content
-      }
-    };
-
-    addBlogMutation.mutate(payload);
+    if (selectedBlog) {
+      updateBlogMutation.mutate({
+        admin_id: userData?.user._id || '',
+        blogId: selectedBlog.blog_id,
+        updateData: {
+          title,
+          description,
+          content,
+          featured_image: imageUrl
+        }
+      });
+    } else {
+      addBlogMutation.mutate({
+        admin_id: userData?.user._id || '',
+        blog: {
+          blog_id: crypto.randomUUID(),
+          featured_image: imageUrl,
+          title,
+          description,
+          content
+        }
+      });
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,25 +125,41 @@ export default function BlogsPage() {
 
         <Dialog open={isBlogModalOpen} onOpenChange={setIsBlogModalOpen}>
           <DialogTrigger asChild>
-            <Button variant="default">Create Blog Post</Button>
+            <Button
+              variant="default"
+              onClick={() => {
+                setSelectedBlog(null); // reset for create
+                setPreviewImage(null);
+              }}
+            >
+              Create Blog Post
+            </Button>
           </DialogTrigger>
 
           <DialogContent className="sm:max-w-150">
             <form onSubmit={onSubmitBlog}>
               <DialogHeader>
-                <DialogTitle>Create New Blog Post</DialogTitle>
+                <DialogTitle>
+                  {selectedBlog ? 'Edit Blog Post' : 'Create New Blog Post'}
+                </DialogTitle>
                 <DialogDescription>
-                  Fill out the fields below to publish a new blog entry.
+                  {selectedBlog
+                    ? 'Update the fields below to edit your blog entry.'
+                    : 'Fill out the fields below to publish a new blog entry.'}
                 </DialogDescription>
               </DialogHeader>
 
               <div className="grid gap-4 py-4">
+                {/* IMAGE */}
                 <div className="grid gap-2">
                   <Label htmlFor="featured_image">Featured Image</Label>
                   <div className="relative flex flex-col items-center justify-center border border-dashed border-gray-300 rounded-md h-40 cursor-pointer hover:border-gray-400 transition overflow-hidden">
-                    {previewImage ? (
+                    {previewImage || selectedBlog?.featured_image ? (
                       <Image
-                        src={previewImage}
+                        src={
+                          previewImage ||
+                          (selectedBlog?.featured_image as string)
+                        }
                         alt="Preview"
                         fill
                         className="object-cover rounded-md"
@@ -123,6 +172,8 @@ export default function BlogsPage() {
                         </span>
                       </>
                     )}
+
+                    {/* Hidden file input */}
                     <input
                       id="featured_image"
                       name="featured_image"
@@ -131,32 +182,54 @@ export default function BlogsPage() {
                       onChange={handleImageChange}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     />
+
+                    {/* Change Photo button (only show when editing and image exists) */}
+                    {(selectedBlog || previewImage) && (
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        className="absolute top-2 right-2 z-10"
+                        onClick={() => {
+                          // trigger the file input click
+                          document.getElementById('featured_image')?.click();
+                        }}
+                      >
+                        Change Photo
+                      </Button>
+                    )}
                   </div>
                 </div>
 
+                {/* TITLE */}
                 <div className="grid gap-2">
                   <Label htmlFor="title">Title</Label>
                   <Input
                     id="title"
                     name="title"
+                    defaultValue={selectedBlog?.title}
                     placeholder="Enter blog title"
                   />
                 </div>
 
+                {/* DESCRIPTION */}
                 <div className="grid gap-2">
                   <Label htmlFor="description">Description</Label>
                   <Input
                     id="description"
                     name="description"
+                    defaultValue={selectedBlog?.description}
                     placeholder="Brief description"
                   />
                 </div>
 
+                {/* CONTENT */}
                 <div className="grid gap-2">
                   <Label htmlFor="content">Content</Label>
                   <Textarea
                     id="content"
                     name="content"
+                    defaultValue={selectedBlog?.content}
                     placeholder="Full blog post content"
                     rows={6}
                   />
@@ -171,9 +244,17 @@ export default function BlogsPage() {
                 </DialogClose>
                 <Button
                   type="submit"
-                  disabled={addBlogMutation.isPending || isUploading}
+                  disabled={
+                    addBlogMutation.isPending ||
+                    updateBlogMutation.isPending ||
+                    isUploading
+                  }
                 >
-                  {addBlogMutation.isPending || isUploading
+                  {selectedBlog
+                    ? updateBlogMutation.isPending || isUploading
+                      ? 'Updating...'
+                      : 'Update Blog Post'
+                    : addBlogMutation.isPending || isUploading
                     ? 'Creating...'
                     : 'Create Blog Post'}
                 </Button>
@@ -214,13 +295,27 @@ export default function BlogsPage() {
                   {new Date(blog.created_at).toLocaleDateString()}
                 </p>
                 <div className="flex justify-end gap-2 pt-2">
-                  <Button variant="ghost" size="icon">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      setSelectedBlog(blog);
+                      setPreviewImage(null);
+                      setIsBlogModalOpen(true);
+                    }}
+                  >
                     <Pencil className="w-4 h-4" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
                     className="text-red-500 hover:text-red-700"
+                    onClick={() =>
+                      deleteBlogMutation.mutate({
+                        admin_id: userData?.user._id || '',
+                        blog_id: blog.blog_id
+                      })
+                    }
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>

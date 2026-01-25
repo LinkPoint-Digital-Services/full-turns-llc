@@ -22,7 +22,7 @@ export interface UpdateBlogRequest {
 
 export interface DeleteBlogRequest {
   admin_id: string;
-  blogId: string;
+  blog_id: string;
 }
 
 export interface BlogItem {
