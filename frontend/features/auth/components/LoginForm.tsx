@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import React from 'react';
-import InputField from './AuthInputField';
-import {Button} from '@/components/ui/button';
-import {FormEvent} from 'react';
-import {useAuthForm} from '../hooks/useAuthForm';
-import {usePasswordToggle} from '../hooks/usePasswordToggle';
-import {useAppMutation} from '@/features/shared/hooks/useAppMutation';
-import {authClient} from '../services/authClient';
-import {LoginRequest} from '../types/auth.types';
+import React from "react";
+import InputField from "./AuthInputField";
+import {Button} from "@/components/ui/button";
+import {FormEvent} from "react";
+import {useAuthForm} from "../hooks/useAuthForm";
+import {usePasswordToggle} from "../hooks/usePasswordToggle";
+import {useAppMutation} from "@/features/shared/hooks/useAppMutation";
+import {authClient} from "../services/authClient";
+import {LoginRequest} from "../types/auth.types";
 
 export default function LoginForm() {
   const {fields, updateField} = useAuthForm();
@@ -17,9 +17,9 @@ export default function LoginForm() {
   // test - modify the (dashboard) into dashboard/ to make a dynamic redirect for property managers and admin
   const mutation = useAppMutation({
     mutationFn: authClient.login,
-    onSuccessRedirect: '/dashboard',
-    successMessage: 'Login successful!',
-    errorMessage: 'Login failed. Please try again.'
+    onSuccessRedirect: "/dashboard",
+    successMessage: "Login successful!",
+    errorMessage: "Login failed. Please try again.",
   });
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -27,7 +27,7 @@ export default function LoginForm() {
 
     const payload: LoginRequest = {
       email_address: fields.email_address,
-      password: fields.password
+      password: fields.password,
     };
 
     mutation.mutate(payload);
@@ -41,7 +41,7 @@ export default function LoginForm() {
         id="email"
         type="email"
         value={fields.email_address}
-        onChange={e => updateField('email_address', e.target.value)}
+        onChange={(e) => updateField("email_address", e.target.value)}
         placeholder="your.email@example.com"
       />
 
@@ -51,10 +51,10 @@ export default function LoginForm() {
         id="password"
         type="password"
         value={fields.password}
-        onChange={e => updateField('password', e.target.value)}
+        onChange={(e) => updateField("password", e.target.value)}
         placeholder="Enter your password"
         showPassword={passwordToggle.showPassword}
-        onTogglePassword={() => passwordToggle.setShowPassword(prev => !prev)}
+        onTogglePassword={() => passwordToggle.setShowPassword((prev) => !prev)}
       />
 
       <div className="flex justify-end">
@@ -66,8 +66,8 @@ export default function LoginForm() {
         </a>
       </div>
 
-      <Button type="submit" disabled={mutation.isPending}>
-        {mutation.isPending ? 'Logging in...' : 'Login'}
+      <Button className="w-full" type="submit" disabled={mutation.isPending}>
+        {mutation.isPending ? "Logging in..." : "Login"}
       </Button>
     </form>
   );
