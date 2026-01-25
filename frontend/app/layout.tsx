@@ -1,8 +1,9 @@
-import type {Metadata} from 'next';
-import {Geist, Geist_Mono} from 'next/font/google';
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import {ReactQueryProvider} from '@/lib/provider/ReactQueryProvider';
-import {Toaster} from 'sonner';
+import { ReactQueryProvider } from '@/lib/provider/ReactQueryProvider';
+import { Toaster } from 'sonner';
+import DesktopOnlyCursor from '@/components/DesktopOnlyCursor';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -24,12 +25,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-slate-900 dark:bg-black dark:text-slate-50`}
       >
         <ReactQueryProvider>
+          <DesktopOnlyCursor/>
           {children}
           <Toaster richColors position="top-right" />
         </ReactQueryProvider>
