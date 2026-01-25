@@ -4,7 +4,6 @@ import React, {useState} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from '@/public/assets/images/homepage/logo_for_darks.png';
-import {Button} from '../ui/button';
 
 export default function HomepageHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

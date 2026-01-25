@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { ReactQueryProvider } from '@/lib/provider/ReactQueryProvider';
 import { Toaster } from 'sonner';
-import { useIsDesktop } from '@/hooks/useIsDesktop'; // 
 import DesktopOnlyCursor from '@/components/DesktopOnlyCursor';
 
 const geistSans = Geist({
@@ -26,7 +25,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isDesktop = typeof window !== "undefined" ? useIsDesktop() : false;
 
   return (
     <html lang="en">
