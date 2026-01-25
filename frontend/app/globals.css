@@ -1,6 +1,6 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "aos/dist/aos.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'aos/dist/aos.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -129,7 +129,6 @@ html {
   scroll-behavior: smooth;
 }
 
-
 @keyframes wipe-horizontal {
   from {
     transform: translateX(0%);
@@ -142,4 +141,3 @@ html {
 .animate-wipe-horizontal {
   animation: wipe-horizontal 1.5s ease-in-out forwards;
 }
-

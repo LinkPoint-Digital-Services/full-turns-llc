@@ -1,31 +1,30 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import {useForm} from "react-hook-form";
+import Image from 'next/image';
+import {useForm} from 'react-hook-form';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import {Textarea} from "@/components/ui/textarea";
-import toolboxman from "@/public/assets/images/contact/toolboxman.png";
-import SectionHeader from "./ui/SectionHeader";
-import bathroom from "@/public/assets/images/contact/bathroom.png";
-import livingroom from "@/public/assets/images/contact/living-room.png";
-import {Phone, Mail} from "lucide-react";
+  FormLabel
+} from '@/components/ui/form';
+import {Input} from '@/components/ui/input';
+import {Button} from '@/components/ui/button';
+import {Textarea} from '@/components/ui/textarea';
+import SectionHeader from './ui/SectionHeader';
+import bathroom from '@/public/assets/images/contact/bathroom.png';
+import livingroom from '@/public/assets/images/contact/living-room.png';
+import {Phone, Mail} from 'lucide-react';
 
 export default function Contact() {
   const form = useForm({
     defaultValues: {
-      name: "",
-      surname: "",
-      email: "",
-      message: "",
-    },
+      name: '',
+      surname: '',
+      email: '',
+      message: ''
+    }
   });
 
   return (
@@ -116,7 +115,7 @@ export default function Contact() {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" variant={"default"}>
+                  <Button type="submit" variant={'default'}>
                     Submit
                   </Button>
                 </form>
@@ -127,7 +126,7 @@ export default function Contact() {
           <div className="flex flex-col gap-8 order-1 md:max-w-xl h-full backdrop-blur-md bg-[#1a1a1a]/20 p-7 rounded-md">
             <div data-aos="fade-right">
               <h3 className="text-white font-bold text-5xl">
-                Let’s Work Together on Your Next{" "}
+                Let’s Work Together on Your Next{' '}
                 <span className="text-primary">Unit Turnover</span>.
               </h3>
             </div>
@@ -135,10 +134,10 @@ export default function Contact() {
             <div
               data-aos="fade-right"
               data-aos-delay="200"
-              className="flex items-start gap-3 text-primary rounded-full w-fit"
+              className="flex gap-3 text-primary rounded-full w-fit items-center"
             >
-              <Phone className="w-5 h-5 text-primary fill-primary stroke-0" />
-              <span className="font-medium text-primary text-sm sm:text-base">
+              <Phone className="w-5 text-primary fill-primary stroke-0" />
+              <span className="font-medium text-primary text-[18px]">
                 +1 (443) 683-9520
               </span>
             </div>
@@ -149,7 +148,7 @@ export default function Contact() {
               className="flex items-center gap-3 text-primary rounded-full w-fit"
             >
               <Phone className="w-5 h-5 text-primary fill-primary stroke-0" />
-              <span className="font-medium text-primary text-sm sm:text-base">
+              <span className="font-medium text-primary text-[18px]">
                 (443) 481-0809
               </span>
             </div>
@@ -160,7 +159,7 @@ export default function Contact() {
               className="flex items-center gap-3 text-primary rounded-full w-fit"
             >
               <Mail className="w-5 h-5 text-primary " />
-              <span className="font-medium text-primary text-sm sm:text-base">
+              <span className="font-medium text-primary text-[18px]">
                 david@fullturns.com
               </span>
             </div>
@@ -171,7 +170,7 @@ export default function Contact() {
               className="flex items-center gap-3 text-primary rounded-full w-fit"
             >
               <Mail className="w-5 h-5 text-primary " />
-              <span className="font-medium text-primary text-sm sm:text-base">
+              <span className="font-medium text-primary text-[18px]">
                 fullturnsllc@gmail.com
               </span>
             </div>

@@ -1,48 +1,48 @@
-"use client";
+'use client';
 
-import {useState} from "react";
-import {Calendar, CircleArrowRight} from "lucide-react";
-import Image from "next/image";
-import SectionHeader from "./ui/SectionHeader";
+import {useState} from 'react';
+import {Calendar, CircleArrowRight} from 'lucide-react';
+import Image from 'next/image';
+import SectionHeader from './ui/SectionHeader';
 
 const blogs = [
   {
     title:
-      "Complete Unit Turnover Services: Preparing Your Property for the Next Tenant",
-    author: "Jayson Samathy",
-    date: "Jan 13, 2026",
+      'Complete Unit Turnover Services: Preparing Your Property for the Next Tenant',
+    author: 'Jayson Samathy',
+    date: 'Jan 13, 2026',
     description:
-      "When a tenant moves out, the condition of your unit directly affects how fast you can lease it again. Delays, poor finishing, or missed repairs can lead to lost income and negative impressions.",
+      'When a tenant moves out, the condition of your unit directly affects how fast you can lease it again. Delays, poor finishing, or missed repairs can lead to lost income and negative impressions.',
     imageUrl:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format", // workspace / office
+      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format' // workspace / office
   },
   {
-    title: "Why Preventive Maintenance Saves You More in the Long Run",
-    author: "Maria Gonzales",
-    date: "Jan 20, 2026",
+    title: 'Why Preventive Maintenance Saves You More in the Long Run',
+    author: 'Maria Gonzales',
+    date: 'Jan 20, 2026',
     description:
-      "Preventive maintenance helps property owners avoid costly repairs, unexpected breakdowns, and unhappy tenants by addressing small issues before they become major problems.",
+      'Preventive maintenance helps property owners avoid costly repairs, unexpected breakdowns, and unhappy tenants by addressing small issues before they become major problems.',
     imageUrl:
-      "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&auto=format", // tools image
+      'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&auto=format' // tools image
   },
   {
-    title: "Renovation vs Repair: Knowing What Your Property Really Needs",
-    author: "Daniel Cruz",
-    date: "Jan 27, 2026",
+    title: 'Renovation vs Repair: Knowing What Your Property Really Needs',
+    author: 'Daniel Cruz',
+    date: 'Jan 27, 2026',
     description:
-      "Understanding whether your unit needs a full renovation or just targeted repairs can save time, money, and unnecessary downtime between tenants.",
+      'Understanding whether your unit needs a full renovation or just targeted repairs can save time, money, and unnecessary downtime between tenants.',
     imageUrl:
-      "https://images.unsplash.com/photo-1581092334553-fcb55f9afa29?w=800&auto=format", // renovation/room
+      'https://images.unsplash.com/photo-1581092334553-fcb55f9afa29?w=800&auto=format' // renovation/room
   },
   {
-    title: "How Professional Cleaning Improves Tenant Retention",
-    author: "Angela Reyes",
-    date: "Feb 3, 2026",
+    title: 'How Professional Cleaning Improves Tenant Retention',
+    author: 'Angela Reyes',
+    date: 'Feb 3, 2026',
     description:
-      "A professionally cleaned unit creates a strong first impression, boosts tenant satisfaction, and increases the likelihood of long-term occupancy.",
+      'A professionally cleaned unit creates a strong first impression, boosts tenant satisfaction, and increases the likelihood of long-term occupancy.',
     imageUrl:
-      "https://images.unsplash.com/photo-1539186607617-3c3a4fb197f9?w=800&auto=format", // clean interior
-  },
+      'https://images.unsplash.com/photo-1539186607617-3c3a4fb197f9?w=800&auto=format' // clean interior
+  }
 ];
 
 function PaginationDots({activeIndex}: {activeIndex: number}) {
@@ -52,7 +52,7 @@ function PaginationDots({activeIndex}: {activeIndex: number}) {
         <div
           key={i}
           className={`w-2.5 h-2.5 rounded-full ${
-            i === activeIndex ? "bg-[#EAA918]" : "bg-white"
+            i === activeIndex ? 'bg-[#EAA918]' : 'bg-white'
           }`}
         />
       ))}
@@ -65,11 +65,11 @@ export default function Blogs() {
   const blog = blogs[index];
 
   const nextBlog = () => {
-    setIndex((prev) => (prev + 1) % blogs.length);
+    setIndex(prev => (prev + 1) % blogs.length);
   };
 
   return (
-    <section id="blogs" className="text-white bg-[#262626] py-16 px-4 md:px-10">
+    <section id="blogs" className="text-white bg-[#262626] py-40 px-4 md:px-10">
       <div className="mx-auto container flex flex-col items-center w-full">
         <SectionHeader title="Latest Insights" style="top-1" />
 
@@ -91,7 +91,7 @@ export default function Blogs() {
                 alt="blog image"
                 width={800}
                 height={500}
-                className="rounded-md w-full h-[340px] object-cover"
+                className="rounded-md w-full h-85 object-cover"
               />
             </div>
 

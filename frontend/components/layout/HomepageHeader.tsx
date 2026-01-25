@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, {useState} from "react";
-import Link from "next/link";
-import Image from "next/image";
-import logo from "@/public/assets/images/homepage/logo_for_dark.png";
-import {Button} from "../ui/button";
+import React, {useState} from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import logo from '@/public/assets/images/homepage/logo_for_darks.png';
+import {Button} from '../ui/button';
 
 export default function HomepageHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,32 +14,26 @@ export default function HomepageHeader() {
   };
 
   const navLinks = [
-    {href: "#home", label: "Home"},
-    {href: "#services", label: "Services"},
-    {href: "#about-us", label: "About Us"},
-    {href: "#blogs", label: "Blogs"},
-    {href: "#contacts", label: "Contact Us"},
+    {href: '#home', label: 'Home'},
+    {href: '#services', label: 'Services'},
+    {href: '#about-us', label: 'About Us'},
+    {href: '#blogs', label: 'Blogs'},
+    {href: '#contacts', label: 'Contact Us'}
   ];
 
   return (
-    <header className="w-full text-white p-3 md:p-4 backdrop-blur-md bg-black/20 fixed z-50 md:px-10">
+    <header className="w-full text-white p-3 md:p-4 backdrop-blur-md bg-black/20 fixed z-50 md:px-10 px-10 ">
       <div className="container mx-auto flex items-center justify-between">
-        <div className="flex flex-col items-center sm:items-start justify-center mb-6 sm:mb-0">
-          <Link href="/" className="transition-opacity hover:opacity-80">
-            <Image
-              src="/assets/images/homepage/logo_for_dark.png"
-              alt="Full Turns LLC Logo"
-              width={150}
-              height={50}
-              priority
-            />
+        <div className="flex items-center sm:items-start justify-center">
+          <Link href="/" className="transition-opacity hover:opacity-80 ">
+            <Image src={logo} alt="Full Turns LLC Logo" width={100} priority />
           </Link>
         </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:block">
           <ul className="flex gap-6 lg:gap-8">
-            {navLinks.map((link) => (
+            {navLinks.map(link => (
               <li key={link.href}>
                 <Link
                   href={link.href}
@@ -54,9 +48,12 @@ export default function HomepageHeader() {
         </nav>
 
         {/* Desktop Button */}
-        <Button variant={"default"} className="hidden md:block">
-          <Link href={"/login"}>Order Now</Link>
-        </Button>
+        <Link
+          href={'/login'}
+          className="hidden md:block bg-primary text-white px-4 py-2 rounded-md font-semibold hover:bg-primary/90 transition-colors text-sm"
+        >
+          Order Now
+        </Link>
 
         {/* Mobile Menu Button */}
         <button
@@ -66,17 +63,17 @@ export default function HomepageHeader() {
         >
           <span
             className={`w-6 h-0.5 bg-white transition-transform duration-300 ${
-              isMenuOpen ? "rotate-45 translate-y-2" : ""
+              isMenuOpen ? 'rotate-45 translate-y-2' : ''
             }`}
           ></span>
           <span
             className={`w-6 h-0.5 bg-white transition-opacity duration-300 ${
-              isMenuOpen ? "opacity-0" : ""
+              isMenuOpen ? 'opacity-0' : ''
             }`}
           ></span>
           <span
             className={`w-6 h-0.5 bg-white transition-transform duration-300 ${
-              isMenuOpen ? "-rotate-45 -translate-y-2" : ""
+              isMenuOpen ? '-rotate-45 -translate-y-2' : ''
             }`}
           ></span>
         </button>
@@ -87,7 +84,7 @@ export default function HomepageHeader() {
         <nav className="md:hidden bg-black/40 border-t border-white/10">
           <div className="container mx-auto px-4 py-4">
             <ul className="flex flex-col gap-4">
-              {navLinks.map((link) => (
+              {navLinks.map(link => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -99,13 +96,13 @@ export default function HomepageHeader() {
                 </li>
               ))}
             </ul>
-            <Button
-              variant={"default"}
-              className="w-full mt-4"
+            <Link
+              className="bg-primary text-white w-full text-center  px-4 py-2 rounded-md font-semibold hover:bg-primary/90 transition-colors text-sm mt-4 inline-block"
+              href={'/login'}
               onClick={() => setIsMenuOpen(false)}
             >
               Order Now
-            </Button>
+            </Link>
           </div>
         </nav>
       )}

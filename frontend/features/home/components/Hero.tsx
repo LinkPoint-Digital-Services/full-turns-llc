@@ -1,9 +1,9 @@
-import bg from "@/public/assets/images/homepage/hero-bg.png";
-import man from "@/public/assets/images/homepage/man-waving.png";
-import ladderMan from "@/public/assets/images/homepage/ladderman.png";
-import {Button} from "@/components/ui/button";
-import Image from "next/image";
-import Link from "next/link";
+import bg from '@/public/assets/images/homepage/hero-bg.png';
+import man from '@/public/assets/images/homepage/man-waving.png';
+import ladderMan from '@/public/assets/images/homepage/ladderman.png';
+import {Button} from '@/components/ui/button';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Hero() {
   return (
@@ -19,7 +19,7 @@ export default function Hero() {
               data-aos="fade-right"
               className="text-5xl md:text-6xl lg:text-8xl font-bold"
             >
-              Every Unit. <span className="text-primary">Fully Turned.</span>
+              Every Unit. <span className="text-primary">Freshly Renewed.</span>
             </h1>
             <p
               data-aos="fade-right"
@@ -32,14 +32,14 @@ export default function Hero() {
             </p>
           </span>
 
-          <Button
+          <Link
             data-aos="fade-right"
             data-aos-delay="400"
-            variant={"default"}
-            className="w-fit h-12"
+            className="w-fit h-12 bg-primary text-white px-6 py-2 rounded-md font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center text-lg"
+            href={'/login'}
           >
-            <Link href={"/login"}>Get Started Now</Link>
-          </Button>
+            Get Started Now
+          </Link>
         </div>
 
         <div className="relative w-85 h-96 md:flex hidden items-center justify-center">
@@ -48,14 +48,14 @@ export default function Hero() {
             data-aos-delay="200"
             className="object-contain absolute bottom-7 right-0 w-45 h-auto"
             src={ladderMan}
-            alt={"man with ladder"}
+            alt={'man with ladder'}
             priority
           />
           <Image
             data-aos="zoom-in"
             className="object-contain absolute bottom-0 right-12 w-full h-auto z-10"
             src={man}
-            alt={"man waving"}
+            alt={'man waving'}
             priority
           />
         </div>
