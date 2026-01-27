@@ -4,51 +4,20 @@ import {useState} from 'react';
 import {Calendar, CircleArrowRight} from 'lucide-react';
 import Image from 'next/image';
 import SectionHeader from './ui/SectionHeader';
+import {useQuery} from '@tanstack/react-query';
+import {adminClient} from '@/features/admin/adminClient';
+import {GetBlogResponse} from '@/features/shared/types/api.types';
 
-const blogs = [
-  {
-    title:
-      'Complete Unit Turnover Services: Preparing Your Property for the Next Tenant',
-    author: 'Jayson Samathy',
-    date: 'Jan 13, 2026',
-    description:
-      'When a tenant moves out, the condition of your unit directly affects how fast you can lease it again. Delays, poor finishing, or missed repairs can lead to lost income and negative impressions.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format' // workspace / office
-  },
-  {
-    title: 'Why Preventive Maintenance Saves You More in the Long Run',
-    author: 'Maria Gonzales',
-    date: 'Jan 20, 2026',
-    description:
-      'Preventive maintenance helps property owners avoid costly repairs, unexpected breakdowns, and unhappy tenants by addressing small issues before they become major problems.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&auto=format' // tools image
-  },
-  {
-    title: 'Renovation vs Repair: Knowing What Your Property Really Needs',
-    author: 'Daniel Cruz',
-    date: 'Jan 27, 2026',
-    description:
-      'Understanding whether your unit needs a full renovation or just targeted repairs can save time, money, and unnecessary downtime between tenants.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1581092334553-fcb55f9afa29?w=800&auto=format' // renovation/room
-  },
-  {
-    title: 'How Professional Cleaning Improves Tenant Retention',
-    author: 'Angela Reyes',
-    date: 'Feb 3, 2026',
-    description:
-      'A professionally cleaned unit creates a strong first impression, boosts tenant satisfaction, and increases the likelihood of long-term occupancy.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1539186607617-3c3a4fb197f9?w=800&auto=format' // clean interior
-  }
-];
-
-function PaginationDots({activeIndex}: {activeIndex: number}) {
+function PaginationDots({
+  activeIndex,
+  total
+}: {
+  activeIndex: number;
+  total: number;
+}) {
   return (
     <div className="flex items-center gap-4.75">
-      {blogs.map((_, i) => (
+      {Array.from({length: total}).map((_, i) => (
         <div
           key={i}
           className={`w-2.5 h-2.5 rounded-full ${
@@ -62,11 +31,58 @@ function PaginationDots({activeIndex}: {activeIndex: number}) {
 
 export default function Blogs() {
   const [index, setIndex] = useState(0);
-  const blog = blogs[index];
+
+  const {data: blogsData, isLoading} = useQuery<GetBlogResponse>({
+    queryKey: ['blogs', '696de86a30e67ed1670602e5'],
+    queryFn: () => adminClient.getBlog('696de86a30e67ed1670602e5')
+  });
+
+  const blogList = blogsData?.data || [];
+  const blog = blogList[index];
 
   const nextBlog = () => {
-    setIndex(prev => (prev + 1) % blogs.length);
+    if (blogList.length > 0) {
+      setIndex(prev => (prev + 1) % blogList.length);
+    }
   };
+
+  // Format date from ISO string
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <section
+        id="blogs"
+        className="text-white bg-[#262626] py-40 px-4 md:px-10"
+      >
+        <div className="mx-auto container flex flex-col items-center w-full">
+          <SectionHeader title="Latest Insights" style="top-1" />
+          <p className="text-center mt-10">Loading blogs...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (!blog) {
+    return (
+      <section
+        id="blogs"
+        className="text-white bg-[#262626] py-40 px-4 md:px-10"
+      >
+        <div className="mx-auto container flex flex-col items-center w-full">
+          <SectionHeader title="Latest Insights" style="top-1" />
+          <p className="text-center mt-10">No blogs available.</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="blogs" className="text-white bg-[#262626] py-40 px-4 md:px-10">
@@ -87,8 +103,8 @@ export default function Blogs() {
             <div className="w-full lg:w-1/3 z-10">
               <Image
                 data-aos="zoom-in"
-                src={blog.imageUrl}
-                alt="blog image"
+                src={blog.featured_image}
+                alt={blog.title}
                 width={800}
                 height={500}
                 className="rounded-md w-full h-85 object-cover"
@@ -101,14 +117,14 @@ export default function Blogs() {
                 data-aos-delay="200"
                 className="text-2xl font-medium text-center lg:text-left"
               >
-                {blog.author}
+                Full Turns LLC
               </h4>
               <p
                 data-aos="fade-right"
                 data-aos-delay="200"
                 className="flex items-center text-primary gap-3 justify-center lg:justify-start"
               >
-                <Calendar /> {blog.date}
+                <Calendar /> {formatDate(blog.created_at)}
               </p>
               <p
                 data-aos="fade-right"
@@ -136,7 +152,7 @@ export default function Blogs() {
         </article>
 
         <div className="mt-10">
-          <PaginationDots activeIndex={index} />
+          <PaginationDots activeIndex={index} total={blogList.length} />
         </div>
       </div>
     </section>

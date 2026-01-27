@@ -14,7 +14,6 @@ export class BlogController {
     }
   }
 
-  // tomorrow need to implement in frontend
   static async updateBlog(req: Request, res: Response) {
     try {
       const {admin_id, blogId, updateData} = req.body;

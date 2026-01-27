@@ -1,7 +1,9 @@
 'use client';
 
+import {useState} from 'react';
 import Image from 'next/image';
 import {useForm} from 'react-hook-form';
+import emailjs from 'emailjs-com';
 import {
   Form,
   FormControl,
@@ -18,6 +20,13 @@ import livingroom from '@/public/assets/images/contact/living-room.png';
 import {Phone, Mail} from 'lucide-react';
 
 export default function Contact() {
+  const [submitted, setSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+
+  const serviceId = process.env.NEXT_PUBLIC_SERVICE_ID!;
+  const templateId = process.env.NEXT_PUBLIC_TEMPLATE_ID!;
+  const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY!;
+
   const form = useForm({
     defaultValues: {
       name: '',
@@ -26,6 +35,37 @@ export default function Contact() {
       message: ''
     }
   });
+
+  const onSubmit = async (data: {
+    name: string;
+    surname: string;
+    email: string;
+    message: string;
+  }) => {
+    try {
+      setIsSending(true);
+      await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          fname: data.name,
+          name: `${data.name} ${data.surname}`,
+          email: data.email,
+          message: data.message
+        },        
+        publicKey
+      );
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        form.reset();
+      }, 3000);
+    } catch (error) {
+      console.error('EmailJS error:', error);
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   return (
     <section
@@ -58,68 +98,89 @@ export default function Contact() {
               data-aos="zoom-in"
               className=" backdrop-blur-md bg-white/90 p-6 md:p-8 rounded-lg shadow-lg relative z-10"
             >
-              <Form {...form}>
-                <form className="flex flex-col gap-6">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({field}) => (
-                      <FormItem className="flex flex-col gap-2">
-                        <FormLabel>First Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="John" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="surname"
-                    render={({field}) => (
-                      <FormItem className="flex flex-col gap-2">
-                        <FormLabel>Last Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Doe" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({field}) => (
-                      <FormItem className="flex flex-col gap-2">
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            placeholder="johndoe@email.com"
-                            {...field}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="message"
-                    render={({field}) => (
-                      <FormItem className="flex flex-col gap-2">
-                        <FormLabel>Message</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="I’d like to get in touch regarding your services…"
-                            {...field}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" variant={'default'}>
-                    Submit
-                  </Button>
-                </form>
-              </Form>
+              {submitted ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Mail className="text-green-600 w-8 h-8" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">
+                    Thank You!
+                  </h3>
+                  <p className="text-slate-600">
+                    We&apos;ll get back to you as soon as possible.
+                  </p>
+                </div>
+              ) : (
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="flex flex-col gap-6"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({field}) => (
+                        <FormItem className="flex flex-col gap-2">
+                          <FormLabel>First Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="John" {...field} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="surname"
+                      render={({field}) => (
+                        <FormItem className="flex flex-col gap-2">
+                          <FormLabel>Last Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Doe" {...field} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({field}) => (
+                        <FormItem className="flex flex-col gap-2">
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="email"
+                              placeholder="johndoe@email.com"
+                              {...field}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="message"
+                      render={({field}) => (
+                        <FormItem className="flex flex-col gap-2">
+                          <FormLabel>Message</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="I’d like to get in touch regarding your services…"
+                              {...field}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <Button
+                      type="submit"
+                      variant={'default'}
+                      disabled={isSending}
+                    >
+                      {isSending ? 'Sending...' : 'Submit'}
+                    </Button>
+                  </form>
+                </Form>
+              )}
             </div>
           </div>
 
