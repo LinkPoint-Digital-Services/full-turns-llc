@@ -7,6 +7,7 @@ import {AxiosError} from 'axios';
 import {toast} from 'sonner';
 import {useQueryClient} from '@tanstack/react-query';
 import {Button} from '../ui/button';
+import Image from 'next/image';
 
 export default function DashboardHeader() {
   const router = useRouter();
@@ -30,12 +31,27 @@ export default function DashboardHeader() {
   };
 
   return (
-    <header className='flex items-center justify-between p-4 border-b'>
-      <span>Logo</span>
+    <header className="bg-primary">
+      <div className="flex items-center justify-between p-4 container mx-auto">
+        <Image
+          src="/assets/images/homepage/logo_for_orange.png"
+          alt="Full Turns LLC Logo"
+          width={150}
+          height={150}
+          className="object-contain"
+          priority
+        />
 
-      <div className='flex items-center gap-4'>
-        <h4>Admin</h4>
-        <Button onClick={handleLogout}>Logout</Button>
+        <div className="flex items-center gap-4">
+          <h4>Admin</h4>
+          <Button
+            variant="outline"
+            className="rounded-md border-2 border-[#1c1c1c] bg-transparent hover:bg-[#1c1c1c] hover:text-primary text-[#1c1c1c] transition"
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
+        </div>
       </div>
     </header>
   );

@@ -1,25 +1,26 @@
-'use client';
+"use client";
 
-import React, {useEffect, useState} from 'react';
-import {useRouter} from 'next/navigation';
-import {useMe} from '@/features/auth/hooks/useMe';
-import Loading from '@/app/loading';
-import DashboardHeader from '@/components/layout/DashboardHeader';
-import {Button} from '@/components/ui/button';
-import BuffersPage from './buffers/page';
-import BlogsPage from './blogs/page';
-import ServicesPage from './services/page';
-import BackupPage from './backup/page';
+import React, {useEffect, useState} from "react";
+import Image from "next/image";
+import {useRouter} from "next/navigation";
+import {useMe} from "@/features/auth/hooks/useMe";
+import Loading from "@/app/loading";
+import DashboardHeader from "@/components/layout/DashboardHeader";
+import {Button} from "@/components/ui/button";
+import BuffersPage from "./buffers/page";
+import BlogsPage from "./blogs/page";
+import ServicesPage from "./services/page";
+import BackupPage from "./backup/page";
 
 export default function AdminPage() {
   const router = useRouter();
   const {data: userData, isLoading, isError} = useMe();
-  type AdminTab = 'buffers' | 'blogs' | 'services' | 'backup' | null;
-  const [activeTab, setActiveTab] = useState<AdminTab>('buffers');
+  type AdminTab = "buffers" | "blogs" | "services" | "backup" | null;
+  const [activeTab, setActiveTab] = useState<AdminTab>("buffers");
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (isLoading) router.replace('/login');
+      if (isLoading) router.replace("/login");
     }, 5000);
 
     return () => clearTimeout(timer);
@@ -27,19 +28,17 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (isLoading) return;
-
-    // Only run redirect logic if we actually have a user object
     if (!userData?.user) return;
 
     const role = userData.user.role;
 
-    if (role === 'manager') {
-      router.replace('/dashboard/property-manager');
+    if (role === "manager") {
+      router.replace("/dashboard/property-manager");
       return;
     }
 
-    if (isError || role !== 'admin') {
-      router.replace('/login');
+    if (isError || role !== "admin") {
+      router.replace("/login");
       return;
     }
   }, [isLoading, isError, userData, router]);
@@ -50,60 +49,60 @@ export default function AdminPage() {
   return (
     <>
       <DashboardHeader />
-      <main className="p-4">
-        <div>
-          <h1 className="text-2xl font-semibold">Admin Dashboard</h1>
-          <p>Manage property managers, blogs, services, and data backups</p>
-        </div>
 
-        <div className="mt-10">
+      <main className="min-h-screen bg-[#121212] text-white px-6 py-10">
+        <div className="container mx-auto">
+          {/* Header */}
           <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              onClick={() => setActiveTab('buffers')}
-              className={
-                activeTab === 'buffers' ? 'bg-orange-500 text-white' : ''
-              }
-            >
-              Buffers
-            </Button>
+            <Image
+              src="/assets/images/homepage/logo_for_orange.png"
+              alt="Full Turns LLC Logo"
+              width={48}
+              height={48}
+              className="object-contain"
+              priority
+            />
 
-            <Button
-              variant="outline"
-              onClick={() => setActiveTab('blogs')}
-              className={
-                activeTab === 'blogs' ? 'bg-orange-500 text-white' : ''
-              }
-            >
-              Blogs
-            </Button>
-
-            <Button
-              variant="outline"
-              onClick={() => setActiveTab('services')}
-              className={
-                activeTab === 'services' ? 'bg-orange-500 text-white' : ''
-              }
-            >
-              Services
-            </Button>
-
-            <Button
-              variant="outline"
-              onClick={() => setActiveTab('backup')}
-              className={
-                activeTab === 'backup' ? 'bg-orange-500 text-white' : ''
-              }
-            >
-              Backup
-            </Button>
+            <div>
+              <h1 className="text-3xl font-semibold">Welcome!</h1>
+              <p className="text-sm text-gray-400 mt-1">
+                Manage property managers, blogs, services, and data backups
+              </p>
+            </div>
           </div>
 
-          <div>
-            {activeTab === 'buffers' && <BuffersPage />}
-            {activeTab === 'blogs' && <BlogsPage />}
-            {activeTab === 'services' && <ServicesPage />}
-            {activeTab === 'backup' && <BackupPage />}
+          {/* Tabs (UNCHANGED BEHAVIOR) */}
+          <div className="flex gap-4 mt-8 items-center">
+            {(
+              [
+                ["buffers", "Buffers"],
+                ["blogs", "Blogs"],
+                ["services", "Services"],
+                ["backup", "Backup"],
+              ] as const
+            ).map(([key, label]) => (
+              <Button
+                key={key}
+                variant="default"
+                onClick={() => setActiveTab(key)}
+                className={`h-9 px-6 rounded-full text-sm transition-all flex-1
+                  ${
+                    activeTab === key
+                      ? "bg-primary text-black"
+                      : "bg-[#1c1c1c] text-gray-300 hover:bg-[#1c1c1c]/20"
+                  }`}
+              >
+                {label}
+              </Button>
+            ))}
+          </div>
+
+          {/* Content Container */}
+          <div className="mt-8 bg-white text-[#1c1c1c] rounded-xl p-8 min-h-[420px]">
+            {activeTab === "buffers" && <BuffersPage />}
+            {activeTab === "blogs" && <BlogsPage />}
+            {activeTab === "services" && <ServicesPage />}
+            {activeTab === "backup" && <BackupPage />}
           </div>
         </div>
       </main>
