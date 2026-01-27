@@ -9,7 +9,7 @@ import Image from "next/image";
 
 export default function SignupPage() {
   return (
-    <main className="relative min-h-screen w-full bg-[#1a1a1a] text-white flex flex-col lg:flex-row overflow-hidden">
+    <main className="relative min-h-screen w-full bg-[#262626] text-white flex flex-col lg:flex-row overflow-hidden">
       {/* IMAGE / HERO */}
       <section className="relative w-full lg:w-[60%] h-[20vh] lg:h-auto overflow-hidden order-1 lg:order-2">
         <div
@@ -39,7 +39,7 @@ export default function SignupPage() {
         <div
           className="
             relative w-full
-            bg-[#1a1a1a]
+            bg-[#262626]
             px-6 pt-10 md:px-6 lg:px-15 xl:px-35
             -mt-24 lg:mt-0
             z-20

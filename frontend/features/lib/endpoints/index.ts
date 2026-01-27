@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
 const build = (path?: string) => `${API_BASE}${path}`;
 
@@ -26,5 +26,9 @@ export const Endpoint = {
     updateBlog: build(process.env.NEXT_PUBLIC_ADMIN_UPDATE_BLOG),
     deleteBlog: build(process.env.NEXT_PUBLIC_ADMIN_DELETE_BLOG),
     getBlog: build(process.env.NEXT_PUBLIC_ADMIN_GET_BLOG),
+  },
+
+  manager: {
+    updateProfile: build(process.env.NEXT_PUBLIC_MANAGER_UPDATE_PROFILE),
   }
 } as const;

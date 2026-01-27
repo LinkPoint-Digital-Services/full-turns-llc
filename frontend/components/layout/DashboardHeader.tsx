@@ -8,10 +8,13 @@ import {toast} from 'sonner';
 import {useQueryClient} from '@tanstack/react-query';
 import {Button} from '../ui/button';
 import Image from 'next/image';
+import { useMe } from '@/features/auth/hooks/useMe';
 
 export default function DashboardHeader() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { data: userData } = useMe();
+
 
   const handleLogout = async () => {
     try {
@@ -43,14 +46,16 @@ export default function DashboardHeader() {
         />
 
         <div className="flex items-center gap-4">
-          <h4>Admin</h4>
-          <Button
-            variant="outline"
-            className="rounded-md border-2 border-[#1c1c1c] bg-transparent hover:bg-[#1c1c1c] hover:text-primary text-[#1c1c1c] transition"
-            onClick={handleLogout}
-          >
-            Logout
-          </Button>
+          <h4>{userData?.user.role == "admin" ? "Admin" : "Manager"}</h4>
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              className="rounded-md border-2 border-[#1c1c1c] bg-transparent hover:bg-[#1c1c1c] hover:text-primary text-[#1c1c1c] transition"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </div>
         </div>
       </div>
     </header>

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, {useEffect} from "react";
-import {useRouter} from "next/navigation";
-import {useMe} from "@/features/auth/hooks/useMe";
-import LoginForm from "@/features/auth/components/LoginForm";
-import bg from "@/public/assets/images/homepage/hero-bg.png";
-import Link from "next/link";
-import stroke from "@/public/assets/images/about-us/about-us-paintstroke.png";
-import Image from "next/image";
+import React, {useEffect} from 'react';
+import {useRouter} from 'next/navigation';
+import {useMe} from '@/features/auth/hooks/useMe';
+import LoginForm from '@/features/auth/components/LoginForm';
+import bg from '@/public/assets/images/homepage/hero-bg.png';
+import Link from 'next/link';
+import stroke from '@/public/assets/images/about-us/about-us-paintstroke.png';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const {data: userData, isLoading, isError} = useMe();
@@ -20,7 +20,7 @@ export default function LoginPage() {
   }, [isLoading, isError, userData, router]);
 
   return (
-    <main className="relative min-h-screen w-full bg-[#1a1a1a] text-white flex flex-col lg:flex-row overflow-hidden">
+    <main className="relative min-h-screen w-full bg-[#262626] text-white flex flex-col lg:flex-row overflow-hidden">
       {/* IMAGE / HERO */}
       <section className="relative w-full lg:w-[60%] h-[20vh] lg:h-auto overflow-hidden order-1 lg:order-2">
         <div
@@ -50,7 +50,7 @@ export default function LoginPage() {
         <div
           className="
             relative w-full
-            bg-[#1a1a1a]
+            bg-[#262626]
             px-6 pt-10 md:px-6 lg:px-15 xl:px-35
             -mt-24 lg:mt-0
             z-20
@@ -79,7 +79,7 @@ export default function LoginPage() {
           </div>
 
           <p className="text-sm text-gray-300 mb-6">
-            Don&apos;t have an account?{" "}
+            Don&apos;t have an account?{' '}
             <Link
               href="/signup"
               className="text-[#eaa918] hover:underline font-medium"

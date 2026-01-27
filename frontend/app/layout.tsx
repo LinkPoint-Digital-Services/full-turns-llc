@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-slate-900 dark:bg-black dark:text-slate-50`}
       >
         <ReactQueryProvider>
-          <DesktopOnlyCursor/>
+          <DesktopOnlyCursor />
           {children}
           <Toaster richColors position="top-right" />
         </ReactQueryProvider>

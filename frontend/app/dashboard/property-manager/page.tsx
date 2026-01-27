@@ -1,22 +1,25 @@
-'use client';
+"use client";
 
-import React, {useEffect} from 'react';
-import {authClient} from '@/features/auth/services/authClient';
-import {toast} from 'sonner';
-import {useRouter} from 'next/navigation';
-import {AxiosError} from 'axios';
-import {useMe} from '@/features/auth/hooks/useMe';
-import Loading from '@/app/loading';
-import {useQueryClient} from '@tanstack/react-query';
+import React, {useEffect, useState} from "react";
+import {useRouter} from "next/navigation";
+import {useMe} from "@/features/auth/hooks/useMe";
+import Loading from "@/app/loading";
+import DashboardHeader from "@/components/layout/DashboardHeader";
+import {Button} from "@/components/ui/button";
+import OrdersPage from "./orders/page";
+import MyOrdersPage from "./my-orders/page";
+import SettingsPage from "./settings/page";
 
 export default function ManagerPage() {
   const router = useRouter();
   const {data: userData, isLoading, isError} = useMe();
-  const queryClient = useQueryClient();
+
+  type ManagerTab = "orders" | "my-orders" | "settings" | null;
+  const [activeTab, setActiveTab] = useState<ManagerTab>("orders");
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (isLoading) router.replace('/login');
+      if (isLoading) router.replace("/login");
     }, 5000);
 
     return () => clearTimeout(timer);
@@ -24,42 +27,71 @@ export default function ManagerPage() {
 
   useEffect(() => {
     if (isLoading) return;
+    if (!userData?.user) return;
 
-    const role = userData?.user?.role;
-    if (role === 'admin') {
-      router.replace('/dashboard/admin');
+    const role = userData.user.role;
+
+    if (role === "admin") {
+      router.replace("/dashboard/admin");
       return;
     }
-    if (isError || role !== 'manager') {
-      router.replace('/login');
+
+    if (isError || role !== "manager") {
+      router.replace("/login");
+      return;
     }
   }, [isError, isLoading, router, userData]);
 
-  const handleLogout = async () => {
-    try {
-      const result = await authClient.logout();
-      if (result.message) {
-        queryClient.removeQueries({queryKey: ['auth', 'me']});
-        router.push('/login');
-      }
-    } catch (error) {
-      const axiosError = error as AxiosError<{message: string}>;
-      toast.error(
-        axiosError.response?.data.message ||
-          axiosError.message ||
-          'Logout failed. Please try again.'
-      );
-    }
-  };
-
   if (isLoading) return <Loading />;
-
-  if (!userData?.user) return null;
+  if (!userData?.user) return <Loading />;
 
   return (
-    <div>
-      <h1>Manager Dashboard</h1>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
+    <>
+      <DashboardHeader />
+
+      <main className="min-h-screen bg-[#121212] text-white px-6 py-10">
+        <div className="container mx-auto">
+          {/* Header */}
+          <div>
+            <h1 className="text-3xl font-semibold">Manager Dashboard</h1>
+            <p className="text-sm text-gray-400 mt-1">
+              Manage orders, view my orders, and update settings
+            </p>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex gap-4 mt-8 items-center">
+            {(
+              [
+                ["orders", "Orders"],
+                ["my-orders", "My Orders"],
+                ["settings", "Settings"],
+              ] as const
+            ).map(([key, label]) => (
+              <Button
+                key={key}
+                variant="default"
+                onClick={() => setActiveTab(key)}
+                className={`h-9 px-6 rounded-full text-sm transition-all flex-1
+                  ${
+                    activeTab === key
+                      ? "bg-primary text-black"
+                      : "bg-[#1c1c1c] text-gray-300 hover:bg-[#1c1c1c]/20"
+                  }`}
+              >
+                {label}
+              </Button>
+            ))}
+          </div>
+
+          {/* Content Container */}
+          <div className="mt-8 bg-white text-[#1c1c1c] rounded-xl p-8 min-h-[420px]">
+            {activeTab === "orders" && <OrdersPage />}
+            {activeTab === "my-orders" && <MyOrdersPage />}
+            {activeTab === "settings" && <SettingsPage />}
+          </div>
+        </div>
+      </main>
+    </>
   );
 }
