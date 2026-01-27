@@ -7,10 +7,13 @@ import {AxiosError} from 'axios';
 import {toast} from 'sonner';
 import {useQueryClient} from '@tanstack/react-query';
 import {Button} from '../ui/button';
+import { useMe } from '@/features/auth/hooks/useMe';
 
 export default function DashboardHeader() {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const { data: userData } = useMe();
+
 
   const handleLogout = async () => {
     try {
@@ -34,7 +37,7 @@ export default function DashboardHeader() {
       <span>Logo</span>
 
       <div className='flex items-center gap-4'>
-        <h4>Admin</h4>
+        <h4>{userData?.user.role == 'admin' ? 'Admin' : 'Manager'}</h4>
         <Button onClick={handleLogout}>Logout</Button>
       </div>
     </header>

@@ -27,4 +27,8 @@ export const Endpoint = {
     deleteBlog: build(process.env.NEXT_PUBLIC_ADMIN_DELETE_BLOG),
     getBlog: build(process.env.NEXT_PUBLIC_ADMIN_GET_BLOG),
   },
+
+  manager: {
+    updateProfile: build(process.env.NEXT_PUBLIC_MANAGER_UPDATE_PROFILE),
+  }
 } as const;
