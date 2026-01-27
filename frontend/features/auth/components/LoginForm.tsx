@@ -66,7 +66,7 @@ export default function LoginForm() {
         </a>
       </div>
 
-      <Button className="w-full" type="submit" disabled={mutation.isPending}>
+      <Button className="w-full h-12" type="submit" disabled={mutation.isPending}>
         {mutation.isPending ? "Logging in..." : "Login"}
       </Button>
     </form>

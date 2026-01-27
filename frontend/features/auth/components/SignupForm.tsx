@@ -152,7 +152,7 @@ export default function SignupForm() {
       <Button
         type="submit"
         disabled={mutation.isPending}
-        className="w-full bg-primary hover:bg-primary/90"
+        className="w-full bg-primary hover:bg-primary/90 h-12"
       >
         {mutation.isPending ? "Signing up..." : "Sign Up"}
       </Button>
