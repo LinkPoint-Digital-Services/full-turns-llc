@@ -49,6 +49,7 @@ export default function SettingsPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!userData?.user._id) return;
+    console.log(userData.user.company_name)
 
     updateProfileMutation.mutate({
       manager_id: userData.user._id,
@@ -125,7 +126,7 @@ export default function SettingsPage() {
             />
           </div>
 
-          {userData?.user.company_name !== undefined && (
+          {userData?.user.account_type !== 'solo' && (
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Company Name
