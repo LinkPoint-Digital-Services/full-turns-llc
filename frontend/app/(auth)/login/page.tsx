@@ -1,10 +1,13 @@
 'use client';
 
+import { ArrowLeft } from 'lucide-react';
+
 import React, {useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 import {useMe} from '@/features/auth/hooks/useMe';
 import LoginForm from '@/features/auth/components/LoginForm';
 import bg from '@/public/assets/images/homepage/hero-bg.png';
+import livingRoom from '@/public/assets/images/contact/living-room.png';
 import Link from 'next/link';
 import stroke from '@/public/assets/images/about-us/about-us-paintstroke.png';
 import Image from 'next/image';
@@ -45,13 +48,21 @@ export default function LoginPage() {
       </section>
 
       {/* LOGIN */}
-      <section className="relative w-full lg:w-[40%] flex items-start lg:items-center justify-center order-2 lg:order-1">
+      <section className="relative w-full lg:w-[40%] flex items-start lg:items-center justify-center order-2 lg:order-1 h-full min-h-screen">
+        <Link 
+          href="/" 
+          className="hidden lg:flex absolute top-4 left-4 lg:top-8 lg:left-8 z-30 text-white hover:text-[#eaa918] transition-colors"
+        >
+          <ArrowLeft size={24} />
+          <span className="sr-only">Back to Home</span>
+        </Link>
         {/* Form area — SAME BG AS SECTION */}
         <div
           className="
             relative w-full
             bg-[#262626]
-            px-6 pt-10 md:px-6 lg:px-15 xl:px-35
+            px-6 pt-10 md:px-6 lg:px-15 xl:px-20
+            lg:max-w-[38rem]
             -mt-24 lg:mt-0
             z-20
 
@@ -89,6 +100,8 @@ export default function LoginPage() {
           </p>
 
           <LoginForm />
+          
+
         </div>
       </section>
     </main>

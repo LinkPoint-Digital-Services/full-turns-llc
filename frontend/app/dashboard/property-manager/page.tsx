@@ -49,7 +49,7 @@ export default function ManagerPage() {
     <>
       <DashboardHeader />
 
-      <main className="min-h-screen bg-[#121212] text-white px-6 py-10">
+      <main className="min-h-screen pt-40 bg-[#121212] text-white px-6 py-10">
         <div className="container mx-auto">
           {/* Header */}
           <div>
@@ -60,10 +60,10 @@ export default function ManagerPage() {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-4 mt-8 items-center">
+          <div className="mt-6 md:mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3 items-stretch sm:items-center">
             {(
               [
-                ["orders", "Orders"],
+                ["orders", "Place Orders"],
                 ["my-orders", "My Orders"],
                 ["settings", "Settings"],
               ] as const
@@ -72,7 +72,7 @@ export default function ManagerPage() {
                 key={key}
                 variant="default"
                 onClick={() => setActiveTab(key)}
-                className={`h-9 px-6 rounded-full text-sm transition-all flex-1
+                className={`h-9 px-4 md:px-6 rounded-full text-xs md:text-sm transition-all w-full sm:w-auto
                   ${
                     activeTab === key
                       ? "bg-primary text-black"
@@ -85,7 +85,7 @@ export default function ManagerPage() {
           </div>
 
           {/* Content Container */}
-          <div className="mt-8 bg-white text-[#1c1c1c] rounded-xl p-8 min-h-[420px]">
+          <div className="mt-8 bg-white text-[#1c1c1c] rounded-xl p-8">
             {activeTab === "orders" && <OrdersPage />}
             {activeTab === "my-orders" && <MyOrdersPage />}
             {activeTab === "settings" && <SettingsPage />}

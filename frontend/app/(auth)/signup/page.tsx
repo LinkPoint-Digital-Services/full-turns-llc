@@ -1,9 +1,13 @@
 "use client";
 
+import { ArrowLeft } from "lucide-react";
+
+
 import React from "react";
 import SignupForm from "@/features/auth/components/SignupForm";
 import Link from "next/link";
 import bg from "@/public/assets/images/homepage/hero-bg.png";
+import livingRoom from "@/public/assets/images/contact/living-room.png";
 import stroke from "@/public/assets/images/about-us/about-us-paintstroke.png";
 import Image from "next/image";
 
@@ -11,7 +15,7 @@ export default function SignupPage() {
   return (
     <main className="relative min-h-screen w-full bg-[#262626] text-white flex flex-col lg:flex-row overflow-hidden">
       {/* IMAGE / HERO */}
-      <section className="relative w-full lg:w-[60%] h-[20vh] lg:h-auto overflow-hidden order-1 lg:order-2">
+      <section className="relative -z-0 w-full lg:w-[60%] h-[20vh] lg:h-auto overflow-hidden order-1 lg:order-2">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{backgroundImage: `url(${bg.src})`}}
@@ -34,13 +38,23 @@ export default function SignupPage() {
       </section>
 
       {/* SIGNUP */}
-      <section className="relative w-full lg:w-[40%] flex pb-15 items-start lg:items-center justify-center order-2 lg:order-1">
+      <section className="relative z-10 w-full lg:w-[40%] flex pb-15 items-start lg:items-center justify-center order-2 lg:order-1 h-full min-h-screen">
+        <Link 
+          href="/" 
+          className="hidden lg:flex absolute top-4 left-4 lg:top-8 lg:left-8 z-30 text-white hover:text-[#eaa918] transition-colors"
+        >
+          <ArrowLeft size={24} />
+          <span className="sr-only">Back to Home</span>
+        </Link>
+        <div className="absolute -bottom-24 -left-24 z-10 w-64 md:w-96">
+        </div>
         {/* Form area — SAME BG AS SECTION */}
         <div
           className="
             relative w-full
-            bg-[#262626]
-            px-6 pt-10 md:px-6 lg:px-15 xl:px-35
+            bg-[#262626] md:bg-transparent
+            px-6 pt-10 md:px-6 lg:px-15 xl:px-20
+            lg:max-w-[38rem]
             -mt-24 lg:mt-0
             z-20
 
@@ -67,7 +81,7 @@ export default function SignupPage() {
             </h2>
           </div>
 
-          <p className="text-sm text-gray-300 mb-6">
+          <p className="text-sm text-gray-300 mb-6 font-light">
             Already have an account?{" "}
             <Link
               href="/login"

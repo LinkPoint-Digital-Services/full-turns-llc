@@ -34,12 +34,12 @@ export default function DashboardHeader() {
   };
 
   return (
-    <header className="bg-primary">
-      <div className="flex items-center justify-between p-4 container mx-auto">
+    <header className="bg-primary fixed w-full">
+      <div className="flex items-center justify-between py-4 container mx-auto z-50">
         <Image
           src="/assets/images/homepage/logo_for_orange.png"
           alt="Full Turns LLC Logo"
-          width={150}
+          width={100}
           height={150}
           className="object-contain"
           priority
