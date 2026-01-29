@@ -6,9 +6,9 @@ import {useMe} from "@/features/auth/hooks/useMe";
 import Loading from "@/app/loading";
 import DashboardHeader from "@/components/layout/DashboardHeader";
 import {Button} from "@/components/ui/button";
-import OrdersPage from "./orders/page";
-import MyOrdersPage from "./my-orders/page";
-import SettingsPage from "./settings/page";
+import OrdersPage from "./orders/Orders";
+import MyOrdersPage from "./my-orders/myOrders";
+import SettingsPage from "./settings/Settings";
 
 export default function ManagerPage() {
   const router = useRouter();
@@ -49,10 +49,10 @@ export default function ManagerPage() {
     <>
       <DashboardHeader />
 
-      <main className="min-h-screen pt-40 bg-[#121212] text-white px-6 py-10">
+      <main className="min-h-screen pt-40 bg-[#121212] text-white md:px-6 py-10">
         <div className="container mx-auto">
           {/* Header */}
-          <div>
+          <div className="px-6 md:px-0">
             <h1 className="text-3xl font-semibold">Manager Dashboard</h1>
             <p className="text-sm text-gray-400 mt-1">
               Manage orders, view my orders, and update settings
@@ -60,7 +60,7 @@ export default function ManagerPage() {
           </div>
 
           {/* Tabs */}
-          <div className="mt-6 md:mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3 items-stretch sm:items-center">
+          <div className="px-6 md:px-0 mt-6 md:mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3 items-stretch sm:items-center">
             {(
               [
                 ["orders", "Place Orders"],
@@ -85,7 +85,7 @@ export default function ManagerPage() {
           </div>
 
           {/* Content Container */}
-          <div className="mt-8 bg-white text-[#1c1c1c] rounded-xl p-8">
+          <div className="mt-8 bg-white text-[#1c1c1c] rounded-xl p-2 md:p-8">
             {activeTab === "orders" && <OrdersPage />}
             {activeTab === "my-orders" && <MyOrdersPage />}
             {activeTab === "settings" && <SettingsPage />}

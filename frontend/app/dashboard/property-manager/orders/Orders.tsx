@@ -1,13 +1,9 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { StepMenu } from "./StepMenu";
 import { StepService } from "./StepService";
-import {
-  ServiceItem,
-  calculateServicePrice,
-} from "@/features/manager/components/serviceData";
+import type { Item } from "@/features/manager/components";
 import { OrderItem } from "@/features/manager/types/order.types";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,16 +20,14 @@ export default function OrdersPage() {
   const [step, setStep] = useState<"MENU" | "SERVICE">("MENU");
   const [cartItems, setCartItems] = useState<OrderItem[]>([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [pendingItem, setPendingItem] = useState<ServiceItem | null>(null);
-
-  const router = useRouter();
+  const [pendingItem, setPendingItem] = useState<Item | null>(null);
 
   const cartTotal = useMemo(
     () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
     [cartItems]
   );
 
-  const handleSimpleItemSelect = (item: ServiceItem) => {
+  const handleSimpleItemSelect = (item: Item) => {
     setPendingItem(item);
     setShowConfirmModal(true);
   };
@@ -41,11 +35,12 @@ export default function OrdersPage() {
   const confirmAddSimpleItem = () => {
     if (!pendingItem) return;
 
-    const basePrice = calculateServicePrice(pendingItem.id);
+    // Use basePrice directly from the item
+    const basePrice = pendingItem.basePrice;
 
     const cartItem: OrderItem = {
-      id: `${pendingItem.id}-${Date.now()}`,
-      serviceId: pendingItem.id,
+      id: `${pendingItem.itemId}-${Date.now()}`,
+      serviceId: pendingItem.itemId,
       name: pendingItem.name,
       price: basePrice,
       quantity: 1,
@@ -126,7 +121,6 @@ export default function OrdersPage() {
 
     setCartItems([]);
     setStep("MENU");
-    router.push("/dashboard/property-manager/my-orders");
   };
 
   return (
@@ -143,7 +137,7 @@ export default function OrdersPage() {
           />
 
           {/* Cart Summary */}
-          <div className="fixed left-0 right-0 bottom-0 z-20 md:static md:z-auto border-t md:border md:border-gray-100 rounded-t-2xl md:rounded-xl bg-white p-4 md:p-6 space-y-4 shadow-[0_-8px_20px_rgba(15,23,42,0.12)] md:shadow-none">
+          <div className="fixed left-0 right-0 bottom-0 md:static border-t md:border md:border-gray-100 rounded-t-2xl md:rounded-xl bg-white p-4 md:p-6 space-y-4 shadow-[0_-8px_20px_rgba(15,23,42,0.12)] md:shadow-none">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h3 className="text-base md:text-lg font-semibold text-gray-900">
@@ -162,7 +156,7 @@ export default function OrdersPage() {
             </div>
 
             {cartItems.length > 0 && (
-              <div className="space-y-2 max-h-56 overflow-y-auto -mx-1 px-1">
+              <div className="space-y-2 max-h-26 hidden md:block overflow-y-auto -mx-1 px-1">
                 {cartItems.map((item) => (
                   <div
                     key={item.id}

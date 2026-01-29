@@ -1,4 +1,14 @@
 export { ServiceCategoryList } from "./ServiceCategoryList";
 export { ServiceItemGrid } from "./ServiceItemGrid";
-export { PaintingConfigModal } from "./PaintingConfigModal";
-export { PunchOutConfigModal } from "./PunchOutConfigModal";
+export { ServiceItemConfigModal } from "./ServiceItemConfigModal";
+
+export {
+  services,
+  serviceItems,
+  getServiceById,
+  getItemsByServiceId,
+  formatPrice,
+  getIcon  
+} from "./serviceData";
+
+export type { Service, Item } from "./serviceData";

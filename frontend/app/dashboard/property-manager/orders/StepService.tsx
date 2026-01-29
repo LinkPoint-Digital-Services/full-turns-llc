@@ -5,19 +5,17 @@ import { Filter, ChevronDown } from "lucide-react";
 import {
   ServiceCategoryList,
   ServiceItemGrid,
-  PaintingConfigModal,
-  PunchOutConfigModal,
+  ServiceItemConfigModal,
 } from "@/features/manager/components";
+import type { Item } from "@/features/manager/components";
 import {
-  serviceCategories,
-  getServicesByCategory,
-  ServiceCategoryKey,
-  ServiceItem,
+  services,
+  getItemsByServiceId,
 } from "@/features/manager/components/serviceData";
 import { cn } from "@/lib/utils";
 
 interface StepServiceProps {
-  onSelectItem: (item: ServiceItem) => void;
+  onSelectItem: (item: Item) => void;
   onAddConfiguredItem: (item: {
     serviceId: string;
     name: string;
@@ -27,29 +25,31 @@ interface StepServiceProps {
 }
 
 export const StepService = ({ onSelectItem, onAddConfiguredItem }: StepServiceProps) => {
-  const [activeService, setActiveService] = useState<ServiceCategoryKey>("refinish");
-  const [paintModalOpen, setPaintModalOpen] = useState(false);
-  const [punchOutModalOpen, setPunchOutModalOpen] = useState(false);
+  // Initialize with the first service ID
+  const [activeServiceId, setActiveServiceId] = useState<string>(services[0]._id);
+  const [configModalOpen, setConfigModalOpen] = useState(false);
+  const [selectedConfigItem, setSelectedConfigItem] = useState<Item | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const handleItemSelect = (item: ServiceItem) => {
-    // Check if item requires configuration modal
-    if (item.id === "painting_apartments") {
-      setPaintModalOpen(true);
-    } else if (item.id === "maintenance_punchout") {
-      setPunchOutModalOpen(true);
-    } else {
-      // For straightforward services, ask parent to confirm add to cart
+  const handleItemSelect = (item: Item) => {
+    // If item is 'fixed' measurement (no quantity needed), has no add-ons, and no custom details allowed:
+    // Simply select it (triggering the confirmation modal in parent if applicable, or direct add).
+    const isSimpleItem = 
+      item.measurement === "fixed" && 
+      (!item.addOns || item.addOns.length === 0) &&
+      !item.allowCustomDetails;
+
+    if (isSimpleItem) {
       onSelectItem(item);
+    } else {
+      // Otherwise, open configuration modal (for quantity, add-ons, or custom details)
+      setSelectedConfigItem(item);
+      setConfigModalOpen(true);
     }
   };
 
-  const categories = serviceCategories.map((cat) => ({
-    name: cat.displayName,
-    icon: cat.icon,
-  }));
-
-  const currentItems = getServicesByCategory(activeService);
+  const activeService = services.find(s => s._id === activeServiceId) || services[0];
+  const currentItems = getItemsByServiceId(activeServiceId);
 
   return (
     <>
@@ -64,8 +64,7 @@ export const StepService = ({ onSelectItem, onAddConfiguredItem }: StepServicePr
             <span className="flex items-center gap-2">
               <Filter className="w-4 h-4 text-gray-500" />
               <span className="font-medium">
-                {serviceCategories.find((c) => c.id === activeService)?.displayName ||
-                  "Service Categories"}
+                {activeService.serviceName}
               </span>
             </span>
             <ChevronDown
@@ -79,16 +78,14 @@ export const StepService = ({ onSelectItem, onAddConfiguredItem }: StepServicePr
           {isSidebarOpen && (
             <div className="mt-2 border border-gray-100 rounded-lg bg-white shadow-sm">
               <ServiceCategoryList
-                categories={categories}
-                activeCategory={
-                  serviceCategories.find((c) => c.id === activeService)?.displayName || ""
-                }
-                onCategoryChange={(categoryName) => {
-                  const category = serviceCategories.find(
-                    (c) => c.displayName === categoryName
+                categories={services}
+                activeCategory={activeService.serviceName}
+                onCategoryChange={(serviceName) => {
+                  const service = services.find(
+                    (s) => s.serviceName === serviceName
                   );
-                  if (category) {
-                    setActiveService(category.id);
+                  if (service) {
+                    setActiveServiceId(service._id);
                   }
                   setIsSidebarOpen(false);
                 }}
@@ -100,20 +97,18 @@ export const StepService = ({ onSelectItem, onAddConfiguredItem }: StepServicePr
         {/* Desktop sidebar + grid layout */}
         <div className="hidden md:flex md:flex-row md:gap-6 md:flex-1">
           <ServiceCategoryList
-            categories={categories}
-            activeCategory={
-              serviceCategories.find((c) => c.id === activeService)?.displayName || ""
-            }
-            onCategoryChange={(categoryName) => {
-              const category = serviceCategories.find((c) => c.displayName === categoryName);
-              if (category) {
-                setActiveService(category.id);
+            categories={services}
+            activeCategory={activeService.serviceName}
+            onCategoryChange={(serviceName) => {
+              const service = services.find((s) => s.serviceName === serviceName);
+              if (service) {
+                setActiveServiceId(service._id);
               }
             }}
           />
 
           <ServiceItemGrid
-            title={serviceCategories.find((c) => c.id === activeService)?.displayName || ""}
+            title={activeService.serviceName}
             items={currentItems}
             onItemSelect={handleItemSelect}
           />
@@ -122,20 +117,20 @@ export const StepService = ({ onSelectItem, onAddConfiguredItem }: StepServicePr
         {/* Mobile grid below toggle */}
         <div className="mt-3 md:mt-0 md:hidden flex-1">
           <ServiceItemGrid
-            title={serviceCategories.find((c) => c.id === activeService)?.displayName || ""}
+            title={activeService.serviceName}
             items={currentItems}
             onItemSelect={handleItemSelect}
           />
         </div>
       </div>
 
-      {/* Configuration Modals */}
-      <PaintingConfigModal
-        open={paintModalOpen}
-        onOpenChange={setPaintModalOpen}
+      {/* Reusable Configuration Modal */}
+      <ServiceItemConfigModal 
+        item={selectedConfigItem}
+        open={configModalOpen} 
+        onOpenChange={setConfigModalOpen} 
         onAddToCart={onAddConfiguredItem}
       />
-      <PunchOutConfigModal open={punchOutModalOpen} onOpenChange={setPunchOutModalOpen} />
     </>
   );
 };
