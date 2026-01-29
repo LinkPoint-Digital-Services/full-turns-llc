@@ -37,6 +37,7 @@ export default function MyOrdersPage() {
     if (!stored) return;
     try {
       const parsed: OrderSummary[] = JSON.parse(stored);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOrders(parsed);
     } catch {
       // ignore parse errors

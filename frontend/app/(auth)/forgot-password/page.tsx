@@ -13,7 +13,6 @@ import {useAppMutation} from "@/features/shared/hooks/useAppMutation";
 import {Button} from "@/components/ui/button";
 import {useForgotPassword} from "@/stores/auth/password-recovery";
 import bg from "@/public/assets/images/homepage/hero-bg.png";
-import livingRoom from "@/public/assets/images/contact/living-room.png";
 import stroke from "@/public/assets/images/about-us/about-us-paintstroke.png";
 import Image from "next/image";
 import Link from "next/link";

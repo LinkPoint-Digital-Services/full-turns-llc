@@ -7,7 +7,6 @@ import {useRouter} from 'next/navigation';
 import {useMe} from '@/features/auth/hooks/useMe';
 import LoginForm from '@/features/auth/components/LoginForm';
 import bg from '@/public/assets/images/homepage/hero-bg.png';
-import livingRoom from '@/public/assets/images/contact/living-room.png';
 import Link from 'next/link';
 import stroke from '@/public/assets/images/about-us/about-us-paintstroke.png';
 import Image from 'next/image';

@@ -10,7 +10,6 @@ import AuthInputField from "@/features/auth/components/AuthInputField";
 import {Button} from "@/components/ui/button";
 import {useAuthForm} from "@/features/auth/hooks/useAuthForm";
 import bg from "@/public/assets/images/homepage/hero-bg.png";
-import livingRoom from "@/public/assets/images/contact/living-room.png";
 import stroke from "@/public/assets/images/about-us/about-us-paintstroke.png";
 import Image from "next/image";
 import Link from "next/link";

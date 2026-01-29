@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Filter, ChevronDown } from "lucide-react";
 import {
   ServiceCategoryList,
   ServiceItemGrid,
@@ -11,9 +10,7 @@ import type { Item } from "@/features/manager/components";
 import {
   services,
   getItemsByServiceId,
-  getIcon,
 } from "@/features/manager/components/serviceData";
-import { cn } from "@/lib/utils";
 
 interface StepServiceProps {
   onSelectItem: (item: Item) => void;

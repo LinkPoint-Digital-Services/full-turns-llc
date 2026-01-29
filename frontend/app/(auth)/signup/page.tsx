@@ -2,12 +2,9 @@
 
 import { ArrowLeft } from "lucide-react";
 
-
-import React from "react";
 import SignupForm from "@/features/auth/components/SignupForm";
 import Link from "next/link";
 import bg from "@/public/assets/images/homepage/hero-bg.png";
-import livingRoom from "@/public/assets/images/contact/living-room.png";
 import stroke from "@/public/assets/images/about-us/about-us-paintstroke.png";
 import Image from "next/image";
 

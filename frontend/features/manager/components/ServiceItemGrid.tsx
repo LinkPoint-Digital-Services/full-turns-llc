@@ -22,7 +22,6 @@ const getPriceDisplay = (item: Item): string => {
 };
 
 export const ServiceItemGrid = ({
-  title,
   items,
   onItemSelect,
 }: ServiceItemGridProps) => {
