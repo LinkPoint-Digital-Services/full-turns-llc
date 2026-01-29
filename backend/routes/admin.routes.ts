@@ -5,11 +5,8 @@ import {
   getBuffers
 } from '../controllers/admin/buffer.controller';
 import {BlogController} from '../controllers/admin/blog.controller';
-import multer from 'multer';
 
 const router = Router();
-
-const upload = multer({dest: 'uploads/'});
 
 // Buffer Routes
 router.post('/add-buffer', addBuffer);
@@ -19,12 +16,10 @@ router.get('/get-buffer', getBuffers);
 // Blogs Routes
 router.post(
   '/add-blog',
-  upload.single('featured_image'),
   BlogController.addBlog
 );
 router.patch(
   '/update-blog',
-  upload.single('featured_image'),
   BlogController.updateBlog
 );
 router.delete('/delete-blog', BlogController.deleteBlog);
