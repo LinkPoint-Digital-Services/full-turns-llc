@@ -27,11 +27,7 @@ export const ServiceItemGrid = ({
   onItemSelect,
 }: ServiceItemGridProps) => {
   return (
-    <div className="flex-1 bg-gray-50/50 rounded-xl border border-gray-100 p-4 md:p-6">
-      <div className="mb-4 md:mb-6">
-        <h2 className="text-lg md:text-xl font-bold text-gray-900">{title}</h2>
-        <p className="text-gray-500 text-xs md:text-sm">Select a service to configure</p>
-      </div>
+    <div className="flex-1 rounded-xl p-4 md:p-6">
 
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
         {items.map((item) => {

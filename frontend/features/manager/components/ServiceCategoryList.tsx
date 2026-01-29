@@ -13,7 +13,7 @@ export const ServiceCategoryList = ({
   onCategoryChange,
 }: ServiceCategoryListProps) => {
   return (
-    <div className="w-full md:w-64 flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0">
+    <div className="w-full md:w-64 ml-5 mt-5 flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-2 md:pb-0 md:fixed md:left-4 md:top-50 md:max-h-[calc(100vh-10rem)] md:overflow-y-auto md:z-30">
       <h3 className="hidden md:block text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2 px-2">
         Service Categories
       </h3>
