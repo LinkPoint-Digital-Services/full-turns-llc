@@ -35,27 +35,25 @@ export const services = [
     alt: "Unit Upgrade service",
     title: "Unit-Upgrade",
     description:
-      "Minor to major renovation work to refresh and improve your property.",
+      'Minor to major renovation work to refresh and improve your unit.'
   },
   {
     image: varnishing,
-    video: "/assets/videos/refinishing-vid.mp4",
-    alt: "Refinishing service",
-    title: "Refinishing",
-    description:
-      "High-quality varnishing to protect and enhance wood surfaces.",
-  },
+    alt: 'Varnishing service',
+    title: 'Reglazing',
+    description: 'High-quality varnishing to protect and enhance wood surfaces.'
+  }
 ];
 
 
 export const stats = [
   {
-    value: "500+",
-    label: "Projects Completed",
+    value: '1000+',
+    label: 'Projects Completed'
   },
   {
-    value: "250+",
-    label: "Happy Clients",
+    value: '550+',
+    label: 'Happy Clients'
   },
   {
     value: "5",

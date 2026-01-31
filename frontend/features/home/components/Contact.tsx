@@ -17,7 +17,8 @@ import {Textarea} from '@/components/ui/textarea';
 import SectionHeader from './ui/SectionHeader';
 import bathroom from '@/public/assets/images/contact/bathroom.png';
 import livingroom from '@/public/assets/images/contact/living-room.png';
-import {Phone, Mail} from 'lucide-react';
+import {Mail} from 'lucide-react';
+import whatsapplogo from "@/public/assets/images/contact/whatsapp-logo-yellow.svg";
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
@@ -173,10 +174,10 @@ export default function Contact() {
                     />
                     <Button
                       type="submit"
-                      variant={'default'}
+                      variant={"default"}
                       disabled={isSending}
                     >
-                      {isSending ? 'Sending...' : 'Submit'}
+                      {isSending ? "Sending..." : "Submit"}
                     </Button>
                   </form>
                 </Form>
@@ -187,20 +188,9 @@ export default function Contact() {
           <div className="flex flex-col gap-8 order-1 md:max-w-xl h-full backdrop-blur-md bg-[#1a1a1a]/20 p-7 rounded-md">
             <div data-aos="fade-right">
               <h3 className="text-white font-bold text-5xl">
-                Let’s Work Together on Your Next{' '}
+                Let’s Work Together on Your Next{" "}
                 <span className="text-primary">Unit Turnover</span>.
               </h3>
-            </div>
-
-            <div
-              data-aos="fade-right"
-              data-aos-delay="200"
-              className="flex gap-3 text-primary rounded-full w-fit items-center"
-            >
-              <Phone className="w-5 text-primary fill-primary stroke-0" />
-              <span className="font-medium text-primary text-[18px]">
-                +1 (443) 683-9520
-              </span>
             </div>
 
             <div
@@ -208,7 +198,13 @@ export default function Contact() {
               data-aos-delay="300"
               className="flex items-center gap-3 text-primary rounded-full w-fit"
             >
-              <Phone className="w-5 h-5 text-primary fill-primary stroke-0" />
+              <Image
+                src={whatsapplogo}
+                alt="whatsapp logo"
+                color="#e8a72e"
+                width={20}
+                height={20}
+              ></Image>
               <span className="font-medium text-primary text-[18px]">
                 (443) 481-0809
               </span>

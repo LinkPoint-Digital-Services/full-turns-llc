@@ -2,8 +2,9 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import {Phone, Mail} from 'lucide-react';
+import {Mail} from 'lucide-react';
 import toolboxman from '@/public/assets/images/contact/toolboxman.png';
+import whatsapplogo from '@/public/assets/images/contact/whatsapp-logo.svg'
 
 export default function Footer() {
   const generalLinks = [
@@ -72,15 +73,9 @@ export default function Footer() {
               Contacts
             </h3>
             <div className="flex flex-col items-start justify-center gap-3">
-              <div className="flex items-center gap-3 bg-primary/20 rounded-full w-fit backdrop-blur-md">
-                <Phone className="w-5 h-5 text-black fill-black stroke-0" />
-                <span className="font-medium text-black text-[18px]">
-                  +1 (443) 683-9520
-                </span>
-              </div>
 
               <div className="flex items-center gap-3 bg-primary/20 backdrop-blur-md rounded-full w-fit">
-                <Phone className="w-5 h-5 text-black fill-black stroke-0" />
+              <Image src={whatsapplogo} alt='whatsapp logo' width={20} height={20}></Image>
                 <span className="font-medium text-black text-[18px]">
                   (443) 481-0809
                 </span>
