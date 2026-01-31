@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import {Phone, Mail} from 'lucide-react';
+import {Mail} from 'lucide-react';
 import toolboxman from '@/public/assets/images/contact/toolboxman.png';
 import whatsapplogo from '@/public/assets/images/contact/whatsapp-logo.svg'
 
