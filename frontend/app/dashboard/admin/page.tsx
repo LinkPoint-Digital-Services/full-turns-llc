@@ -1,7 +1,6 @@
 "use client";
 
 import React, {useEffect, useState} from "react";
-import Image from "next/image";
 import {useRouter} from "next/navigation";
 import {useMe} from "@/features/auth/hooks/useMe";
 import Loading from "@/app/loading";
@@ -50,19 +49,10 @@ export default function AdminPage() {
     <>
       <DashboardHeader />
 
-      <main className="min-h-screen bg-[#121212] text-white px-6 py-10">
+      <main className="min-h-screen bg-[#121212] text-white py-30">
         <div className="container mx-auto">
           {/* Header */}
           <div className="flex items-center gap-4">
-            <Image
-              src="/assets/images/homepage/logo_for_orange.png"
-              alt="Full Turns LLC Logo"
-              width={48}
-              height={48}
-              className="object-contain"
-              priority
-            />
-
             <div>
               <h1 className="text-3xl font-semibold">Welcome!</h1>
               <p className="text-sm text-gray-400 mt-1">

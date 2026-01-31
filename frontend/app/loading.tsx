@@ -5,8 +5,8 @@ import loading_icon from '@/public/assets/images/loading/loading_icon.png';
 export default function Loading() {
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-[#262626]">
-      <p className="text-3xl text-red-500 font-semibold">
-        Full Turn Is on the way
+      <p className="text-3xl text-primary font-semibold">
+        Full Turns Is On The Way
         <span className="animate-pulse ml-1">...</span>
       </p>
 
