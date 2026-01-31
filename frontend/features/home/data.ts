@@ -39,6 +39,7 @@ export const services = [
   },
   {
     image: varnishing,
+    video: "/assets/videos/refinishing-vid.mp4",
     alt: 'Varnishing service',
     title: 'Reglazing',
     description: 'High-quality varnishing to protect and enhance wood surfaces.'
