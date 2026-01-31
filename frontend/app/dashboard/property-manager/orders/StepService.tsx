@@ -7,10 +7,7 @@ import {
   ServiceItemConfigModal,
 } from "@/features/manager/components";
 import type { Item } from "@/features/manager/components";
-import {
-  services,
-  getItemsByServiceId,
-} from "@/features/manager/components/serviceData";
+import { useServices } from "@/features/manager/components/ServicesContext";
 
 interface StepServiceProps {
   onSelectItem: (item: Item) => void;
@@ -30,8 +27,12 @@ export const StepService = ({
   activeServiceId: controlledActiveServiceId,
   onServiceChange 
 }: StepServiceProps) => {
+  const { services, items } = useServices();
+  
   // Use controlled state if provided, otherwise use internal state
-  const [internalActiveServiceId, setInternalActiveServiceId] = useState<string>(services[0]._id);
+  // Fallback to first service if list is empty (though unlikely with initial data)
+  const initialServiceId = services.length > 0 ? services[0]._id : "";
+  const [internalActiveServiceId, setInternalActiveServiceId] = useState<string>(initialServiceId);
   const [configModalOpen, setConfigModalOpen] = useState(false);
   const [selectedConfigItem, setSelectedConfigItem] = useState<Item | null>(null);
 
@@ -56,7 +57,9 @@ export const StepService = ({
   };
 
   const activeService = services.find(s => s._id === activeServiceId) || services[0];
-  const currentItems = getItemsByServiceId(activeServiceId);
+  const currentItems = items.filter(i => i.serviceId === activeServiceId);
+
+  if (!activeService) return <div>No services available</div>;
 
   return (
     <>
