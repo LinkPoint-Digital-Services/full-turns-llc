@@ -7,6 +7,7 @@ import {AxiosError} from 'axios';
 import {toast} from 'sonner';
 import {useQueryClient} from '@tanstack/react-query';
 import {Button} from '../ui/button';
+import Image from 'next/image';
 import { useMe } from '@/features/auth/hooks/useMe';
 
 export default function DashboardHeader() {
@@ -33,12 +34,29 @@ export default function DashboardHeader() {
   };
 
   return (
-    <header className='flex items-center justify-between p-4 border-b'>
-      <span>Logo</span>
+    <header className="bg-primary fixed w-full px-6 md:px-10 z-50!">
+      <div className="flex items-center justify-between py-4 container mx-auto z-50">
+        <Image
+          src="/assets/images/homepage/logo_for_oranges.png"
+          alt="Full Turns LLC Logo"
+          width={100}
+          height={50}
+          className="object-contain"
+          priority
+        />
 
-      <div className='flex items-center gap-4'>
-        <h4>{userData?.user.role == 'admin' ? 'Admin' : 'Manager'}</h4>
-        <Button onClick={handleLogout}>Logout</Button>
+        <div className="flex items-center gap-4">
+          <h4>{userData?.user.role == "admin" ? "Admin" : "Manager"}</h4>
+          <div className="flex items-center gap-4">
+            <Button
+              variant="outline"
+              className="rounded-md border-2 border-[#1c1c1c] bg-transparent hover:bg-[#1c1c1c] hover:text-primary text-[#1c1c1c] transition"
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </div>
+        </div>
       </div>
     </header>
   );

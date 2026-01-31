@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL!;
+const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
 const build = (path?: string) => `${API_BASE}${path}`;
 
@@ -8,11 +8,11 @@ export const Endpoint = {
     register: build(process.env.NEXT_PUBLIC_AUTH_REGISTER),
     logout: build(process.env.NEXT_PUBLIC_AUTH_LOGOUT),
     forgotPassword: build(process.env.NEXT_PUBLIC_AUTH_FORGOT_PASSWORD),
-    resetPassword: build(process.env.NEXT_PUBLIC_AUTH_RESET_PASSWORD),
+    resetPassword: build(process.env.NEXT_PUBLIC_AUTH_RESET_PASSWORD)
   },
 
   user: {
-    me: build(process.env.NEXT_PUBLIC_USER_ME),
+    me: build(process.env.NEXT_PUBLIC_USER_ME)
   },
 
   admin: {
