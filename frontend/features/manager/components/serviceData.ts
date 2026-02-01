@@ -396,4 +396,13 @@ export const formatPrice = (price: number): string => {
   return `$${price.toFixed(2)}`;
 };
 
-// Legacy support if needed? No, refactoring everything.
+export const MEASUREMENTS: Item["measurement"][] = [
+  "room",
+  "sqft",
+  "unit",
+  "each",
+  "hour",
+  "fixed",
+  "varies",
+];
+

@@ -35,15 +35,16 @@ export const services = [
     alt: "Unit Upgrade service",
     title: "Unit-Upgrade",
     description:
-      'Minor to major renovation work to refresh and improve your unit.'
+      "Minor to major renovation work to refresh and improve your unit.",
   },
   {
     image: varnishing,
     video: "/assets/videos/refinishing-vid.mp4",
-    alt: 'Varnishing service',
-    title: 'Reglazing',
-    description: 'High-quality varnishing to protect and enhance wood surfaces.'
-  }
+    alt: "Varnishing service",
+    title: "Reglazing",
+    description:
+      "High-quality varnishing to protect and enhance wood surfaces.",
+  },
 ];
 
 
