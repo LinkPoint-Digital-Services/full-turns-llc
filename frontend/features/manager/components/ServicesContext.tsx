@@ -11,6 +11,8 @@ import {
 interface ServicesContextType {
   services: Service[];
   items: Item[];
+  setServices: (services: Service[]) => void;
+  setItems: (items: Item[]) => void;
   addService: (service: Service) => void;
   updateService: (service: Service) => void;
   deleteService: (id: string) => void;
@@ -60,6 +62,8 @@ export const ServicesProvider = ({ children }: { children: ReactNode }) => {
       value={{
         services,
         items,
+        setServices,
+        setItems,
         addService,
         updateService,
         deleteService,
