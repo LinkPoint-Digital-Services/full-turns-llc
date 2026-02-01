@@ -32,7 +32,7 @@ export function ServiceList({
     return (
       <div className="text-center py-16 text-muted-foreground">
         <p className="text-lg font-medium mb-2">No services yet</p>
-        <p className="text-sm">Click "Add Service" to create your first service category.</p>
+        <p className="text-sm">Click &quot;Add Service&quot; to create your first service category.</p>
       </div>
     );
   }
