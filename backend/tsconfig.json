@@ -7,8 +7,8 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "outDir": "./dist",
-    "rootDir": "."
+    "rootDir": "./backend"
   },
-  "include": ["**/*.ts"],
+  "include": ["backend/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
