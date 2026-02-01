@@ -36,6 +36,7 @@ export interface Item {
   basePrice: number;
   measurement: "room" | "sqft" | "unit" | "each" | "hour" | "fixed" | "varies";
   allowCustomDetails?: boolean;
+  notes?: string;
   addOns?: {
     addOnsId: string;
     name: string;

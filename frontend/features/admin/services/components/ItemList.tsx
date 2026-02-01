@@ -12,16 +12,16 @@ export function ItemList({ items, onEdit, onDelete }: ItemListProps) {
   if (items.length === 0) {
     return (
       <div className="text-center py-8 text-muted-foreground">
-        <p className="text-sm">No items yet. Click "Add Item" to get started.</p>
+        <p className="text-sm">No items yet. Click &quot;Add Item&quot; to get started.</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-2">
-      {items.map((item) => (
+      {items.map((item, index) => (
         <ItemCard
-          key={item.itemId}
+          key={index}
           item={item}
           onEdit={() => onEdit(item)}
           onDelete={() => onDelete(item.itemId)}

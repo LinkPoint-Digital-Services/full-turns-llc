@@ -46,6 +46,7 @@ export interface AddItemRequest {
     basePrice: number;
     measurement: "room" | "sqft" | "unit" | "each" | "hour" | "fixed" | "varies";
     allowCustomDetails?: boolean;
+    notes?: string;
     addOns?: {
       addOnsId: string;
       name: string;
@@ -64,6 +65,7 @@ export interface UpdateItemRequest {
     basePrice?: number;
     measurement?: "room" | "sqft" | "unit" | "each" | "hour" | "fixed" | "varies";
     allowCustomDetails?: boolean;
+    notes?: string;
     addOns?: {
       addOnsId: string;
       name: string;

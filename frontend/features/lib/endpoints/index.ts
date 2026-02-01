@@ -42,5 +42,7 @@ export const Endpoint = {
 
   manager: {
     updateProfile: build(process.env.NEXT_PUBLIC_MANAGER_UPDATE_PROFILE),
+    getServices: build(process.env.NEXT_PUBLIC_MANAGER_GET_SERVICES),
+    getItems: build(process.env.NEXT_PUBLIC_MANAGER_GET_ITEMS),
   }
 } as const;

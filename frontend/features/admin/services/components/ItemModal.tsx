@@ -137,6 +137,18 @@ export function ItemModal({
             <Label htmlFor="customDetails">Allow custom details / notes</Label>
           </div>
 
+          {/* Notes / Details Input */}
+          {draft.allowCustomDetails && (
+            <div className="space-y-2 pl-6">
+              <Label>Details / Notes</Label>
+              <Input
+                placeholder="Enter details or notes regarding this item..."
+                value={draft.notes || ""}
+                onChange={(e) => setDraft({ ...draft, notes: e.target.value })}
+              />
+            </div>
+          )}
+
           {/* Add-ons Section */}
           <div className="space-y-3 pt-2 border-t">
             <div className="flex justify-between items-center">
