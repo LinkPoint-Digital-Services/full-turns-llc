@@ -33,8 +33,8 @@ export default function Blogs() {
   const [index, setIndex] = useState(0);
 
   const {data: blogsData, isLoading} = useQuery<GetBlogResponse>({
-    queryKey: ['blogs', '696de86a30e67ed1670602e5'],
-    queryFn: () => adminClient.getBlog('696de86a30e67ed1670602e5')
+    queryKey: ['blogs', '697f5f1f3bbcc503c9cc265f'],
+    queryFn: () => adminClient.getBlog('697f5f1f3bbcc503c9cc265f')
   });
 
   const blogList = blogsData?.data || [];
