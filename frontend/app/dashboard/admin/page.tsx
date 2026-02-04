@@ -10,11 +10,12 @@ import BuffersPage from "./buffers/page";
 import BlogsPage from "./blogs/page";
 import ServicesPage from "./services/page";
 import BackupPage from "./backup/page";
+import ViewOrders from "./orders/page";
 
 export default function AdminPage() {
   const router = useRouter();
   const {data: userData, isLoading, isError} = useMe();
-  type AdminTab = "buffers" | "blogs" | "services" | "backup" | null;
+  type AdminTab = "buffers" | "blogs" | "services" | "backup" | "orders" | null;
   const [activeTab, setActiveTab] = useState<AdminTab>("buffers");
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export default function AdminPage() {
       <DashboardHeader />
 
       <main className="min-h-screen bg-[#121212] text-white py-30">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-4 md:px-8">
           {/* Header */}
           <div className="flex items-center gap-4">
             <div>
@@ -62,20 +63,21 @@ export default function AdminPage() {
           </div>
 
           {/* Tabs (UNCHANGED BEHAVIOR) */}
-          <div className="flex gap-4 mt-8 items-center">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3 items-stretch sm:items-center mt-8">
             {(
               [
                 ["buffers", "Buffers"],
                 ["blogs", "Blogs"],
                 ["services", "Services"],
                 ["backup", "Backup"],
+                ["orders", "Orders"],
               ] as const
             ).map(([key, label]) => (
               <Button
                 key={key}
                 variant="default"
                 onClick={() => setActiveTab(key)}
-                className={`h-9 px-6 rounded-full text-sm transition-all flex-1
+                className={`h-9 px-6 rounded-full text-sm transition-all w-full sm:w-auto
                   ${
                     activeTab === key
                       ? "bg-primary text-black"
@@ -88,11 +90,12 @@ export default function AdminPage() {
           </div>
 
           {/* Content Container */}
-          <div className="mt-8 bg-white text-[#1c1c1c] rounded-xl p-8 min-h-[420px]">
+          <div className="mt-8 bg-white text-[#1c1c1c] rounded-xl p-4 md:p-8 min-h-[420px]">
             {activeTab === "buffers" && <BuffersPage />}
             {activeTab === "blogs" && <BlogsPage />}
             {activeTab === "services" && <ServicesPage />}
             {activeTab === "backup" && <BackupPage />}
+            {activeTab === "orders" && <ViewOrders />}
           </div>
         </div>
       </main>
