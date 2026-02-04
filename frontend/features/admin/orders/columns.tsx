@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { OrderSummary } from "./types";
 import { Button } from "@/components/ui/button";
+import { orderClient } from "@/features/manager/orderClient";
 import {
   Select,
   SelectContent,
@@ -13,11 +14,12 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export const columns: ColumnDef<OrderSummary>[] = [
   {
@@ -64,26 +66,41 @@ export const columns: ColumnDef<OrderSummary>[] = [
     cell: ({ row }) => {
       const count = row.getValue("itemsCount") as number;
       const items = row.original.items || [];
+      const orderId = row.original.id;
       
       return (
         <div className="pl-4">
            {items.length > 0 ? (
-             <TooltipProvider>
-               <Tooltip>
-                 <TooltipTrigger asChild>
-                   <span className="cursor-pointer underline decoration-dotted underline-offset-4">
-                     {count} items
-                   </span>
-                 </TooltipTrigger>
-                 <TooltipContent>
-                    <ul className="list-disc pl-4 space-y-1">
-                      {items.map((item, i) => (
-                        <li key={i}>{item}</li>
-                      ))}
-                    </ul>
-                 </TooltipContent>
-               </Tooltip>
-             </TooltipProvider>
+             <Dialog>
+               <DialogTrigger asChild>
+                 <span className="cursor-pointer underline decoration-dotted underline-offset-4 hover:text-primary transition-colors">
+                   {count} items
+                 </span>
+               </DialogTrigger>
+               <DialogContent className="max-w-md">
+                 <DialogHeader>
+                   <DialogTitle>Items for Order {orderId}</DialogTitle>
+                 </DialogHeader>
+                 <div className="space-y-4 py-4 max-h-[60vh] overflow-y-auto pr-2">
+                   {items.map((item, i) => (
+                     <div key={i} className="flex flex-col p-3 border rounded-lg bg-gray-50/50">
+                       <div className="flex justify-between items-start">
+                         <span className="font-semibold text-gray-900">{item.name}</span>
+                         <span className="text-sm font-medium">x{item.quantity}</span>
+                       </div>
+                       <div className="flex justify-between items-center mt-1">
+                         <span className="text-xs text-gray-500">Price: ₱{item.price.toLocaleString()}</span>
+                       </div>
+                       {item.details && (
+                         <pre className="mt-2 text-[11px] text-gray-600 bg-white p-2 rounded border whitespace-pre-wrap font-sans">
+                           {item.details}
+                         </pre>
+                       )}
+                     </div>
+                   ))}
+                 </div>
+               </DialogContent>
+             </Dialog>
            ) : (
              <span>{count} items</span>
            )}
@@ -92,9 +109,9 @@ export const columns: ColumnDef<OrderSummary>[] = [
     }
   },
   {
-    accessorKey: "property",
-    header: "Property",
-    cell: ({ row }) => row.original.property || "—",
+    accessorKey: "managerName",
+    header: "Manager",
+    cell: ({ row }) => row.original.managerName || "—",
   },
   {
     accessorKey: "total",
@@ -126,10 +143,17 @@ export const columns: ColumnDef<OrderSummary>[] = [
     header: "Status",
     cell: ({ row }) => {
       const order = row.original;
-      // In a real app, this would use a mutation hook
-      const handleStatusChange = (value: string) => {
-        console.log(`Order ${order.id} status changed to ${value}`);
-        // Here you would call your API update function
+      const handleStatusChange = async (value: string) => {
+        try {
+          if (order.dbId) {
+            await orderClient.updateOrderStatus(order.dbId, value);
+            // Ideally we'd refresh the table here, but this is a cell component.
+            // For now, we'll just log it. A better way would be using a state manager or refresh callback.
+            console.log(`Order ${order.id} status changed to ${value}`);
+          }
+        } catch (error) {
+           console.error("Failed to update status:", error);
+        }
       };
 
       const getStatusColor = (status: string) => {

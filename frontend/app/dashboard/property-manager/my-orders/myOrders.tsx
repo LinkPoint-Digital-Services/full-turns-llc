@@ -10,6 +10,7 @@ import {
   DollarSign,
 } from "lucide-react";
 import type {OrderSummary} from "@/features/manager/types/order.types";
+import { orderClient } from "@/features/manager/orderClient";
 import {
   Dialog,
   DialogContent,
@@ -21,8 +22,6 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
-
-const ORDERS_STORAGE_KEY = "fullturns-manager-orders";
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -41,22 +40,45 @@ const getStatusColor = (status: string) => {
 
 export default function MyOrdersPage() {
   const [orders, setOrders] = useState<OrderSummary[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = window.localStorage.getItem(ORDERS_STORAGE_KEY);
-    if (!stored) return;
+    const fetchOrders = async () => {
+      try {
+        const response = await orderClient.getMyOrders();
+        // Map backend response to local OrderSummary format
+        const mappedOrders: OrderSummary[] = response.data.map((order: any) => ({
+          id: order.orderId,
+          date: new Date(order.created_at).toLocaleDateString(),
+          status: order.status,
+          total: order.totalAmount,
+          itemsCount: order.items.length,
+          items: order.items.map((item: any) => ({
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            details: item.details
+          }))
+        }));
+        setOrders(mappedOrders);
+      } catch (error) {
+        console.error("Failed to fetch orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    try {
-      const parsed: OrderSummary[] = JSON.parse(stored);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setOrders(parsed);
-    } catch {
-      // ignore parse errors
-    }
+    fetchOrders();
   }, []);
 
   const hasOrders = orders.length > 0;
+  
+  if (loading) {
+     return <div className="p-10 text-center flex flex-col items-center justify-center min-h-[400px]">
+       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+       <p className="text-gray-500">Loading your orders...</p>
+     </div>;
+  }
 
   return (
     <div className="space-y-4 md:space-y-6 pb-4">
@@ -75,7 +97,7 @@ export default function MyOrdersPage() {
         <div className="relative w-full md:w-[40%] lg:w-[25%]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
-            placeholder="Search by Order ID or Property..."
+            placeholder="Search by Order ID..."
             className="pl-9 text-sm"
           />
         </div>
@@ -106,9 +128,6 @@ export default function MyOrdersPage() {
                         {order.status}
                       </span>
                     </div>
-                    <div className="text-sm text-gray-500 mt-1 truncate max-w-[200px]">
-                      {order.property || "—"}
-                    </div>
                   </div>
                 </div>
 
@@ -123,9 +142,8 @@ export default function MyOrdersPage() {
                     <span>{order.itemsCount} Items</span>
                   </div>
                   <div className="flex items-center gap-2 min-w-[100px]">
-                    <DollarSign className="w-4 h-4 text-gray-400" />
                     <span className="font-medium text-gray-900">
-                      ${order.total.toFixed(2)}
+                      ₱{order.total.toLocaleString()}
                     </span>
                   </div>
                 </div>
@@ -146,30 +164,37 @@ export default function MyOrdersPage() {
                 </DialogDescription>
               </DialogHeader>
 
-              {/* ITEMS (derived safely) */}
-              <div className="space-y-3 max-h-[300px] overflow-auto pr-1">
-                {order.itemsCount === 0 && (
+              {/* ITEMS */}
+              <div className="space-y-3 max-h-[400px] overflow-auto pr-1">
+                {!order.items || order.items.length === 0 ? (
                   <p className="text-sm text-gray-500 text-center py-6">
                     No items available for this order.
                   </p>
-                )}
-
-                {Array.from({length: order.itemsCount}).map((_, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between p-3 border rounded-lg bg-gray-50"
-                  >
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        Item {idx + 1}
-                      </p>
-                      <p className="text-sm text-gray-500">Qty: 1</p>
+                ) : (
+                  order.items.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex flex-col p-4 border rounded-lg bg-gray-50"
+                    >
+                      <div className="flex justify-between items-start mb-1">
+                        <p className="font-semibold text-gray-900">
+                          {item.name}
+                        </p>
+                        <span className="font-bold text-gray-900">
+                          ₱{item.price.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="text-sm text-gray-600 space-y-1">
+                         <p>Quantity: {item.quantity}</p>
+                         {item.details && (
+                           <pre className="text-xs text-gray-500 italic border-l-2 border-gray-200 pl-2 whitespace-pre-wrap font-sans">
+                             {item.details}
+                           </pre>
+                         )}
+                      </div>
                     </div>
-                    <span className="font-medium text-gray-900">
-                      ${(order.total / order.itemsCount).toFixed(2)}
-                    </span>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
 
               {/* FOOTER */}

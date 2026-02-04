@@ -15,6 +15,11 @@ export interface OrderSummary {
   status: OrderStatus;
   total: number;
   itemsCount: number;
-  property?: string;
+  items?: {
+    name: string;
+    price: number;
+    quantity: number;
+    details?: string;
+  }[];
 }
 

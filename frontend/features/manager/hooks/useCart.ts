@@ -1,5 +1,6 @@
 import {useState, useMemo} from 'react';
 import {OrderItem} from '../types/order.types';
+import { orderClient } from '../orderClient';
 
 const ORDERS_STORAGE_KEY = 'fullturns-manager-orders';
 
@@ -23,47 +24,30 @@ export const useCart = () => {
     setCartItems([]);
   };
 
-  const checkout = () => {
+  const checkout = async () => {
     if (cartItems.length === 0) return;
 
-    const existingRaw =
-      typeof window !== 'undefined'
-        ? window.localStorage.getItem(ORDERS_STORAGE_KEY)
-        : null;
-    const existing: Array<{
-      id: string;
-      date: string;
-      status: string;
-      total: number;
-      itemsCount: number;
-      property?: string;
-    }> = existingRaw ? JSON.parse(existingRaw) : [];
-
-    const total = cartItems.reduce(
+    const totalAmount = cartItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-    const itemsCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
-    const newOrder = {
-      id: `ORD-${Date.now()}`,
-      date: new Date().toLocaleDateString(undefined, {
-        month: 'short',
-        day: '2-digit',
-        year: 'numeric'
-      }),
-      status: 'Pending' as const,
-      total,
-      itemsCount,
-      property: undefined
-    };
-
-    const updated = [newOrder, ...existing];
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(updated));
+    try {
+      await orderClient.createOrder({
+        items: cartItems.map(item => ({
+          itemId: item.serviceId, // In OrderItem, serviceId is used for the catalog item ID
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          details: item.details
+        })) as any,
+        totalAmount
+      });
+      clearCart();
+    } catch (error) {
+      console.error('Checkout failed:', error);
+      throw error;
     }
-
-    clearCart();
   };
 
   return {

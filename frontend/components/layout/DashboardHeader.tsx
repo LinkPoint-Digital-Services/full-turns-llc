@@ -34,7 +34,7 @@ export default function DashboardHeader() {
   };
 
   return (
-    <header className="bg-primary fixed w-full md:px-10 z-50!">
+    <header className="bg-primary fixed w-full px-4 md:px-10 z-50!">
       <div className="flex items-center justify-between py-4 z-50">
         <Image
           src="/assets/images/homepage/logo_for_oranges.png"

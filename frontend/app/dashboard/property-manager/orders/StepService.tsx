@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ServiceCategoryList,
   ServiceItemGrid,
@@ -27,7 +27,14 @@ export const StepService = ({
   activeServiceId: controlledActiveServiceId,
   onServiceChange 
 }: StepServiceProps) => {
-  const { services, items } = useServices();
+  const { services, items, loading } = useServices();
+
+  if (loading) {
+     return <div className="p-10 text-center flex flex-col items-center justify-center min-h-[400px]">
+       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+       <p className="text-gray-500">Loading services...</p>
+     </div>;
+  }
   
   // Use controlled state if provided, otherwise use internal state
   // Fallback to first service if list is empty (though unlikely with initial data)
@@ -38,6 +45,13 @@ export const StepService = ({
 
   const activeServiceId = controlledActiveServiceId || internalActiveServiceId;
   const setActiveServiceId = onServiceChange || setInternalActiveServiceId;
+
+  // Set initial active service once services are loaded
+  useEffect(() => {
+    if (!activeServiceId && services.length > 0) {
+      setActiveServiceId(services[0]._id);
+    }
+  }, [services, activeServiceId, setActiveServiceId]);
 
   const handleItemSelect = (item: Item) => {
     // If item is 'fixed' measurement (no quantity needed), has no add-ons, and no custom details allowed:

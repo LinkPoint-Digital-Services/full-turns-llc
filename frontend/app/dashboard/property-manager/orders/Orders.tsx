@@ -67,9 +67,13 @@ export default function OrdersPage() {
     setStep("MENU");
   };
 
-  const handleCheckout = () => {
-    checkout();
-    setStep("MENU");
+  const handleCheckout = async () => {
+    try {
+      await checkout();
+      setStep("MENU");
+    } catch (error) {
+       // Error is already logged in useCart, but we could show a toast here
+    }
   };
 
   return (
