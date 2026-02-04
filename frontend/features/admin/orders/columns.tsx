@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { OrderSummary, OrderStatus } from "./types";
+import { OrderSummary } from "./types";
 import { Button } from "@/components/ui/button";
 import {
   Select,

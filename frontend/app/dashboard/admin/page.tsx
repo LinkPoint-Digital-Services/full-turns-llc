@@ -10,7 +10,6 @@ import BuffersPage from "./buffers/page";
 import BlogsPage from "./blogs/page";
 import ServicesPage from "./services/page";
 import BackupPage from "./backup/page";
-import OrdersPage from "../property-manager/orders/Orders";
 import ViewOrders from "./orders/page";
 
 export default function AdminPage() {
