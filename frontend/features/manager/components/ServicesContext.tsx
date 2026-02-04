@@ -1,13 +1,15 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import {
-  services as initialServices,
-  serviceItems as initialItems,
-  Service,
-  Item,
-} from "./serviceData";
-import { managerClient } from "../managerClient";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import {Service, Item} from "./serviceData";
+import {managerClient} from "../managerClient";
+import {ItemData} from "@/features/admin/types/services.types";
 
 interface ServicesContextType {
   services: Service[];
@@ -23,9 +25,11 @@ interface ServicesContextType {
   deleteItem: (id: string) => void;
 }
 
-const ServicesContext = createContext<ServicesContextType | undefined>(undefined);
+const ServicesContext = createContext<ServicesContextType | undefined>(
+  undefined,
+);
 
-export const ServicesProvider = ({ children }: { children: ReactNode }) => {
+export const ServicesProvider = ({children}: {children: ReactNode}) => {
   const [services, setServices] = useState<Service[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,17 +41,19 @@ export const ServicesProvider = ({ children }: { children: ReactNode }) => {
         // We pass empty string for admin_id to fetch all
         const [servicesRes, itemsRes] = await Promise.all([
           managerClient.getServices(""),
-          managerClient.getItems("")
+          managerClient.getItems(""),
         ]);
 
         if (servicesRes.success && servicesRes.data.length > 0) {
           setServices(servicesRes.data);
         }
         if (itemsRes.success && itemsRes.data.length > 0) {
-          setItems(itemsRes.data.map((item: any) => ({
-            ...item,
-            itemId: item._id // Map backend _id to itemId for consistency
-          })));
+          setItems(
+            itemsRes.data.map((item: ItemData) => ({
+              ...item,
+              itemId: item._id, // Map backend _id to itemId for consistency
+            })),
+          );
         }
       } catch (error) {
         console.error("Failed to load services/items:", error);
@@ -65,7 +71,7 @@ export const ServicesProvider = ({ children }: { children: ReactNode }) => {
 
   const updateService = (service: Service) => {
     setServices((prev) =>
-      prev.map((s) => (s._id === service._id ? service : s))
+      prev.map((s) => (s._id === service._id ? service : s)),
     );
   };
 
@@ -80,9 +86,7 @@ export const ServicesProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateItem = (item: Item) => {
-    setItems((prev) =>
-      prev.map((i) => (i.itemId === item.itemId ? item : i))
-    );
+    setItems((prev) => prev.map((i) => (i.itemId === item.itemId ? item : i)));
   };
 
   const deleteItem = (id: string) => {

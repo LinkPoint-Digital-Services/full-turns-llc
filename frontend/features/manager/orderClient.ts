@@ -1,9 +1,9 @@
 import { api } from '@/features/lib/axios/instance';
 import { Endpoint } from '@/features/lib/endpoints';
-import { OrderItem } from './types/order.types';
+import { CreateOrderRequest } from './types/order.types';
 
 export const orderClient = {
-  createOrder: (payload: { items: OrderItem[]; totalAmount: number }) =>
+  createOrder: (payload: CreateOrderRequest) =>
     api.post(Endpoint.orders.create, payload).then((res) => res.data),
 
   getMyOrders: () =>

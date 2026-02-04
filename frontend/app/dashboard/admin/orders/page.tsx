@@ -3,6 +3,7 @@
 import {OrdersTable, OrderSummary} from "@/features/admin/orders/OrdersTable";
 import React, { useEffect, useState } from "react";
 import { orderClient } from "@/features/manager/orderClient";
+import { BackendOrder, BackendOrderItem } from "@/features/manager/types/order.types";
 
 export default function ViewOrders() {
   const [orders, setOrders] = useState<OrderSummary[]>([]);
@@ -12,7 +13,7 @@ export default function ViewOrders() {
     const fetchOrders = async () => {
       try {
         const response = await orderClient.getAllOrders();
-        const mappedOrders: OrderSummary[] = response.data.map((order: any) => ({
+        const mappedOrders: OrderSummary[] = response.data.map((order: BackendOrder) => ({
           id: order.orderId,
           dbId: order._id, // Keep the DB ID for updates
           date: new Date(order.created_at).toLocaleDateString(),
@@ -20,7 +21,7 @@ export default function ViewOrders() {
           total: order.totalAmount,
           itemsCount: order.items.length,
           managerName: order.managerId ? `${order.managerId.first_name} ${order.managerId.last_name}` : "Unknown",
-          items: order.items.map((item: any) => ({
+          items: order.items.map((item: BackendOrderItem) => ({
             name: item.name,
             price: item.price,
             quantity: item.quantity,

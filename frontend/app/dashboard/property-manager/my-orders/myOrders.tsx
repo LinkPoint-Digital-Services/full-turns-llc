@@ -2,15 +2,13 @@
 
 import React, {useEffect, useState} from "react";
 import {Input} from "@/components/ui/input";
-import {
-  Search,
-  ChevronRight,
-  Package,
-  Calendar,
-  DollarSign,
-} from "lucide-react";
-import type {OrderSummary} from "@/features/manager/types/order.types";
-import { orderClient } from "@/features/manager/orderClient";
+import {Search, ChevronRight, Package, Calendar} from "lucide-react";
+import type {
+  OrderSummary,
+  BackendOrder,
+  BackendOrderItem,
+} from "@/features/manager/types/order.types";
+import {orderClient} from "@/features/manager/orderClient";
 import {
   Dialog,
   DialogContent,
@@ -47,19 +45,21 @@ export default function MyOrdersPage() {
       try {
         const response = await orderClient.getMyOrders();
         // Map backend response to local OrderSummary format
-        const mappedOrders: OrderSummary[] = response.data.map((order: any) => ({
-          id: order.orderId,
-          date: new Date(order.created_at).toLocaleDateString(),
-          status: order.status,
-          total: order.totalAmount,
-          itemsCount: order.items.length,
-          items: order.items.map((item: any) => ({
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity,
-            details: item.details
-          }))
-        }));
+        const mappedOrders: OrderSummary[] = response.data.map(
+          (order: BackendOrder) => ({
+            id: order.orderId,
+            date: new Date(order.created_at).toLocaleDateString(),
+            status: order.status,
+            total: order.totalAmount,
+            itemsCount: order.items.length,
+            items: order.items.map((item: BackendOrderItem) => ({
+              name: item.name,
+              price: item.price,
+              quantity: item.quantity,
+              details: item.details,
+            })),
+          }),
+        );
         setOrders(mappedOrders);
       } catch (error) {
         console.error("Failed to fetch orders:", error);
@@ -72,12 +72,14 @@ export default function MyOrdersPage() {
   }, []);
 
   const hasOrders = orders.length > 0;
-  
+
   if (loading) {
-     return <div className="p-10 text-center flex flex-col items-center justify-center min-h-[400px]">
-       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
-       <p className="text-gray-500">Loading your orders...</p>
-     </div>;
+    return (
+      <div className="p-10 text-center flex flex-col items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+        <p className="text-gray-500">Loading your orders...</p>
+      </div>
+    );
   }
 
   return (
@@ -96,10 +98,7 @@ export default function MyOrdersPage() {
         {/* Search */}
         <div className="relative w-full md:w-[40%] lg:w-[25%]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input
-            placeholder="Search by Order ID..."
-            className="pl-9 text-sm"
-          />
+          <Input placeholder="Search by Order ID..." className="pl-9 text-sm" />
         </div>
       </div>
 
@@ -185,12 +184,12 @@ export default function MyOrdersPage() {
                         </span>
                       </div>
                       <div className="text-sm text-gray-600 space-y-1">
-                         <p>Quantity: {item.quantity}</p>
-                         {item.details && (
-                           <pre className="text-xs text-gray-500 italic border-l-2 border-gray-200 pl-2 whitespace-pre-wrap font-sans">
-                             {item.details}
-                           </pre>
-                         )}
+                        <p>Quantity: {item.quantity}</p>
+                        {item.details && (
+                          <pre className="text-xs text-gray-500 italic border-l-2 border-gray-200 pl-2 whitespace-pre-wrap font-sans">
+                            {item.details}
+                          </pre>
+                        )}
                       </div>
                     </div>
                   ))

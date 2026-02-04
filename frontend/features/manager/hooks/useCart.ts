@@ -1,23 +1,21 @@
-import {useState, useMemo} from 'react';
-import {OrderItem} from '../types/order.types';
-import { orderClient } from '../orderClient';
-
-const ORDERS_STORAGE_KEY = 'fullturns-manager-orders';
+import {useState, useMemo} from "react";
+import {OrderItem} from "../types/order.types";
+import {orderClient} from "../orderClient";
 
 export const useCart = () => {
   const [cartItems, setCartItems] = useState<OrderItem[]>([]);
 
   const cartTotal = useMemo(
     () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
-    [cartItems]
+    [cartItems],
   );
 
   const addItem = (item: OrderItem) => {
-    setCartItems(prev => [...prev, item]);
+    setCartItems((prev) => [...prev, item]);
   };
 
   const removeItem = (itemId: string) => {
-    setCartItems(prev => prev.filter(item => item.id !== itemId));
+    setCartItems((prev) => prev.filter((item) => item.id !== itemId));
   };
 
   const clearCart = () => {
@@ -29,23 +27,23 @@ export const useCart = () => {
 
     const totalAmount = cartItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
-      0
+      0,
     );
 
     try {
       await orderClient.createOrder({
-        items: cartItems.map(item => ({
+        items: cartItems.map((item) => ({
           itemId: item.serviceId, // In OrderItem, serviceId is used for the catalog item ID
           name: item.name,
           price: item.price,
           quantity: item.quantity,
-          details: item.details
-        })) as any,
-        totalAmount
+          details: item.details,
+        })),
+        totalAmount,
       });
       clearCart();
     } catch (error) {
-      console.error('Checkout failed:', error);
+      console.error("Checkout failed:", error);
       throw error;
     }
   };
@@ -56,6 +54,6 @@ export const useCart = () => {
     addItem,
     removeItem,
     clearCart,
-    checkout
+    checkout,
   };
 };
