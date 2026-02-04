@@ -1,7 +1,7 @@
-import { useState, useMemo } from "react";
-import { OrderItem } from "../types/order.types";
+import {useState, useMemo} from 'react';
+import {OrderItem} from '../types/order.types';
 
-const ORDERS_STORAGE_KEY = "fullturns-manager-orders";
+const ORDERS_STORAGE_KEY = 'fullturns-manager-orders';
 
 export const useCart = () => {
   const [cartItems, setCartItems] = useState<OrderItem[]>([]);
@@ -12,11 +12,11 @@ export const useCart = () => {
   );
 
   const addItem = (item: OrderItem) => {
-    setCartItems((prev) => [...prev, item]);
+    setCartItems(prev => [...prev, item]);
   };
 
   const removeItem = (itemId: string) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== itemId));
+    setCartItems(prev => prev.filter(item => item.id !== itemId));
   };
 
   const clearCart = () => {
@@ -27,7 +27,7 @@ export const useCart = () => {
     if (cartItems.length === 0) return;
 
     const existingRaw =
-      typeof window !== "undefined"
+      typeof window !== 'undefined'
         ? window.localStorage.getItem(ORDERS_STORAGE_KEY)
         : null;
     const existing: Array<{
@@ -43,26 +43,23 @@ export const useCart = () => {
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-    const itemsCount = cartItems.reduce(
-      (sum, item) => sum + item.quantity,
-      0
-    );
+    const itemsCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
     const newOrder = {
       id: `ORD-${Date.now()}`,
       date: new Date().toLocaleDateString(undefined, {
-        month: "short",
-        day: "2-digit",
-        year: "numeric",
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric'
       }),
-      status: "Pending" as const,
+      status: 'Pending' as const,
       total,
       itemsCount,
-      property: undefined,
+      property: undefined
     };
 
     const updated = [newOrder, ...existing];
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       window.localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(updated));
     }
 
@@ -75,6 +72,6 @@ export const useCart = () => {
     addItem,
     removeItem,
     clearCart,
-    checkout,
+    checkout
   };
 };

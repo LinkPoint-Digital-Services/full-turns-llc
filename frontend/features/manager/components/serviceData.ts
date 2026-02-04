@@ -36,6 +36,7 @@ export interface Item {
   basePrice: number;
   measurement: "room" | "sqft" | "unit" | "each" | "hour" | "fixed" | "varies";
   allowCustomDetails?: boolean;
+  notes?: string;
   addOns?: {
     addOnsId: string;
     name: string;
@@ -396,4 +397,13 @@ export const formatPrice = (price: number): string => {
   return `$${price.toFixed(2)}`;
 };
 
-// Legacy support if needed? No, refactoring everything.
+export const MEASUREMENTS: Item["measurement"][] = [
+  "room",
+  "sqft",
+  "unit",
+  "each",
+  "hour",
+  "fixed",
+  "varies",
+];
+

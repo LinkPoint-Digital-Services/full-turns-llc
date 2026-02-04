@@ -143,7 +143,7 @@ export default function SettingsPage() {
 
           <button
             type="submit"
-            className="px-4 py-2 bg-teal-700 text-white rounded-md hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="px-4 py-2 bg-primary text-white rounded-md hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
           >
             {updateProfileMutation.isPending ? 'Saving...' : 'Save Changes'}
           </button>

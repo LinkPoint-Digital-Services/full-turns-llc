@@ -26,9 +26,23 @@ export const Endpoint = {
     updateBlog: build(process.env.NEXT_PUBLIC_ADMIN_UPDATE_BLOG),
     deleteBlog: build(process.env.NEXT_PUBLIC_ADMIN_DELETE_BLOG),
     getBlog: build(process.env.NEXT_PUBLIC_ADMIN_GET_BLOG),
+
+    // Services Endpoints
+    addService: build(process.env.NEXT_PUBLIC_ADMIN_ADD_SERVICE),
+    updateService: build(process.env.NEXT_PUBLIC_ADMIN_UPDATE_SERVICE),
+    deleteService: build(process.env.NEXT_PUBLIC_ADMIN_DELETE_SERVICE),
+    getServices: build(process.env.NEXT_PUBLIC_ADMIN_GET_SERVICES),
+
+    // Items Endpoints
+    addItem: build(process.env.NEXT_PUBLIC_ADMIN_ADD_ITEM),
+    updateItem: build(process.env.NEXT_PUBLIC_ADMIN_UPDATE_ITEM),
+    deleteItem: build(process.env.NEXT_PUBLIC_ADMIN_DELETE_ITEM),
+    getItems: build(process.env.NEXT_PUBLIC_ADMIN_GET_ITEMS),
   },
 
   manager: {
     updateProfile: build(process.env.NEXT_PUBLIC_MANAGER_UPDATE_PROFILE),
+    getServices: build(process.env.NEXT_PUBLIC_MANAGER_GET_SERVICES),
+    getItems: build(process.env.NEXT_PUBLIC_MANAGER_GET_ITEMS),
   }
 } as const;

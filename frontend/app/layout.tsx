@@ -4,6 +4,7 @@ import './globals.css';
 import { ReactQueryProvider } from '@/lib/provider/ReactQueryProvider';
 import { Toaster } from 'sonner';
 import DesktopOnlyCursor from '@/components/DesktopOnlyCursor';
+import { ServicesProvider } from '@/features/manager/components/ServicesContext';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -32,9 +33,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-slate-900 dark:bg-black dark:text-slate-50`}
       >
         <ReactQueryProvider>
-          <DesktopOnlyCursor />
-          {children}
-          <Toaster richColors position="top-right" />
+          <ServicesProvider>
+            <DesktopOnlyCursor />
+            {children}
+            <Toaster richColors position="top-right" />
+          </ServicesProvider>
         </ReactQueryProvider>
       </body>
     </html>

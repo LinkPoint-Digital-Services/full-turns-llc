@@ -34,7 +34,7 @@ export const StepMenu = ({ onCreateOrder }: StepMenuProps) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-6 md:mt-10">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-6">
       {menuItems.map((item, index) => (
         <button
           key={index}
