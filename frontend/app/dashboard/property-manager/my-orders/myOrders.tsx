@@ -83,7 +83,7 @@ export default function MyOrdersPage() {
   }
 
   return (
-    <div className="space-y-4 md:space-y-6 pb-4">
+    <div className="space-y-4 md:space-y-6 py-4">
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-4 md:sticky top-50 p-2 bg-white">
         <div>

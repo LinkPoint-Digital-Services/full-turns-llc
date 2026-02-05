@@ -42,12 +42,13 @@ export interface AddItemRequest {
   item: {
     itemId: string;
     name: string;
-    icon: string;
+    imageUrl?: string;
     serviceId: string;
     basePrice: number;
     measurement: "room" | "sqft" | "unit" | "each" | "hour" | "fixed" | "varies";
     allowCustomDetails?: boolean;
     notes?: string;
+    selectionType: "individual" | "checklist";
     addOns?: {
       addOnsId: string;
       name: string;
@@ -61,12 +62,13 @@ export interface UpdateItemRequest {
   itemId: string;
   updateData: {
     name?: string;
-    icon?: string;
+    imageUrl?: string;
     serviceId?: string;
     basePrice?: number;
     measurement?: "room" | "sqft" | "unit" | "each" | "hour" | "fixed" | "varies";
     allowCustomDetails?: boolean;
     notes?: string;
+    selectionType?: "individual" | "checklist";
     addOns?: {
       addOnsId: string;
       name: string;

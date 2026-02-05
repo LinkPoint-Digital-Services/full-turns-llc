@@ -18,7 +18,7 @@ export default function OrdersPage() {
   const [pendingItem, setPendingItem] = useState<Item | null>(null);
   const [showCartModal, setShowCartModal] = useState(false);
   const [activeServiceId, setActiveServiceId] =
-    useState<string>("service_refinish");
+    useState<string | undefined>(undefined);
 
   const {cartItems, cartTotal, addItem, removeItem, clearCart, checkout} =
     useCart();
@@ -94,8 +94,6 @@ export default function OrdersPage() {
           <CartSummary
             cartItems={cartItems}
             cartTotal={cartTotal}
-            activeServiceId={activeServiceId}
-            onServiceChange={setActiveServiceId}
             onViewCart={() => setShowCartModal(true)}
             onCancelOrder={handleCancelOrder}
             onCheckout={handleCheckout}

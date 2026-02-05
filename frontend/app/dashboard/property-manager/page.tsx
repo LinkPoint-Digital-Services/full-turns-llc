@@ -55,7 +55,7 @@ export default function ManagerPage() {
           <div className="bg-white text-[#1c1c1c] p-2 md:p-8">
             {/* Tabs (Responsive Scrollable) */}
             {/* className=" md:fixed top-23 mt-20 md:mt-0 left-0 right-0 z-20 bg-white md:px-8 py-9 flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3 items-stretch sm:items-center" */}
-            <div className="flex flex-row overflow-x-auto no-scrollbar gap-2 sm:gap-3 items-center mt-30 pb-1 sm:pb-0">
+            <div className="flex md:fixed flex-row overflow-x-auto no-scrollbar gap-2 sm:gap-3 items-center pt-30 pb-1 sm:pb-0 w-full bg-white z-20">
               {(
                 [
                   ["orders", "Place Orders"],

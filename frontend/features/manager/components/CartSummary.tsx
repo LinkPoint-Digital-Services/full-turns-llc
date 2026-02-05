@@ -4,13 +4,10 @@ import { useState } from "react";
 import { ShoppingCart, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OrderItem } from "../types/order.types";
-import { MobileCategoryDropdown } from "./MobileCategoryDropdown";
 
 interface CartSummaryProps {
   cartItems: OrderItem[];
   cartTotal: number;
-  activeServiceId: string;
-  onServiceChange: (serviceId: string) => void;
   onViewCart: () => void;
   onCancelOrder: () => void;
   onCheckout: () => void;
@@ -19,8 +16,6 @@ interface CartSummaryProps {
 export const CartSummary = ({
   cartItems,
   cartTotal,
-  activeServiceId,
-  onServiceChange,
   onViewCart,
   onCancelOrder,
   onCheckout,
@@ -58,12 +53,6 @@ export const CartSummary = ({
 
       {isCartExpanded && (
         <>
-          {/* Mobile Category Dropdown - moves with cart */}
-          <MobileCategoryDropdown
-            activeServiceId={activeServiceId}
-            onServiceChange={onServiceChange}
-          />
-
           {cartItems.length > 0 && (
             <button
               onClick={onViewCart}

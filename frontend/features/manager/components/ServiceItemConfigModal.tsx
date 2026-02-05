@@ -13,6 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Item, formatPrice } from "./serviceData";
+import NextImage from "next/image";
 
 interface ServiceItemConfigModalProps {
   item: Item | null;
@@ -58,12 +59,23 @@ export const ServiceItemConfigModal = ({
   };
 
   const calculateTotal = () => {
+    if (item.selectionType === 'checklist') {
+      let total = 0; // Base price is removed for checklists
+      if (item.addOns) {
+        item.addOns.forEach((addOn) => {
+          if (selectedAddOns.includes(addOn.addOnsId)) {
+            total += addOn.price;
+          }
+        });
+      }
+      return total;
+    }
+
     let total = item.basePrice * quantity;
     if (item.addOns) {
       item.addOns.forEach((addOn) => {
         if (selectedAddOns.includes(addOn.addOnsId)) {
-          total += addOn.price * quantity; // Assuming add-ons scale with quantity? Usually yes for "each" items.
-          // If measurement is 'fixed' but has add-ons, quantity is likely 1 anyway.
+          total += addOn.price * quantity;
         }
       });
     }
@@ -75,7 +87,7 @@ export const ServiceItemConfigModal = ({
     
     // Construct details string
     let details = "";
-    if (item.measurement !== "fixed") {
+    if (item.selectionType !== 'checklist' && item.measurement !== "fixed") {
       details += `Quantity: ${quantity} ${item.measurement}`;
     }
     
@@ -84,7 +96,9 @@ export const ServiceItemConfigModal = ({
         .filter((a) => selectedAddOns.includes(a.addOnsId))
         .map((a) => a.name)
         .join(", ");
-      details += details ? `\nAdd-ons: ${addOnNames}` : `Add-ons: ${addOnNames}`;
+      
+      const label = item.selectionType === 'checklist' ? "Included Items" : "Add-ons";
+      details += details ? `\n${label}: ${addOnNames}` : `${label}: ${addOnNames}`;
     }
 
     if (customDetails.trim()) {
@@ -105,12 +119,22 @@ export const ServiceItemConfigModal = ({
     onOpenChange(false);
   };
 
-  const showQuantityInput = item.measurement !== "fixed" && item.measurement !== "varies";
+  const showQuantityInput = item.selectionType !== 'checklist' && item.measurement !== "fixed" && item.measurement !== "varies";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
+          {item.imageUrl && (
+            <div className="relative w-full h-40 rounded-lg overflow-hidden bg-gray-50 mb-4 border">
+              <NextImage
+                src={item.imageUrl}
+                alt={item.name}
+                fill
+                className="object-cover"
+              />
+            </div>
+          )}
           <DialogTitle>{item.name}</DialogTitle>
           <DialogDescription>
             Configure your service options below.
@@ -118,20 +142,22 @@ export const ServiceItemConfigModal = ({
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          <div className="flex justify-between items-center text-sm">
-            <span className="text-gray-500">Base Price:</span>
-            {item.measurement !== "varies" ? (
-              <span className="font-medium">
-                {formatPrice(item.basePrice)}{" "}
-                {item.measurement !== "fixed" && `per ${item.measurement}`}
-              </span>
-            ) : (
-              <span className="font-medium">
-                {formatPrice(item.basePrice)}{" "}
-                {item.measurement}
-              </span>
-            )}
-          </div>
+          {item.selectionType !== 'checklist' && (
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-500">Base Price:</span>
+              {item.measurement !== "varies" ? (
+                <span className="font-medium">
+                  {formatPrice(item.basePrice)}{" "}
+                  {item.measurement !== "fixed" && `per ${item.measurement}`}
+                </span>
+              ) : (
+                <span className="font-medium">
+                  {formatPrice(item.basePrice)}{" "}
+                  {item.measurement}
+                </span>
+              )}
+            </div>
+          )}
 
           {showQuantityInput && (
             <div className="space-y-2">
@@ -148,8 +174,10 @@ export const ServiceItemConfigModal = ({
 
           {item.addOns && item.addOns.length > 0 && (
             <div className="space-y-3">
-              <Label>Add-ons</Label>
-              <div className="space-y-2 border rounded-lg p-3">
+              <Label>
+                {item.selectionType === 'checklist' ? 'Select Items' : 'Add-ons'}
+              </Label>
+              <div className="space-y-2 border rounded-lg p-3 bg-gray-50/30">
                 {item.addOns.map((addon) => (
                   <div
                     key={addon.addOnsId}
