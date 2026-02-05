@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,7 +11,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -20,14 +20,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/table";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  searchKey?: string
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  searchKey?: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -35,11 +35,12 @@ export function DataTable<TData, TValue>({
   data,
   searchKey,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
+    [],
+  );
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
@@ -53,7 +54,7 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
     },
-  })
+  });
 
   return (
     <div>
@@ -61,7 +62,9 @@ export function DataTable<TData, TValue>({
         <div className="flex items-center py-4">
           <Input
             placeholder="Search..."
-            value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
+            value={
+              (table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
+            }
             onChange={(event) =>
               table.getColumn(searchKey)?.setFilterValue(event.target.value)
             }
@@ -73,7 +76,10 @@ export function DataTable<TData, TValue>({
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="bg-primary/20 hover:bg-primary/20">
+              <TableRow
+                key={headerGroup.id}
+                className="bg-primary/20 hover:bg-primary/20"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -81,10 +87,10 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -98,7 +104,10 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -135,5 +144,5 @@ export function DataTable<TData, TValue>({
         </Button>
       </div>
     </div>
-  )
+  );
 }

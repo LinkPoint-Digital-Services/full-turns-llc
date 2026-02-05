@@ -51,7 +51,7 @@ export default function AdminPage() {
       <DashboardHeader />
 
       <main className="min-h-screen bg-[#121212] text-white py-30">
-        <div className="container mx-auto px-4 md:px-8">
+        <div className="w-full px-4 md:px-10">
           {/* Header */}
           <div className="flex items-center gap-4">
             <div>
@@ -62,8 +62,8 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Tabs (UNCHANGED BEHAVIOR) */}
-          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-3 items-stretch sm:items-center mt-8">
+          {/* Tabs (Responsive Scrollable) */}
+          <div className="flex flex-row overflow-x-auto no-scrollbar gap-2 sm:gap-3 items-center mt-8 pb-1 sm:pb-0">
             {(
               [
                 ["buffers", "Buffers"],
@@ -77,7 +77,7 @@ export default function AdminPage() {
                 key={key}
                 variant="default"
                 onClick={() => setActiveTab(key)}
-                className={`h-9 px-6 rounded-full text-sm transition-all w-full sm:w-auto
+                className={`h-9 px-6 rounded-full text-sm transition-all whitespace-nowrap
                   ${
                     activeTab === key
                       ? "bg-primary text-black"

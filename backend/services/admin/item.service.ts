@@ -28,7 +28,8 @@ export class ItemService {
     });
   }
 
-  static async getItems(admin_id: string) {
-    return await ItemModel.find({ admin_id });
+  static async getItems(admin_id?: string) {
+    const filter = admin_id ? { admin_id } : {};
+    return await ItemModel.find(filter);
   }
 }

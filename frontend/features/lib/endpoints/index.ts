@@ -44,5 +44,12 @@ export const Endpoint = {
     updateProfile: build(process.env.NEXT_PUBLIC_MANAGER_UPDATE_PROFILE),
     getServices: build(process.env.NEXT_PUBLIC_MANAGER_GET_SERVICES),
     getItems: build(process.env.NEXT_PUBLIC_MANAGER_GET_ITEMS),
+  },
+
+  orders: {
+    create: build(process.env.NEXT_PUBLIC_ORDER_CREATE),
+    myOrders: build(process.env.NEXT_PUBLIC_ORDER_MY_ORDERS),
+    allOrders: build(process.env.NEXT_PUBLIC_ORDER_ALL_ORDERS),
+    updateStatus: build(process.env.NEXT_PUBLIC_ORDER_UPDATE_STATUS),
   }
 } as const;

@@ -1,25 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import { StepMenu } from "./StepMenu";
-import { StepService } from "./StepService";
-import type { Item } from "@/features/manager/components";
+import {useState} from "react";
+import {StepMenu} from "./StepMenu";
+import {StepService} from "./StepService";
+import type {Item} from "@/features/manager/components";
 import {
   CartSummary,
   CartModal,
   AddItemConfirmModal,
 } from "@/features/manager/components";
-import { OrderItem } from "@/features/manager/types/order.types";
-import { useCart } from "@/features/manager/hooks/useCart";
+import {OrderItem} from "@/features/manager/types/order.types";
+import {useCart} from "@/features/manager/hooks/useCart";
 
 export default function OrdersPage() {
   const [step, setStep] = useState<"MENU" | "SERVICE">("MENU");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingItem, setPendingItem] = useState<Item | null>(null);
   const [showCartModal, setShowCartModal] = useState(false);
-  const [activeServiceId, setActiveServiceId] = useState<string>("service_refinish");
+  const [activeServiceId, setActiveServiceId] =
+    useState<string>("service_refinish");
 
-  const { cartItems, cartTotal, addItem, removeItem, clearCart, checkout } = useCart();
+  const {cartItems, cartTotal, addItem, removeItem, clearCart, checkout} =
+    useCart();
 
   const handleSimpleItemSelect = (item: Item) => {
     setPendingItem(item);
@@ -67,9 +69,13 @@ export default function OrdersPage() {
     setStep("MENU");
   };
 
-  const handleCheckout = () => {
-    checkout();
-    setStep("MENU");
+  const handleCheckout = async () => {
+    try {
+      await checkout();
+      setStep("MENU");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

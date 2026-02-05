@@ -1,52 +1,65 @@
 "use client";
 
 import {OrdersTable, OrderSummary} from "@/features/admin/orders/OrdersTable";
-import React from "react";
-
-const sampleOrders: OrderSummary[] = [
-  {
-    id: "ORD-001",
-    date: "2026-02-02",
-    status: "Processing",
-    total: 12500,
-    itemsCount: 3,
-    items: ["Full Paint Job", "Drywall Repair", "Deep Cleaning"],
-    property: "FullTurn Condo",
-  },
-  {
-    id: "ORD-002",
-    date: "2026-02-01",
-    status: "Completed",
-    total: 8900,
-    itemsCount: 2,
-    items: ["Carpet Cleaning", "Window Washing"],
-    property: "Sunrise Villas",
-  },
-  {
-    id: "ORD-003",
-    date: "2026-02-03",
-    status: "Pending",
-    total: 5400,
-    itemsCount: 1,
-    items: ["Plumbing Fix"],
-  },
-];
+import React, { useEffect, useState } from "react";
+import { orderClient } from "@/features/manager/orderClient";
+import { BackendOrder, BackendOrderItem } from "@/features/manager/types/order.types";
 
 export default function ViewOrders() {
+  const [orders, setOrders] = useState<OrderSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await orderClient.getAllOrders();
+        const mappedOrders: OrderSummary[] = response.data.map((order: BackendOrder) => ({
+          id: order.orderId,
+          dbId: order._id, // Keep the DB ID for updates
+          date: new Date(order.created_at).toLocaleDateString(),
+          status: order.status,
+          total: order.totalAmount,
+          itemsCount: order.items.length,
+          managerName: order.managerId ? `${order.managerId.first_name} ${order.managerId.last_name}` : "Unknown",
+          items: order.items.map((item: BackendOrderItem) => ({
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            details: item.details
+          }))
+        }));
+        setOrders(mappedOrders);
+      } catch (error) {
+        console.error("Failed to fetch all orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  if (loading) {
+     return <div className="p-10 text-center flex flex-col items-center justify-center min-h-[400px]">
+       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+       <p className="text-gray-500">Loading orders...</p>
+     </div>;
+  }
+
   return (
     <main className="mt-5">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-semibold">Property Manager Orders</h1>
           <p className="text-muted-foreground">
             Track orders placed by property managers and see details like
-            status, items count, total amount, and associated property.
+            status, items count, total amount, and manager name.
           </p>
         </div>
       </div>
 
       <div className="mt-6">
-        <OrdersTable orders={sampleOrders} />
+        <OrdersTable orders={orders} />
       </div>
     </main>
   );

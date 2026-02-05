@@ -11,7 +11,7 @@ interface OrdersTableProps {
 export function OrdersTable({ orders }: OrdersTableProps) {
   return (
     <div className="w-full">
-      <DataTable columns={columns} data={orders} searchKey="property" />
+      <DataTable columns={columns} data={orders} searchKey="managerName" />
     </div>
   );
 }

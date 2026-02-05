@@ -9,12 +9,51 @@ export interface OrderItem {
 
 export type OrderStatus = "Pending" | "Completed" | "Processing" | "Cancelled";
 
+export interface CreateOrderItem {
+  itemId: string;
+  name: string;
+  price: number;
+  quantity: number;
+  details?: string;
+}
+
+export interface CreateOrderRequest {
+  items: CreateOrderItem[];
+  totalAmount: number;
+}
+
 export interface OrderSummary {
   id: string;
   date: string;
   status: OrderStatus;
   total: number;
   itemsCount: number;
-  property?: string;
+  items?: {
+    name: string;
+    price: number;
+    quantity: number;
+    details?: string;
+  }[];
+}
+
+export interface BackendOrderItem {
+  itemId: string;
+  name: string;
+  price: number;
+  quantity: number;
+  details?: string;
+}
+
+export interface BackendOrder {
+  _id: string;
+  orderId: string;
+  created_at: string;
+  status: OrderStatus;
+  totalAmount: number;
+  items: BackendOrderItem[];
+  managerId?: {
+    first_name: string;
+    last_name: string;
+  };
 }
 

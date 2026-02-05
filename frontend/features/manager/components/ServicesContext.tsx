@@ -1,16 +1,20 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import {
-  services as initialServices,
-  serviceItems as initialItems,
-  Service,
-  Item,
-} from "./serviceData";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import {Service, Item} from "./serviceData";
+import {managerClient} from "../managerClient";
+import {ItemData} from "@/features/admin/types/services.types";
 
 interface ServicesContextType {
   services: Service[];
   items: Item[];
+  loading: boolean;
   setServices: (services: Service[]) => void;
   setItems: (items: Item[]) => void;
   addService: (service: Service) => void;
@@ -21,11 +25,45 @@ interface ServicesContextType {
   deleteItem: (id: string) => void;
 }
 
-const ServicesContext = createContext<ServicesContextType | undefined>(undefined);
+const ServicesContext = createContext<ServicesContextType | undefined>(
+  undefined,
+);
 
-export const ServicesProvider = ({ children }: { children: ReactNode }) => {
-  const [services, setServices] = useState<Service[]>(initialServices);
-  const [items, setItems] = useState<Item[]>(initialItems);
+export const ServicesProvider = ({children}: {children: ReactNode}) => {
+  const [services, setServices] = useState<Service[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        // We pass empty string for admin_id to fetch all
+        const [servicesRes, itemsRes] = await Promise.all([
+          managerClient.getServices(""),
+          managerClient.getItems(""),
+        ]);
+
+        if (servicesRes.success && servicesRes.data.length > 0) {
+          setServices(servicesRes.data);
+        }
+        if (itemsRes.success && itemsRes.data.length > 0) {
+          setItems(
+            itemsRes.data.map((item: ItemData) => ({
+              ...item,
+              itemId: item._id, // Map backend _id to itemId for consistency
+            })),
+          );
+        }
+      } catch (error) {
+        console.error("Failed to load services/items:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   const addService = (service: Service) => {
     setServices((prev) => [...prev, service]);
@@ -33,7 +71,7 @@ export const ServicesProvider = ({ children }: { children: ReactNode }) => {
 
   const updateService = (service: Service) => {
     setServices((prev) =>
-      prev.map((s) => (s._id === service._id ? service : s))
+      prev.map((s) => (s._id === service._id ? service : s)),
     );
   };
 
@@ -48,9 +86,7 @@ export const ServicesProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateItem = (item: Item) => {
-    setItems((prev) =>
-      prev.map((i) => (i.itemId === item.itemId ? item : i))
-    );
+    setItems((prev) => prev.map((i) => (i.itemId === item.itemId ? item : i)));
   };
 
   const deleteItem = (id: string) => {
@@ -62,6 +98,7 @@ export const ServicesProvider = ({ children }: { children: ReactNode }) => {
       value={{
         services,
         items,
+        loading,
         setServices,
         setItems,
         addService,

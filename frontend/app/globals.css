@@ -141,3 +141,13 @@ html {
 .animate-wipe-horizontal {
   animation: wipe-horizontal 1.5s ease-in-out forwards;
 }
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

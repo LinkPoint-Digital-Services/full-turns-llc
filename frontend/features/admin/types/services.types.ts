@@ -28,6 +28,7 @@ export interface DeleteServiceRequest {
 }
 
 export interface ServiceItem extends Service {
+  _id: string;
   created_at: string;
   updated_at: string;
 }
@@ -80,6 +81,7 @@ export interface DeleteItemRequest {
 }
 
 export interface ItemData extends Item {
+  _id: string;
   created_at: string;
   updated_at: string;
 }
