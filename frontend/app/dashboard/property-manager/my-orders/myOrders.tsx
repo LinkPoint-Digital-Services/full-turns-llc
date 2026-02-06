@@ -142,7 +142,7 @@ export default function MyOrdersPage() {
                   </div>
                   <div className="flex items-center gap-2 min-w-[100px]">
                     <span className="font-medium text-gray-900">
-                      ₱{order.total.toLocaleString()}
+                      ${order.total.toLocaleString()}
                     </span>
                   </div>
                 </div>
@@ -180,7 +180,7 @@ export default function MyOrdersPage() {
                           {item.name}
                         </p>
                         <span className="font-bold text-gray-900">
-                          ₱{item.price.toLocaleString()}
+                          ${item.price.toLocaleString()}
                         </span>
                       </div>
                       <div className="text-sm text-gray-600 space-y-1">
