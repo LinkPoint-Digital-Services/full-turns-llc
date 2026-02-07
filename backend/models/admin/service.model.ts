@@ -11,4 +11,6 @@ export const ServiceSchema = new Schema<IService>(
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
+ServiceSchema.index({ admin_id: 1 });
+
 export const ServiceModel = model<IService>('services', ServiceSchema);

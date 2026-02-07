@@ -1,7 +1,7 @@
 import Router from 'express';
 import {ProfileController} from '../controllers/manager/profile.controller';
-import { ServiceController } from '../controllers/admin/service.controller';
-import { ItemController } from '../controllers/admin/item.controller';
+import {ServiceController} from '../controllers/admin/service.controller';
+import {ItemController} from '../controllers/admin/item.controller';
 
 const router = Router();
 

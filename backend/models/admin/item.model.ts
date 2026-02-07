@@ -24,4 +24,7 @@ export const ItemSchema = new Schema<IItem>(
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
+ItemSchema.index({ admin_id: 1 });
+ItemSchema.index({ serviceId: 1 });
+
 export const ItemModel = model<IItem>('items', ItemSchema);

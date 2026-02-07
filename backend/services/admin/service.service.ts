@@ -34,6 +34,6 @@ export class ServiceService {
 
   static async getServices(admin_id?: string) {
     const filter = admin_id ? { admin_id } : {};
-    return await ServiceModel.find(filter);
+    return await ServiceModel.find(filter).lean().exec();
   }
 }

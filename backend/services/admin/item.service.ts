@@ -1,5 +1,5 @@
-import { ItemModel } from '../../models/admin/item.model';
-import { IItem } from '../../interfaces/admin/IItem';
+import {ItemModel} from '../../models/admin/item.model';
+import {IItem} from '../../interfaces/admin/IItem';
 
 export class ItemService {
   static async addItem(admin_id: string, item: IItem) {
@@ -15,9 +15,9 @@ export class ItemService {
     updateData: Partial<IItem>
   ) {
     return await ItemModel.findOneAndUpdate(
-      { _id: itemId, admin_id },
-      { $set: updateData },
-      { new: true }
+      {_id: itemId, admin_id},
+      {$set: updateData},
+      {new: true}
     );
   }
 
@@ -29,7 +29,7 @@ export class ItemService {
   }
 
   static async getItems(admin_id?: string) {
-    const filter = admin_id ? { admin_id } : {};
-    return await ItemModel.find(filter);
+    const filter = admin_id ? {admin_id} : {};
+    return await ItemModel.find(filter).lean().exec();
   }
 }

@@ -17,7 +17,14 @@ api.interceptors.response.use(
   res => res,
   (error: AxiosError<ErrorResponse>) => {
     const message =
-      error.response?.data?.message || 'Unexpected error. Please try again.';
-    return Promise.reject({message, status: error.response?.status});
+      error.response?.data?.message ||
+      error.message ||
+      'Unexpected error. Please try again.';
+    return Promise.reject({
+      message,
+      status: error.response?.status ?? 0,
+      code: error.code,
+      url: error.config?.url
+    });
   }
 );
