@@ -5,6 +5,7 @@ import {
   ServiceCategoryList,
   ServiceItemGrid,
   ServiceItemConfigModal,
+  MobileCategoryDropdown,
 } from "@/features/manager/components";
 import type {Item} from "@/features/manager/components";
 import {useServices} from "@/features/manager/components/ServicesContext";
@@ -31,9 +32,8 @@ export const StepService = ({
 
   // Use controlled state if provided, otherwise use internal state
   // Fallback to first service if list is empty (though unlikely with initial data)
-  const initialServiceId = services.length > 0 ? services[0]._id : "";
   const [internalActiveServiceId, setInternalActiveServiceId] =
-    useState<string>(initialServiceId);
+    useState<string>("");
   const [configModalOpen, setConfigModalOpen] = useState(false);
   const [selectedConfigItem, setSelectedConfigItem] = useState<Item | null>(
     null,
@@ -64,7 +64,8 @@ export const StepService = ({
     const isSimpleItem =
       item.measurement === "fixed" &&
       (!item.addOns || item.addOns.length === 0) &&
-      !item.allowCustomDetails;
+      !item.allowCustomDetails &&
+      item.selectionType !== "checklist";
 
     if (isSimpleItem) {
       onSelectItem(item);
@@ -77,7 +78,9 @@ export const StepService = ({
 
   const activeService =
     services.find((s) => s._id === activeServiceId) || services[0];
-  const currentItems = items.filter((i) => i.serviceId === activeServiceId);
+  const currentItems = activeService
+    ? items.filter((i) => i.serviceId === activeService._id)
+    : [];
 
   if (!activeService) return <div>No services available</div>;
 
@@ -107,7 +110,12 @@ export const StepService = ({
         </div>
 
         {/* Mobile grid */}
-        <div className="md:hidden flex-1">
+        <div className="md:hidden flex-1 flex flex-col">
+          <MobileCategoryDropdown
+            activeServiceId={activeServiceId}
+            onServiceChange={setActiveServiceId}
+            services={services}
+          />
           <ServiceItemGrid
             title={activeService.serviceName}
             items={currentItems}

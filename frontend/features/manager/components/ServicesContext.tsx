@@ -38,25 +38,34 @@ export const ServicesProvider = ({children}: {children: ReactNode}) => {
     const loadData = async () => {
       try {
         setLoading(true);
+        console.log("Fetching services and items...");
         // We pass empty string for admin_id to fetch all
         const [servicesRes, itemsRes] = await Promise.all([
           managerClient.getServices(""),
           managerClient.getItems(""),
         ]);
 
-        if (servicesRes.success && servicesRes.data.length > 0) {
-          setServices(servicesRes.data);
+        console.log("Services Result:", servicesRes);
+        console.log("Items Result:", itemsRes);
+
+        if (servicesRes.success) {
+          setServices(servicesRes.data || []);
+        } else {
+          console.error("Services API returned error:", servicesRes.message);
         }
-        if (itemsRes.success && itemsRes.data.length > 0) {
+        
+        if (itemsRes.success) {
           setItems(
-            itemsRes.data.map((item: ItemData) => ({
+            (itemsRes.data || []).map((item: ItemData) => ({
               ...item,
               itemId: item._id, // Map backend _id to itemId for consistency
             })),
           );
+        } else {
+          console.error("Items API returned error:", itemsRes.message);
         }
       } catch (error) {
-        console.error("Failed to load services/items:", error);
+        console.error("Caught error during services/items load:", error);
       } finally {
         setLoading(false);
       }

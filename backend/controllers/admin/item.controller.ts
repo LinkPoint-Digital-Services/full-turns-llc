@@ -16,7 +16,9 @@ export class ItemController {
   static async updateItem(req: Request, res: Response) {
     try {
       const { admin_id, itemId, updateData } = req.body;
-      const result = await ItemService.updateItem(admin_id, itemId, updateData);
+      // Filter out _id if it accidentally passed through
+      const { _id, ...cleanData } = updateData;
+      const result = await ItemService.updateItem(admin_id, itemId, cleanData);
       res.status(200).json({ success: true, data: result });
     } catch (error: any) {
       res.status(400).json({ success: false, message: error.message });

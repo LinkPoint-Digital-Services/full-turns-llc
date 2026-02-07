@@ -1,4 +1,5 @@
-import { Item, formatPrice, getIcon } from "./serviceData";
+import {Item, formatPrice} from "./serviceData";
+import NextImage from "next/image";
 
 interface ServiceItemGridProps {
   title: string;
@@ -7,18 +8,10 @@ interface ServiceItemGridProps {
 }
 
 const getPriceDisplay = (item: Item): string => {
-  // Simplified price display logic based on new schema
-  // "room" | "sqft" | "unit" | "each"
-  const price = formatPrice(item.basePrice);
-  
-  if (item.measurement === "unit" || item.measurement === "each") {
-    // For unit/each, typically just the price, or "per unit" if desired.
-    // The price list usually shows just the price.
-    // But if it's something like "Outlets Replace ... $10.00 each", we might want to show "/each"
-    return item.measurement === "each" ? `${price} each` : price;
+  if (item.selectionType === "checklist") {
+    return "Starts at $0";
   }
-  
-  return `${price}/${item.measurement}`;
+  return formatPrice(item.basePrice);
 };
 
 export const ServiceItemGrid = ({
@@ -26,28 +19,59 @@ export const ServiceItemGrid = ({
   onItemSelect,
 }: ServiceItemGridProps) => {
   return (
-    <div className="flex-1 rounded-xl p-4 md:p-6">
-
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+    <div className="flex-1 rounded-xl md:p-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
         {items.map((item) => {
-          const ItemIcon = getIcon(item.icon);
           const priceDisplay = getPriceDisplay(item);
 
           return (
             <button
               key={item.itemId}
               onClick={() => onItemSelect(item)}
-              className="group flex flex-col items-center justify-center p-4 md:p-6 h-40 md:h-48 bg-white border border-gray-200 rounded-xl hover:border-primary/50 hover:shadow-md transition-all duration-200"
+              className="group flex flex-col bg-white border border-gray-100 rounded-2xl overflow-hidden hover:border-primary/40 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-left"
             >
-              <div className="p-2 md:p-3 rounded-full bg-gray-50 text-gray-500 mb-2 md:mb-3 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                <ItemIcon className="w-5 h-5 md:w-6 md:h-6" />
+              {/* Image Container */}
+              <div className="relative w-full aspect-[4/3] bg-gray-50 overflow-hidden">
+                {item.imageUrl ? (
+                  <NextImage
+                    src={item.imageUrl}
+                    alt={item.name}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-300">
+                    <span className="text-xs font-medium uppercase tracking-wider">
+                      No Preview
+                    </span>
+                  </div>
+                )}
+                {/* Overlay for Checklist badge */}
+                {item.selectionType === "checklist" && (
+                  <div className="absolute top-3 right-3 bg-primary/90 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">
+                    CHECKLIST
+                  </div>
+                )}
               </div>
-              <span className="font-medium text-gray-900 group-hover:text-primary transition-colors text-xs md:text-sm text-center px-2 mb-2 line-clamp-2">
-                {item.name}
-              </span>
-              <span className="text-primary font-bold text-sm md:text-base">
-                {priceDisplay}
-              </span>
+
+              {/* Content Container */}
+              <div className="p-3 md:p-4 flex flex-col flex-1 gap-2">
+                <div className="space-y-1.5">
+                  <h3 className="font-semibold text-gray-800 group-hover:text-primary transition-colors text-xs md:text-sm line-clamp-2 leading-tight">
+                    {item.name}
+                  </h3>
+                  {item.notes && (
+                    <p className="text-[10px] md:text-xs text-gray-500 line-clamp-2 leading-relaxed">
+                      {item.notes}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center justify-between mt-auto pt-1">
+                  <span className="text-primary font-bold text-sm md:text-base">
+                    {priceDisplay}
+                  </span>
+                </div>
+              </div>
             </button>
           );
         })}

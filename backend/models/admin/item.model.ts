@@ -13,11 +13,12 @@ export const ItemSchema = new Schema<IItem>(
     admin_id: { type: String, required: true, ref: 'admins' },
     serviceId: { type: String, required: true, ref: 'services' },
     name: { type: String, required: true },
-    icon: { type: String, required: true },
+    imageUrl: { type: String },
     basePrice: { type: Number, required: true },
     measurement: { type: String, required: true },
     allowCustomDetails: { type: Boolean, default: false },
     notes: { type: String },
+    selectionType: { type: String, enum: ['individual', 'checklist'], default: 'individual' },
     addOns: [AddOnSchema]
   },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }

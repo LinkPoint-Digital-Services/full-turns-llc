@@ -5,6 +5,7 @@ import { adminClient } from "@/features/admin/adminClient";
 import { useServices } from "@/features/manager/components/ServicesContext";
 import { Service, Item } from "@/features/manager/components/serviceData";
 import { GetServicesResponse, GetItemsResponse } from "@/features/shared/types/api.types";
+import { ItemData } from "@/features/admin/types/services.types";
 
 export function useServiceManagement(adminId: string) {
   const queryClient = useQueryClient();
@@ -41,7 +42,9 @@ export function useServiceManagement(adminId: string) {
 
   // Use API data if available, otherwise fall back to context data
   const services = servicesData?.data || contextServices;
-  const items = itemsData?.data || contextItems;
+  const items = itemsData?.data 
+    ? itemsData.data.map((item: ItemData) => ({ ...item, itemId: item._id }))
+    : contextItems;
   const isLoading = isLoadingServices || isLoadingItems;
 
   // Service mutations
@@ -107,19 +110,17 @@ export function useServiceManagement(adminId: string) {
       addServiceMutation.mutate({
         admin_id: adminId,
         service: {
-          _id: service._id,
-          serviceName: service.serviceName,
-          icon: service.icon,
+          ...service,
         },
       });
       addService(service);
     } else {
+      const { _id, ...updateData } = service;
       updateServiceMutation.mutate({
         admin_id: adminId,
-        serviceId: service._id,
+        serviceId: _id,
         updateData: {
-          serviceName: service.serviceName,
-          icon: service.icon,
+          ...updateData,
         },
       });
       updateService(service);
@@ -143,29 +144,20 @@ export function useServiceManagement(adminId: string) {
       addItemMutation.mutate({
         admin_id: adminId,
         item: {
-          itemId: item.itemId,
-          name: item.name,
-          icon: item.icon,
-          serviceId: item.serviceId,
-          basePrice: item.basePrice,
-          measurement: item.measurement,
-          allowCustomDetails: item.allowCustomDetails,
-          addOns: item.addOns,
+          ...item,
+          selectionType: item.selectionType || "individual",
         },
       });
       addItem(item);
     } else {
+      const { itemId, ...updateData } = item;
       updateItemMutation.mutate({
         admin_id: adminId,
-        itemId: item.itemId,
+        itemId: itemId,
         updateData: {
-          name: item.name,
-          icon: item.icon,
-          serviceId: item.serviceId,
-          basePrice: item.basePrice,
-          measurement: item.measurement,
-          allowCustomDetails: item.allowCustomDetails,
-          addOns: item.addOns,
+          ...updateData,
+          selectionType: item.selectionType || "individual",
+          imageUrl: item.imageUrl || "",
         },
       });
       updateItem(item);
@@ -202,12 +194,13 @@ export function useServiceManagement(adminId: string) {
     setItemModal({
       itemId: `item_${crypto.randomUUID()}`,
       name: "",
-      icon: "Hammer",
+      imageUrl: "",
       serviceId: serviceId,
       basePrice: 0,
       measurement: "fixed",
       addOns: [],
       allowCustomDetails: false,
+      selectionType: "individual",
     });
     setIsNewItem(true);
   };
