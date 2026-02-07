@@ -1,5 +1,6 @@
 import type {Metadata} from 'next';
 import type {ReactNode} from 'react';
+import {ServicesProvider} from '@/features/manager/components/ServicesContext';
 
 export const metadata: Metadata = {
   robots: {
@@ -9,5 +10,5 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardLayout({children}: {children: ReactNode}) {
-  return <>{children}</>;
+  return <ServicesProvider>{children}</ServicesProvider>;
 }

@@ -3,13 +3,17 @@
 import React, {
   createContext,
   useContext,
-  useState,
   ReactNode,
-  useEffect,
+  useMemo,
 } from "react";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {Service, Item} from "./serviceData";
 import {managerClient} from "../managerClient";
-import {ItemData} from "@/features/admin/types/services.types";
+import {
+  GetItemsResponse,
+  GetServicesResponse,
+} from "@/features/shared/types/api.types";
+import {ItemData, ServiceItem} from "@/features/admin/types/services.types";
 
 interface ServicesContextType {
   services: Service[];
@@ -30,76 +34,104 @@ const ServicesContext = createContext<ServicesContextType | undefined>(
 );
 
 export const ServicesProvider = ({children}: {children: ReactNode}) => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [items, setItems] = useState<Item[]>([]);
-  const [loading, setLoading] = useState(true);
+  const adminId = "";
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        setLoading(true);
-        console.log("Fetching services and items...");
-        // We pass empty string for admin_id to fetch all
-        const [servicesRes, itemsRes] = await Promise.all([
-          managerClient.getServices(""),
-          managerClient.getItems(""),
-        ]);
+  const servicesQuery = useQuery<GetServicesResponse>({
+    queryKey: ["manager", "services", adminId],
+    queryFn: () => managerClient.getServices(adminId),
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false
+  });
 
-        console.log("Services Result:", servicesRes);
-        console.log("Items Result:", itemsRes);
+  const itemsQuery = useQuery<GetItemsResponse>({
+    queryKey: ["manager", "items", adminId],
+    queryFn: () => managerClient.getItems(adminId),
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false
+  });
 
-        if (servicesRes.success) {
-          setServices(servicesRes.data || []);
-        } else {
-          console.error("Services API returned error:", servicesRes.message);
-        }
-        
-        if (itemsRes.success) {
-          setItems(
-            (itemsRes.data || []).map((item: ItemData) => ({
-              ...item,
-              itemId: item._id, // Map backend _id to itemId for consistency
-            })),
-          );
-        } else {
-          console.error("Items API returned error:", itemsRes.message);
-        }
-      } catch (error) {
-        console.error("Caught error during services/items load:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  if (servicesQuery.error) {
+    console.error("Services request failed:", servicesQuery.error);
+  }
+  if (itemsQuery.error) {
+    console.error("Items request failed:", itemsQuery.error);
+  }
 
-    loadData();
-  }, []);
+  const services = servicesQuery.data?.success
+    ? servicesQuery.data.data || []
+    : [];
 
-  const addService = (service: Service) => {
-    setServices((prev) => [...prev, service]);
-  };
+  const items = useMemo<Item[]>(() => {
+    if (!itemsQuery.data?.success) return [];
+    return (itemsQuery.data.data || []).map((item: ItemData) => ({
+      ...item,
+      itemId: item._id, // Map backend _id to itemId for consistency
+    }));
+  }, [itemsQuery.data]);
 
-  const updateService = (service: Service) => {
-    setServices((prev) =>
-      prev.map((s) => (s._id === service._id ? service : s)),
+  const loading = servicesQuery.isLoading || itemsQuery.isLoading;
+
+  const setServices = (next: Service[]) => {
+    const mapped: ServiceItem[] = next.map((service) => {
+      const existing = servicesQuery.data?.data?.find(
+        (s) => s._id === service._id
+      );
+      return {
+        ...service,
+        created_at: existing?.created_at ?? "",
+        updated_at: existing?.updated_at ?? ""
+      };
+    });
+    queryClient.setQueryData<GetServicesResponse>(
+      ["manager", "services", adminId],
+      (old) => ({
+        success: true,
+        message: old?.message ?? "",
+        data: mapped
+      })
     );
   };
 
+  const setItems = (next: Item[]) => {
+    const mapped: ItemData[] = next.map((item) => ({
+      ...(item as ItemData),
+      _id: (item as Item).itemId
+    }));
+    queryClient.setQueryData<GetItemsResponse>(
+      ["manager", "items", adminId],
+      (old) => ({
+        success: true,
+        message: old?.message ?? "",
+        data: mapped
+      })
+    );
+  };
+
+  const addService = (service: Service) => {
+    setServices([...services, service]);
+  };
+
+  const updateService = (service: Service) => {
+    setServices(services.map((s) => (s._id === service._id ? service : s)));
+  };
+
   const deleteService = (id: string) => {
-    setServices((prev) => prev.filter((s) => s._id !== id));
+    setServices(services.filter((s) => s._id !== id));
     // Also delete associated items
-    setItems((prev) => prev.filter((i) => i.serviceId !== id));
+    setItems(items.filter((i) => i.serviceId !== id));
   };
 
   const addItem = (item: Item) => {
-    setItems((prev) => [...prev, item]);
+    setItems([...items, item]);
   };
 
   const updateItem = (item: Item) => {
-    setItems((prev) => prev.map((i) => (i.itemId === item.itemId ? item : i)));
+    setItems(items.map((i) => (i.itemId === item.itemId ? item : i)));
   };
 
   const deleteItem = (id: string) => {
-    setItems((prev) => prev.filter((i) => i.itemId !== id));
+    setItems(items.filter((i) => i.itemId !== id));
   };
 
   return (
