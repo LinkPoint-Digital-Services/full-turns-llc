@@ -94,12 +94,6 @@ export default function MyOrdersPage() {
             View and track your recent orders.
           </p>
         </div>
-
-        {/* Search */}
-        <div className="relative w-full md:w-[40%] lg:w-[25%]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input placeholder="Search by Order ID..." className="pl-9 text-sm" />
-        </div>
       </div>
 
       {/* Orders List */}
