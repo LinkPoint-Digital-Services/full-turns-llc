@@ -2,7 +2,7 @@
 
 import {useState} from "react";
 import {Filter, ChevronDown} from "lucide-react";
-import {Service, getIcon} from "./serviceData";
+import {Service} from "./serviceData";
 import {cn} from "@/lib/utils";
 
 interface MobileCategoryDropdownProps {
@@ -31,7 +31,6 @@ export const MobileCategoryDropdown = ({
         {isSidebarOpen && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-xl max-h-80 overflow-y-auto z-50">
             {services.map((category) => {
-              const Icon = getIcon(category.icon);
               return (
                 <button
                   key={category._id}
@@ -46,7 +45,6 @@ export const MobileCategoryDropdown = ({
                       : "text-gray-700 hover:bg-gray-50",
                   )}
                 >
-                  <Icon className="w-5 h-5 flex-shrink-0" />
                   <span className="text-sm">{category.serviceName}</span>
                 </button>
               );
