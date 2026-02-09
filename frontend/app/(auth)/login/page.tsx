@@ -1,15 +1,16 @@
-'use client';
+"use client";
 
-import { ArrowLeft } from 'lucide-react';
+import {ArrowLeft} from "lucide-react";
 
-import React, {useEffect} from 'react';
-import {useRouter} from 'next/navigation';
-import {useMe} from '@/features/auth/hooks/useMe';
-import LoginForm from '@/features/auth/components/LoginForm';
-import bg from '@/public/assets/images/homepage/hero-bg.png';
-import Link from 'next/link';
-import stroke from '@/public/assets/images/about-us/about-us-paintstroke.png';
-import Image from 'next/image';
+import React, {useEffect} from "react";
+import {useRouter} from "next/navigation";
+import {useMe} from "@/features/auth/hooks/useMe";
+import LoginForm from "@/features/auth/components/LoginForm";
+import bg from "@/public/assets/images/homepage/auth-bg.jpg";
+import roombg from "@/public/assets/images/contact/living-room.png";
+import Link from "next/link";
+import stroke from "@/public/assets/images/about-us/about-us-paintstroke.png";
+import Image from "next/image";
 
 export default function LoginPage() {
   const {data: userData, isLoading, isError} = useMe();
@@ -23,6 +24,15 @@ export default function LoginPage() {
 
   return (
     <main className="relative min-h-screen w-full bg-[#262626] text-white flex flex-col lg:flex-row overflow-hidden">
+      <div className="absolute bottom-20 md:-bottom-22 -left-20 w-[90%] md:w-[65%] lg:w-[17%]">
+        <Image
+          className="w-full"
+          src={roombg}
+          width={0}
+          height={0}
+          alt={"Isometric Room"}
+        ></Image>
+      </div>
       {/* IMAGE / HERO */}
       <section className="relative w-full lg:w-[60%] h-[20vh] lg:h-auto overflow-hidden order-1 lg:order-2">
         <div
@@ -48,8 +58,8 @@ export default function LoginPage() {
 
       {/* LOGIN */}
       <section className="relative w-full lg:w-[40%] flex items-start lg:items-center justify-center order-2 lg:order-1 h-full min-h-screen">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="hidden lg:flex absolute top-4 left-4 lg:top-8 lg:left-8 z-30 text-white hover:text-[#eaa918] transition-colors"
         >
           <ArrowLeft size={24} />
@@ -60,6 +70,7 @@ export default function LoginPage() {
           className="
             relative w-full
             bg-[#262626]
+            lg:bg-transparent
             px-6 pt-10 md:px-6 lg:px-15 xl:px-20
             lg:max-w-[38rem]
             -mt-24 lg:mt-0
@@ -89,7 +100,7 @@ export default function LoginPage() {
           </div>
 
           <p className="text-sm text-gray-300 mb-6">
-            Don&apos;t have an account?{' '}
+            Don&apos;t have an account?{" "}
             <Link
               href="/signup"
               className="text-[#eaa918] hover:underline font-medium"
@@ -99,8 +110,6 @@ export default function LoginPage() {
           </p>
 
           <LoginForm />
-          
-
         </div>
       </section>
     </main>

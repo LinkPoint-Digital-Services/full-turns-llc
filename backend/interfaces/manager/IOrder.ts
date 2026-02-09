@@ -15,6 +15,7 @@ export interface IOrder {
   items: IOrderItem[];
   totalAmount: number;
   status: OrderStatus;
+  images?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 }

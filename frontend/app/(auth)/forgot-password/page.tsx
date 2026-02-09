@@ -12,8 +12,9 @@ import {authClient} from "@/features/auth/services/authClient";
 import {useAppMutation} from "@/features/shared/hooks/useAppMutation";
 import {Button} from "@/components/ui/button";
 import {useForgotPassword} from "@/stores/auth/password-recovery";
-import bg from "@/public/assets/images/homepage/hero-bg.png";
+import bg from "@/public/assets/images/homepage/auth-bg.jpg";
 import stroke from "@/public/assets/images/about-us/about-us-paintstroke.png";
+import roombg from "@/public/assets/images/contact/living-room.png";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -52,7 +53,16 @@ export default function ForgotPasswordPage() {
   });
 
   return (
-    <main className="relative min-h-screen w-full bg-[#1a1a1a] text-white flex flex-col lg:flex-row">
+    <main className="relative min-h-screen w-full bg-[#262626] text-white flex flex-col lg:flex-row">
+      <div className="absolute bottom-20 md:-bottom-22 -left-20 w-[90%] md:w-[65%] lg:w-[17%]">
+        <Image
+          className="w-full"
+          src={roombg}
+          width={0}
+          height={0}
+          alt={"Isometric Room"}
+        ></Image>
+      </div>
       {/* IMAGE / HERO */}
       <section className="relative z-0 w-full lg:w-[60%] h-[20vh] lg:h-auto overflow-hidden order-1 lg:order-2">
         <div
@@ -77,8 +87,7 @@ export default function ForgotPasswordPage() {
 
       {/* FORGOT PASSWORD */}
       <section className="relative z-10 w-full lg:w-[40%] flex items-start lg:items-center justify-center order-2 lg:order-1 h-full min-h-screen overflow-hidden">
-        <div className="absolute -bottom-24 -left-24 z-10 w-64 md:w-96">
-        </div>
+        <div className="absolute -bottom-24 -left-24 z-10 w-64 md:w-96"></div>
         <div
           className="
             relative w-full

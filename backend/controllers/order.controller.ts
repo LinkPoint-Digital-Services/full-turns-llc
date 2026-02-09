@@ -12,15 +12,16 @@ export class OrderController {
         return res.status(401).json({ success: false, message: 'Unauthorized' });
       }
 
-      const { items, totalAmount } = req.body;
+      const { items, totalAmount, images } = req.body;
       const orderId = `ORD-${Date.now()}`;
-
+ 
       const orderData = {
         orderId,
         managerId,
         items,
         totalAmount,
-        status: 'Pending'
+        status: 'Pending',
+        images
       };
 
       const result = await orderService.createOrder(orderData as any);

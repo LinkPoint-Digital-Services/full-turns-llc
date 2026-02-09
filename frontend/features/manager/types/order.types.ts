@@ -20,6 +20,7 @@ export interface CreateOrderItem {
 export interface CreateOrderRequest {
   items: CreateOrderItem[];
   totalAmount: number;
+  images?: string[];
 }
 
 export interface OrderSummary {
@@ -34,6 +35,7 @@ export interface OrderSummary {
     quantity: number;
     details?: string;
   }[];
+  images?: string[];
 }
 
 export interface BackendOrderItem {
@@ -51,6 +53,7 @@ export interface BackendOrder {
   status: OrderStatus;
   totalAmount: number;
   items: BackendOrderItem[];
+  images?: string[];
   managerId?: {
     first_name: string;
     last_name: string;
