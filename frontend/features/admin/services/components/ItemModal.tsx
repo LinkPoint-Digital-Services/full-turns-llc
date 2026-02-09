@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -6,8 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -15,11 +15,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Item, MEASUREMENTS } from "@/features/manager/components/serviceData";
-import { useState, useEffect } from "react";
+import {Checkbox} from "@/components/ui/checkbox";
+import {Item, MEASUREMENTS} from "@/features/manager/components/serviceData";
+import {useState, useEffect} from "react";
 import NextImage from "next/image";
-import { Plus, Trash2 } from "lucide-react";
+import {Plus, Trash2} from "lucide-react";
 
 export function ItemModal({
   item,
@@ -42,7 +42,7 @@ export function ItemModal({
       ...prev,
       addOns: [
         ...(prev.addOns || []),
-        { addOnsId: `addon_${crypto.randomUUID()}`, name: "", price: 0 },
+        {addOnsId: `addon_${crypto.randomUUID()}`, name: "", price: 0},
       ],
     }));
   };
@@ -50,16 +50,16 @@ export function ItemModal({
   const handleAddOnChange = (
     index: number,
     field: "name" | "price",
-    value: string | number
+    value: string | number,
   ) => {
     setDraft((prev) => {
       const newAddOns = [...(prev.addOns || [])];
       if (field === "price") {
-        newAddOns[index] = { ...newAddOns[index], price: Number(value) };
+        newAddOns[index] = {...newAddOns[index], price: Number(value)};
       } else {
-        newAddOns[index] = { ...newAddOns[index], name: String(value) };
+        newAddOns[index] = {...newAddOns[index], name: String(value)};
       }
-      return { ...prev, addOns: newAddOns };
+      return {...prev, addOns: newAddOns};
     });
   };
 
@@ -67,7 +67,7 @@ export function ItemModal({
     setDraft((prev) => {
       const newAddOns = [...(prev.addOns || [])];
       newAddOns.splice(index, 1);
-      return { ...prev, addOns: newAddOns };
+      return {...prev, addOns: newAddOns};
     });
   };
 
@@ -85,7 +85,7 @@ export function ItemModal({
             <Input
               placeholder="Item name"
               value={draft.name}
-              onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+              onChange={(e) => setDraft({...draft, name: e.target.value})}
             />
           </div>
 
@@ -95,7 +95,7 @@ export function ItemModal({
             <Select
               value={draft.selectionType || "individual"}
               onValueChange={(v) =>
-                setDraft({ ...draft, selectionType: v as Item["selectionType"] })
+                setDraft({...draft, selectionType: v as Item["selectionType"]})
               }
             >
               <SelectTrigger>
@@ -103,12 +103,14 @@ export function ItemModal({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="individual">Individual Item</SelectItem>
-                <SelectItem value="checklist">Checklist (of multiple sub-items)</SelectItem>
+                <SelectItem value="checklist">
+                  Checklist (of multiple sub-items)
+                </SelectItem>
               </SelectContent>
             </Select>
             <p className="text-[10px] text-muted-foreground">
-              {draft.selectionType === "checklist" 
-                ? "This item will be displayed as a checklist group. Add specific tasks below." 
+              {draft.selectionType === "checklist"
+                ? "This item will be displayed as a checklist group. Add specific tasks below."
                 : "This item will be shown as a standard selectable card."}
             </p>
           </div>
@@ -140,7 +142,7 @@ export function ItemModal({
                     if (file) {
                       const reader = new FileReader();
                       reader.onloadend = () => {
-                        setDraft({ ...draft, imageUrl: reader.result as string });
+                        setDraft({...draft, imageUrl: reader.result as string});
                       };
                       reader.readAsDataURL(file);
                     }
@@ -152,11 +154,11 @@ export function ItemModal({
                 </p>
               </div>
               {draft.imageUrl && (
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   className="text-destructive"
-                  onClick={() => setDraft({ ...draft, imageUrl: "" })}
+                  onClick={() => setDraft({...draft, imageUrl: ""})}
                 >
                   <Trash2 size={16} />
                 </Button>
@@ -165,7 +167,7 @@ export function ItemModal({
           </div>
 
           {/* Base Price & Measurement */}
-          {draft.selectionType !== 'checklist' && (
+          {draft.selectionType !== "checklist" && (
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Base Price ($)</Label>
@@ -175,7 +177,10 @@ export function ItemModal({
                   step="0.01"
                   value={draft.basePrice}
                   onChange={(e) =>
-                    setDraft({ ...draft, basePrice: parseFloat(e.target.value) || 0 })
+                    setDraft({
+                      ...draft,
+                      basePrice: parseFloat(e.target.value) || 0,
+                    })
                   }
                 />
               </div>
@@ -185,7 +190,7 @@ export function ItemModal({
                 <Select
                   value={draft.measurement}
                   onValueChange={(v) =>
-                    setDraft({ ...draft, measurement: v as Item["measurement"] })
+                    setDraft({...draft, measurement: v as Item["measurement"]})
                   }
                 >
                   <SelectTrigger>
@@ -209,10 +214,10 @@ export function ItemModal({
               id="customDetails"
               checked={draft.allowCustomDetails ?? false}
               onCheckedChange={(v) =>
-                setDraft({ ...draft, allowCustomDetails: Boolean(v) })
+                setDraft({...draft, allowCustomDetails: Boolean(v)})
               }
             />
-            <Label htmlFor="customDetails">Allow custom details / notes</Label>
+            <Label htmlFor="customDetails">Item Details</Label>
           </div>
 
           {/* Notes / Details Input */}
@@ -222,7 +227,7 @@ export function ItemModal({
               <Input
                 placeholder="Enter details or notes regarding this item..."
                 value={draft.notes || ""}
-                onChange={(e) => setDraft({ ...draft, notes: e.target.value })}
+                onChange={(e) => setDraft({...draft, notes: e.target.value})}
               />
             </div>
           )}
@@ -231,7 +236,9 @@ export function ItemModal({
           <div className="space-y-3 pt-2 border-t">
             <div className="flex justify-between items-center">
               <Label className="text-base font-semibold">
-                {draft.selectionType === 'checklist' ? 'Checklist Sub-items' : 'Tailored Add-ons'}
+                {draft.selectionType === "checklist"
+                  ? "Checklist Sub-items"
+                  : "Tailored Add-ons"}
               </Label>
               <Button
                 type="button"
@@ -245,9 +252,9 @@ export function ItemModal({
 
             {(!draft.addOns || draft.addOns.length === 0) && (
               <p className="text-sm text-muted-foreground italic">
-                {draft.selectionType === 'checklist' 
-                  ? 'No sub-items defined for this checklist yet.' 
-                  : 'No add-ons tailored for this item.'}
+                {draft.selectionType === "checklist"
+                  ? "No sub-items defined for this checklist yet."
+                  : "No add-ons tailored for this item."}
               </p>
             )}
 
@@ -255,7 +262,11 @@ export function ItemModal({
               {draft.addOns?.map((addon, idx) => (
                 <div key={idx} className="flex gap-2 items-center">
                   <Input
-                    placeholder={draft.selectionType === 'checklist' ? "Sub-item name" : "Name"}
+                    placeholder={
+                      draft.selectionType === "checklist"
+                        ? "Sub-item name"
+                        : "Name"
+                    }
                     className="flex-1"
                     value={addon.name}
                     onChange={(e) =>

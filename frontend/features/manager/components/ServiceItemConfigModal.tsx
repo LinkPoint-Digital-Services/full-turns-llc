@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import {useEffect, useState} from "react";
+import {Button} from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,11 +8,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "@/components/ui/textarea";
-import { Item, formatPrice } from "./serviceData";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {Checkbox} from "@/components/ui/checkbox";
+import {Textarea} from "@/components/ui/textarea";
+import {Item, formatPrice} from "./serviceData";
 import NextImage from "next/image";
 
 interface ServiceItemConfigModalProps {
@@ -37,7 +37,6 @@ export const ServiceItemConfigModal = ({
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
   const [customDetails, setCustomDetails] = useState("");
 
-  
   useEffect(() => {
     const resetState = () => {
       setQuantity(1);
@@ -54,12 +53,12 @@ export const ServiceItemConfigModal = ({
     setSelectedAddOns((prev) =>
       prev.includes(addOnId)
         ? prev.filter((id) => id !== addOnId)
-        : [...prev, addOnId]
+        : [...prev, addOnId],
     );
   };
 
   const calculateTotal = () => {
-    if (item.selectionType === 'checklist') {
+    if (item.selectionType === "checklist") {
       let total = 0; // Base price is removed for checklists
       if (item.addOns) {
         item.addOns.forEach((addOn) => {
@@ -84,25 +83,30 @@ export const ServiceItemConfigModal = ({
 
   const handleAddToOrder = () => {
     const total = calculateTotal();
-    
+
     // Construct details string
     let details = "";
-    if (item.selectionType !== 'checklist' && item.measurement !== "fixed") {
+    if (item.selectionType !== "checklist" && item.measurement !== "fixed") {
       details += `Quantity: ${quantity} ${item.measurement}`;
     }
-    
+
     if (selectedAddOns.length > 0 && item.addOns) {
       const addOnNames = item.addOns
         .filter((a) => selectedAddOns.includes(a.addOnsId))
         .map((a) => a.name)
         .join(", ");
-      
-      const label = item.selectionType === 'checklist' ? "Included Items" : "Add-ons";
-      details += details ? `\n${label}: ${addOnNames}` : `${label}: ${addOnNames}`;
+
+      const label =
+        item.selectionType === "checklist" ? "Included Items" : "Add-ons";
+      details += details
+        ? `\n${label}: ${addOnNames}`
+        : `${label}: ${addOnNames}`;
     }
 
     if (customDetails.trim()) {
-       details += details ? `\nNote: ${customDetails}` : `Note: ${customDetails}`;
+      details += details
+        ? `\nNote: ${customDetails}`
+        : `Note: ${customDetails}`;
     }
 
     onAddToCart({
@@ -111,7 +115,7 @@ export const ServiceItemConfigModal = ({
       price: total,
       details: details,
     });
-    
+
     // Reset and close
     setQuantity(1);
     setSelectedAddOns([]);
@@ -119,7 +123,10 @@ export const ServiceItemConfigModal = ({
     onOpenChange(false);
   };
 
-  const showQuantityInput = item.selectionType !== 'checklist' && item.measurement !== "fixed" && item.measurement !== "varies";
+  const showQuantityInput =
+    item.selectionType !== "checklist" &&
+    item.measurement !== "fixed" &&
+    item.measurement !== "varies";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -142,7 +149,7 @@ export const ServiceItemConfigModal = ({
         </DialogHeader>
 
         <div className="space-y-6 py-4">
-          {item.selectionType !== 'checklist' && (
+          {item.selectionType !== "checklist" && (
             <div className="flex justify-between items-center text-sm">
               <span className="text-gray-500">Base Price:</span>
               {item.measurement !== "varies" ? (
@@ -152,8 +159,7 @@ export const ServiceItemConfigModal = ({
                 </span>
               ) : (
                 <span className="font-medium">
-                  {formatPrice(item.basePrice)}{" "}
-                  {item.measurement}
+                  {formatPrice(item.basePrice)} {item.measurement}
                 </span>
               )}
             </div>
@@ -175,7 +181,9 @@ export const ServiceItemConfigModal = ({
           {item.addOns && item.addOns.length > 0 && (
             <div className="space-y-3">
               <Label>
-                {item.selectionType === 'checklist' ? 'Select Items' : 'Add-ons'}
+                {item.selectionType === "checklist"
+                  ? "Select Items"
+                  : "Add-ons"}
               </Label>
               <div className="space-y-2 border rounded-lg p-3 bg-gray-50/30">
                 {item.addOns.map((addon) => (
@@ -200,19 +208,6 @@ export const ServiceItemConfigModal = ({
                   </div>
                 ))}
               </div>
-            </div>
-          )}
-
-          {item.allowCustomDetails && (
-            <div className="space-y-2">
-              <Label htmlFor="details">Custom Details / Notes</Label>
-              <Textarea
-                id="details"
-                value={customDetails}
-                onChange={(e) => setCustomDetails(e.target.value)}
-                placeholder="Describe any specific requirements..."
-                className="resize-none"
-              />
             </div>
           )}
 

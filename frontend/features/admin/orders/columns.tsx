@@ -140,9 +140,9 @@ export const columns: ColumnDef<OrderSummary>[] = [
     },
     cell: ({row}) => {
       const amount = parseFloat(row.getValue("total"));
-      const formatted = new Intl.NumberFormat("en-PH", {
+      const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "PHP",
+        currency: "USD",
       }).format(amount);
       return <div className="text-right font-medium">{formatted}</div>;
     },
