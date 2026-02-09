@@ -99,6 +99,7 @@ export default function Services() {
               <video
                 className="aspect-video w-[80vw] max-w-[60vw] rounded-md md:w-full"
                 src={service.video}
+                poster={service.image.src}
                 autoPlay
                 muted
                 loop
