@@ -1,7 +1,8 @@
-import { ShoppingCart, X, ImagePlus, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { uploadToCloudinary } from "@/lib/cloudinary";
+/* eslint-disable @next/next/no-img-element */
+import {ShoppingCart, X, ImagePlus, Loader2} from "lucide-react";
+import {Button} from "@/components/ui/button";
+import {useState} from "react";
+import {uploadToCloudinary} from "@/lib/cloudinary";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { OrderItem } from "../types/order.types";
+import {OrderItem} from "../types/order.types";
 
 interface CartModalProps {
   open: boolean;
@@ -130,11 +131,18 @@ export const CartModal = ({
                   Upload any relevant photos for this order
                 </p>
               </label>
-              
+
               <div className="flex flex-wrap gap-3 mb-3">
                 {previews.map((preview, index) => (
-                  <div key={index} className="relative w-20 h-20 rounded-md overflow-hidden border border-gray-200 bg-gray-100 group">
-                    <img src={preview} alt="preview" className="w-full h-full object-cover" />
+                  <div
+                    key={index}
+                    className="relative w-20 h-20 rounded-md overflow-hidden border border-gray-200 bg-gray-100 group"
+                  >
+                    <img
+                      src={preview}
+                      alt="preview"
+                      className="w-full h-full object-cover"
+                    />
                     <button
                       onClick={() => removeFile(index)}
                       className="absolute top-1 right-1 p-1 bg-white/80 hover:bg-white rounded-full text-red-500 transition-colors opacity-0 group-hover:opacity-100"
@@ -143,7 +151,7 @@ export const CartModal = ({
                     </button>
                   </div>
                 ))}
-                
+
                 <label className="w-20 h-20 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md hover:border-primary hover:bg-primary/5 cursor-pointer transition-all">
                   <ImagePlus className="w-6 h-6 text-gray-400 mb-1" />
                   <span className="text-[10px] text-gray-500">Add Photo</span>
@@ -163,9 +171,7 @@ export const CartModal = ({
 
         <div className="border-t pt-4 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold text-gray-900">
-              Total:
-            </span>
+            <span className="text-lg font-semibold text-gray-900">Total:</span>
             <span className="text-2xl font-bold text-primary">
               ${cartTotal.toFixed(2)}
             </span>

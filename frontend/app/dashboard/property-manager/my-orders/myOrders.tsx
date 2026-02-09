@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, {useEffect, useState} from "react";
-import {Input} from "@/components/ui/input";
-import {Search, ChevronRight, Package, Calendar} from "lucide-react";
+import {ChevronRight, Package, Calendar} from "lucide-react";
 import type {
   OrderSummary,
   BackendOrder,
@@ -194,19 +194,21 @@ export default function MyOrdersPage() {
               {/* IMAGES */}
               {order.images && order.images.length > 0 && (
                 <div className="mt-6 border-t pt-4">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-3">Order Images</h4>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-3">
+                    Order Images
+                  </h4>
                   <div className="flex flex-wrap gap-2 pb-2">
                     {order.images.map((img, i) => (
-                      <a 
-                        key={i} 
-                        href={img} 
-                        target="_blank" 
+                      <a
+                        key={i}
+                        href={img}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="relative w-24 h-24 rounded-lg overflow-hidden border border-gray-100 hover:ring-2 hover:ring-primary transition-all shadow-sm"
                       >
-                        <img 
-                          src={img} 
-                          alt={`Attachment ${i + 1}`} 
+                        <img
+                          src={img}
+                          alt={`Attachment ${i + 1}`}
                           className="w-full h-full object-cover"
                         />
                       </a>
