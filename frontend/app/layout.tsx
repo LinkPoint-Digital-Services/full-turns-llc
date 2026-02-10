@@ -1,19 +1,18 @@
-import type {Metadata} from 'next';
-import {Geist, Geist_Mono} from 'next/font/google';
-import './globals.css';
-import {ReactQueryProvider} from '@/lib/provider/ReactQueryProvider';
-import {Toaster} from 'sonner';
-import DesktopOnlyCursor from '@/components/DesktopOnlyCursor';
-import {ogImage, siteName, siteTagline, siteUrl} from '@/lib/seo';
+import type {Metadata} from "next";
+import {Geist, Geist_Mono} from "next/font/google";
+import "./globals.css";
+import {ReactQueryProvider} from "@/lib/provider/ReactQueryProvider";
+import {Toaster} from "sonner";
+import {ogImage, siteName, siteTagline, siteUrl} from "@/lib/seo";
 
 const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin']
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin']
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -23,47 +22,47 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteName,
     description: siteTagline,
-    url: '/',
+    url: "/",
     siteName,
     images: [
       {
         url: ogImage,
-        alt: `${siteName} logo`
-      }
+        alt: `${siteName} logo`,
+      },
     ],
-    type: 'website'
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: siteName,
     description: siteTagline,
-    images: [ogImage]
+    images: [ogImage],
   },
   icons: {
     icon: [
       {
-        url: '/assets/images/homepage/logo_for_darks.png',
-        sizes: '32x32',
-        type: 'image/png'
+        url: "/assets/images/homepage/logo_for_darks.png",
+        sizes: "32x32",
+        type: "image/png",
       },
       {
-        url: '/assets/images/homepage/logo_for_darks.png',
-        sizes: '16x16',
-        type: 'image/png'
-      }
+        url: "/assets/images/homepage/logo_for_darks.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
     ],
     apple: [
       {
-        url: '/assets/images/homepage/logo_for_darks.png',
-        sizes: '180x180',
-        type: 'image/png'
-      }
-    ]
-  }
+        url: "/assets/images/homepage/logo_for_darks.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {

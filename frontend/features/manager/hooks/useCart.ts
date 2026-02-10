@@ -22,14 +22,14 @@ export const useCart = () => {
     setCartItems([]);
   };
 
-  const checkout = async () => {
+  const checkout = async (images?: string[]) => {
     if (cartItems.length === 0) return;
-
+ 
     const totalAmount = cartItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0,
     );
-
+ 
     try {
       await orderClient.createOrder({
         items: cartItems.map((item) => ({
@@ -40,6 +40,7 @@ export const useCart = () => {
           details: item.details,
         })),
         totalAmount,
+        images,
       });
       clearCart();
     } catch (error) {

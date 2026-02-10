@@ -13,5 +13,6 @@ export interface OrderSummary {
     quantity: number;
     details?: string;
   }[];
+  images?: string[];
   managerName?: string;
 }

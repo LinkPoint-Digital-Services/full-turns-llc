@@ -1,5 +1,5 @@
-import { Item, formatPrice } from "./serviceData";
-import { Checkbox } from "@/components/ui/checkbox";
+import {Item, formatPrice} from "./serviceData";
+import {Checkbox} from "@/components/ui/checkbox";
 import NextImage from "next/image";
 
 interface ServiceItemChecklistProps {
@@ -8,8 +8,8 @@ interface ServiceItemChecklistProps {
 }
 
 const getPriceDisplay = (item: Item): string => {
-  if (item.selectionType === 'checklist') {
-    return 'Starts at $0';
+  if (item.selectionType === "checklist") {
+    return "Varies";
   }
   return formatPrice(item.basePrice);
 };
@@ -31,9 +31,9 @@ export const ServiceItemChecklist = ({
               className="group flex items-center p-3 rounded-lg border border-transparent hover:border-primary/20 hover:bg-primary/5 transition-all duration-200 cursor-pointer"
             >
               <div className="mr-4">
-                <Checkbox 
+                <Checkbox
                   checked={false} // Since we handle selection through onItemSelect (which adds to cart)
-                  className="w-5 h-5 pointer-events-none" 
+                  className="w-5 h-5 pointer-events-none"
                 />
               </div>
 
@@ -66,7 +66,7 @@ export const ServiceItemChecklist = ({
           );
         })}
       </div>
-      
+
       {items.length === 0 && (
         <div className="py-20 text-center text-gray-500">
           No items found for this service.

@@ -1,7 +1,8 @@
-"use client";
-
-import { ShoppingCart, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+/* eslint-disable @next/next/no-img-element */
+import {ShoppingCart, X, ImagePlus, Loader2} from "lucide-react";
+import {Button} from "@/components/ui/button";
+import {useState} from "react";
+import {uploadToCloudinary} from "@/lib/cloudinary";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { OrderItem } from "../types/order.types";
+import {OrderItem} from "../types/order.types";
 
 interface CartModalProps {
   open: boolean;
@@ -17,7 +18,7 @@ interface CartModalProps {
   cartItems: OrderItem[];
   cartTotal: number;
   onRemoveItem: (itemId: string) => void;
-  onCheckout: () => void;
+  onCheckout: (images?: string[]) => void;
 }
 
 export const CartModal = ({
@@ -28,9 +29,47 @@ export const CartModal = ({
   onRemoveItem,
   onCheckout,
 }: CartModalProps) => {
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      setSelectedFiles((prev) => [...prev, ...files]);
+      const newPreviews = files.map((file) => URL.createObjectURL(file));
+      setPreviews((prev) => [...prev, ...newPreviews]);
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+    setPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleCheckoutClick = async () => {
+    setIsUploading(true);
+    try {
+      const imageUrls: string[] = [];
+      for (const file of selectedFiles) {
+        const url = await uploadToCloudinary(file);
+        imageUrls.push(url);
+      }
+      onCheckout(imageUrls.length > 0 ? imageUrls : undefined);
+      // Reset state if successful
+      setSelectedFiles([]);
+      setPreviews([]);
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      // Maybe show a toast notification here
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col">
+      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold flex items-center gap-2">
             <ShoppingCart className="w-5 h-5" />
@@ -39,53 +78,100 @@ export const CartModal = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto space-y-3 py-4">
-          {cartItems.length === 0 ? (
-            <div className="text-center py-12">
-              <ShoppingCart className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-              <p className="text-gray-500">Your cart is empty</p>
-            </div>
-          ) : (
-            cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors group"
-              >
-                <div className="pr-4 flex-1">
-                  <p className="text-base font-semibold text-gray-900 mb-1">
-                    {item.name}
-                  </p>
-                  {item.details && (
-                    <p className="text-sm text-gray-600 mb-2">
-                      {item.details}
-                    </p>
-                  )}
-                  <p className="text-xs text-gray-500">
-                    Quantity: {item.quantity}
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <p className="text-lg font-bold text-primary whitespace-nowrap">
-                    ${item.price.toFixed(2)}
-                  </p>
-                  <button
-                    onClick={() => onRemoveItem(item.id)}
-                    className="p-2 hover:bg-red-50 rounded-lg transition-colors"
-                    aria-label="Remove item"
-                  >
-                    <X className="w-5 h-5 text-red-500" />
-                  </button>
-                </div>
+        <div className="flex-1 overflow-y-auto space-y-6 py-4 px-1">
+          {/* Cart Items */}
+          <div className="space-y-3">
+            {cartItems.length === 0 ? (
+              <div className="text-center py-12">
+                <ShoppingCart className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                <p className="text-gray-500">Your cart is empty</p>
               </div>
-            ))
+            ) : (
+              cartItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between border border-gray-200 rounded-lg px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors group"
+                >
+                  <div className="pr-4 flex-1">
+                    <p className="text-base font-semibold text-gray-900 mb-1">
+                      {item.name}
+                    </p>
+                    {item.details && (
+                      <p className="text-sm text-gray-600 mb-2">
+                        {item.details}
+                      </p>
+                    )}
+                    <p className="text-xs text-gray-500">
+                      Quantity: {item.quantity}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <p className="text-lg font-bold text-primary whitespace-nowrap">
+                      ${item.price.toFixed(2)}
+                    </p>
+                    <button
+                      onClick={() => onRemoveItem(item.id)}
+                      className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                      aria-label="Remove item"
+                    >
+                      <X className="w-5 h-5 text-red-500" />
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Image Upload Section - Optional */}
+          {cartItems.length > 0 && (
+            <div className="border-t pt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Add Images (Optional)
+                <p className="text-xs text-gray-500 font-normal">
+                  Upload any relevant photos for this order
+                </p>
+              </label>
+
+              <div className="flex flex-wrap gap-3 mb-3">
+                {previews.map((preview, index) => (
+                  <div
+                    key={index}
+                    className="relative w-20 h-20 rounded-md overflow-hidden border border-gray-200 bg-gray-100 group"
+                  >
+                    <img
+                      src={preview}
+                      alt="preview"
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      onClick={() => removeFile(index)}
+                      className="absolute top-1 right-1 p-1 bg-white/80 hover:bg-white rounded-full text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+
+                <label className="w-20 h-20 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md hover:border-primary hover:bg-primary/5 cursor-pointer transition-all">
+                  <ImagePlus className="w-6 h-6 text-gray-400 mb-1" />
+                  <span className="text-[10px] text-gray-500">Add Photo</span>
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    multiple
+                    onChange={handleFileChange}
+                    disabled={isUploading}
+                  />
+                </label>
+              </div>
+            </div>
           )}
         </div>
 
         <div className="border-t pt-4 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold text-gray-900">
-              Total:
-            </span>
+            <span className="text-lg font-semibold text-gray-900">Total:</span>
             <span className="text-2xl font-bold text-primary">
               ${cartTotal.toFixed(2)}
             </span>
@@ -96,19 +182,23 @@ export const CartModal = ({
               variant="outline"
               onClick={() => onOpenChange(false)}
               className="w-full sm:w-auto"
-              disabled={cartItems.length === 0}
+              disabled={cartItems.length === 0 || isUploading}
             >
               Back
             </Button>
             <Button
-              onClick={() => {
-                onOpenChange(false);
-                onCheckout();
-              }}
+              onClick={handleCheckoutClick}
               className="w-full sm:w-auto"
-              disabled={cartItems.length === 0}
+              disabled={cartItems.length === 0 || isUploading}
             >
-              Proceed to Checkout
+              {isUploading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                "Proceed to Checkout"
+              )}
             </Button>
           </DialogFooter>
         </div>

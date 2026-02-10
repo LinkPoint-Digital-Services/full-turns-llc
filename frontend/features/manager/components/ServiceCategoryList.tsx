@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
-import { Service, getIcon } from "./serviceData";
+import {cn} from "@/lib/utils";
+import {Service} from "./serviceData";
 
 interface ServiceCategoryListProps {
   categories: Service[];
@@ -18,7 +18,6 @@ export const ServiceCategoryList = ({
         Service Categories
       </h3>
       {categories.map((category) => {
-        const Icon = getIcon(category.icon);
         return (
           <button
             key={category._id}
@@ -27,10 +26,9 @@ export const ServiceCategoryList = ({
               "flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 md:py-3 rounded-lg text-left transition-all whitespace-nowrap md:whitespace-normal text-sm md:text-base",
               activeCategory === category.serviceName
                 ? "bg-primary text-black font-medium shadow-sm"
-                : "text-gray-600 hover:bg-gray-100 bg-white md:bg-transparent border md:border-0"
+                : "text-gray-600 hover:bg-gray-100 bg-white md:bg-transparent border md:border-0",
             )}
           >
-            <Icon className="w-4 h-4 flex-shrink-0" />
             <span className="truncate">{category.serviceName}</span>
           </button>
         );

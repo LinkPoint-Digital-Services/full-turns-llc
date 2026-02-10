@@ -69,9 +69,10 @@ export default function OrdersPage() {
     setStep("MENU");
   };
 
-  const handleCheckout = async () => {
+  const handleCheckout = async (images?: string[]) => {
     try {
-      await checkout();
+      await checkout(images);
+      setShowCartModal(false);
       setStep("MENU");
     } catch (error) {
       console.error(error);
@@ -96,7 +97,7 @@ export default function OrdersPage() {
             cartTotal={cartTotal}
             onViewCart={() => setShowCartModal(true)}
             onCancelOrder={handleCancelOrder}
-            onCheckout={handleCheckout}
+            onCheckout={() => setShowCartModal(true)}
           />
         </>
       )}

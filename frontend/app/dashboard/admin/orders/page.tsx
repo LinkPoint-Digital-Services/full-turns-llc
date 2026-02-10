@@ -21,6 +21,7 @@ export default function ViewOrders() {
           total: order.totalAmount,
           itemsCount: order.items.length,
           managerName: order.managerId ? `${order.managerId.first_name} ${order.managerId.last_name}` : "Unknown",
+          images: order.images,
           items: order.items.map((item: BackendOrderItem) => ({
             name: item.name,
             price: item.price,

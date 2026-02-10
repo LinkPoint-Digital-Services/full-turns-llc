@@ -103,11 +103,15 @@ export default function Blogs() {
             <div className="w-full lg:w-1/3 z-10">
               <Image
                 data-aos="zoom-in"
-                src={blog.featured_image}
+                src={blog.featured_image || 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=800'}
                 alt={blog.title}
                 width={800}
                 height={500}
                 className="rounded-md w-full h-85 object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=800';
+                }}
               />
             </div>
 

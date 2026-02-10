@@ -19,7 +19,8 @@ const OrderSchema = new Schema<IOrder>(
       type: String,
       enum: ['Pending', 'Processing', 'Completed', 'Cancelled'],
       default: 'Pending'
-    }
+    },
+    images: [{ type: String }]
   },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );

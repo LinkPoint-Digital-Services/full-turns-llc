@@ -9,7 +9,7 @@ interface ServiceItemGridProps {
 
 const getPriceDisplay = (item: Item): string => {
   if (item.selectionType === "checklist") {
-    return "Starts at $0";
+    return "Varies";
   }
   return formatPrice(item.basePrice);
 };
