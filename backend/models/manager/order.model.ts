@@ -13,6 +13,8 @@ const OrderSchema = new Schema<IOrder>(
   {
     orderId: { type: String, required: true, unique: true },
     managerId: { type: String, required: true, ref: 'managers' },
+    managerName: { type: String },
+    managerEmail: { type: String },
     items: [OrderItemSchema],
     totalAmount: { type: Number, required: true },
     status: {

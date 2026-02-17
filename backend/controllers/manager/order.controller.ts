@@ -109,6 +109,8 @@ export class OrderController {
       const orderData: Omit<IOrder, '_id' | 'createdAt' | 'updatedAt'> = {
         orderId,
         managerId,
+        managerName,
+        managerEmail,
         items,
         totalAmount: Number(totalAmount),
         status: "Pending",

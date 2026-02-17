@@ -55,9 +55,8 @@ export interface BackendOrder {
   totalAmount: number;
   items: BackendOrderItem[];
   images?: string[];
-  managerId?: {
-    first_name: string;
-    last_name: string;
-  };
+  managerId?: string;
+  managerName?: string;
+  managerEmail?: string;
 }
 

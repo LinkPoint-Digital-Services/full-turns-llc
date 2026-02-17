@@ -12,6 +12,8 @@ export interface IOrder {
   _id?: string;
   orderId: string; // Readable ID like ORD-123...
   managerId: string; // Reference to the user who placed it
+  managerName?: string; // Name of the property manager
+  managerEmail?: string; // Email of the property manager
   items: IOrderItem[];
   totalAmount: number;
   status: OrderStatus;

@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import {ColumnDef} from "@tanstack/react-table";
@@ -14,13 +13,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {Badge} from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 export const columns: ColumnDef<OrderSummary>[] = [
   {
@@ -67,80 +59,22 @@ export const columns: ColumnDef<OrderSummary>[] = [
     cell: ({row}) => {
       const count = row.getValue("itemsCount") as number;
       const items = row.original.items || [];
-      const orderId = row.original.id;
 
       return (
         <div className="pl-4">
           {items.length > 0 ? (
-            <Dialog>
-              <DialogTrigger asChild>
-                <span className="cursor-pointer underline decoration-dotted underline-offset-4 hover:text-primary transition-colors">
-                  {count} items
-                </span>
-              </DialogTrigger>
-              <DialogContent className="max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Items for Order {orderId}</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-6 py-4 max-h-[70vh] pr-2">
-                  <div className="space-y-4">
-                    <h3 className="text-sm font-semibold text-gray-900 px-1">
-                      Order Items
-                    </h3>
-                    {items.map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex flex-col p-3 border rounded-lg bg-gray-50/50"
-                      >
-                        <div className="flex justify-between items-start">
-                          <span className="font-semibold text-gray-900">
-                            {item.name}
-                          </span>
-                          <span className="text-sm font-medium">
-                            x{item.quantity}
-                          </span>
-                        </div>
-                        <div className="flex justify-between items-center mt-1">
-                          <span className="text-xs text-gray-500">
-                            Price: ${item.price.toLocaleString()}
-                          </span>
-                        </div>
-                        {item.details && (
-                          <pre className="mt-2 text-[11px] text-gray-600 bg-white p-2 rounded border whitespace-pre-wrap font-sans">
-                            {item.details}
-                          </pre>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  {row.original.images && row.original.images.length > 0 && (
-                    <div className="space-y-4 pt-4 border-t">
-                      <h3 className="text-sm font-semibold text-gray-900 px-1">
-                        Order Images
-                      </h3>
-                      <div className="grid grid-cols-2 gap-3">
-                        {row.original.images.map((img, i) => (
-                          <a
-                            key={i}
-                            href={img}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="relative aspect-square rounded-lg overflow-hidden border bg-gray-100 hover:ring-2 hover:ring-primary transition-all"
-                          >
-                            <img
-                              src={img}
-                              alt={`Order attachment ${i + 1}`}
-                              className="w-full h-full object-cover"
-                            />
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </DialogContent>
-            </Dialog>
+            <span 
+              className="cursor-pointer underline decoration-dotted underline-offset-4 hover:text-primary transition-colors"
+              onClick={() => {
+                // This will be handled by the parent component
+                const event = new CustomEvent('openOrderReceipt', { 
+                  detail: row.original 
+                });
+                window.dispatchEvent(event);
+              }}
+            >
+              {count} items
+            </span>
           ) : (
             <span>{count} items</span>
           )}
