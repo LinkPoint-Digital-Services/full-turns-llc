@@ -15,4 +15,5 @@ export interface OrderSummary {
   }[];
   images?: string[];
   managerName?: string;
+  managerEmail?: string;
 }

@@ -1,9 +1,11 @@
 import {useState, useMemo} from "react";
-import {OrderItem} from "../types/order.types";
+import {OrderItem, OrderSummary} from "../types/order.types";
 import {orderClient} from "../orderClient";
+import {useMe} from "@/features/auth/hooks/useMe";
 
 export const useCart = () => {
   const [cartItems, setCartItems] = useState<OrderItem[]>([]);
+  const { data: userData } = useMe();
 
   const cartTotal = useMemo(
     () => cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0),
@@ -55,6 +57,26 @@ export const useCart = () => {
     }
   };
 
+  const generateOrderSummary = (files?: File[]): OrderSummary => {
+    const user = userData?.user;
+    return {
+      id: `preview-${Date.now()}`,
+      date: new Date().toISOString(),
+      status: "Pending",
+      total: cartTotal,
+      itemsCount: cartItems.length,
+      items: cartItems.map((item) => ({
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        details: item.details,
+      })),
+      images: files ? files.map((file) => URL.createObjectURL(file)) : [],
+      managerName: user ? `${user.first_name} ${user.last_name}` : undefined,
+      managerEmail: user?.email_address,
+    };
+  };
+
   return {
     cartItems,
     cartTotal,
@@ -62,5 +84,6 @@ export const useCart = () => {
     removeItem,
     clearCart,
     checkout,
+    generateOrderSummary,
   };
 };
