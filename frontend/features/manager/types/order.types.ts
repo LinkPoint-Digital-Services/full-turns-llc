@@ -20,7 +20,6 @@ export interface CreateOrderItem {
 export interface CreateOrderRequest {
   items: CreateOrderItem[];
   totalAmount: number;
-  images?: string[];
 }
 
 export interface OrderSummary {

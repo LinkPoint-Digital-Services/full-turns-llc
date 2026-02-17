@@ -27,7 +27,7 @@ export const authenticateToken = (
 
   req.user = {
     _id: decoded.userId, 
-    email_address: decoded.email_address,
+    email_address: decoded.email, // email is stored as 'email' in token
     first_name: decoded.first_name,
     last_name: decoded.last_name,
     role: decoded.role

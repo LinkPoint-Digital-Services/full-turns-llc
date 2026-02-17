@@ -38,7 +38,9 @@ export class LoginService {
     const payload = {
       userId: user._id.toString(),
       email: user.email_address,
-      role: user.role
+      role: user.role,
+      first_name: user.first_name,
+      last_name: user.last_name
     };
     const accessToken = generateAccessToken(payload);
 

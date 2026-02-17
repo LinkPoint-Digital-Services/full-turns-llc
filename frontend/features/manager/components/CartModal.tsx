@@ -2,7 +2,6 @@
 import {ShoppingCart, X, ImagePlus, Loader2} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {useState} from "react";
-import {uploadToCloudinary} from "@/lib/cloudinary";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +17,7 @@ interface CartModalProps {
   cartItems: OrderItem[];
   cartTotal: number;
   onRemoveItem: (itemId: string) => void;
-  onCheckout: (images?: string[]) => void;
+  onCheckout: (files?: File[]) => void;
 }
 
 export const CartModal = ({
@@ -31,15 +30,25 @@ export const CartModal = ({
 }: CartModalProps) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length > 0) {
+      const totalFiles = selectedFiles.length + files.length;
+      
+      // Limit to 3 images maximum
+      if (totalFiles > 3) {
+        alert(`You can only upload a maximum of 3 images. Currently selected: ${selectedFiles.length}`);
+        e.target.value = ''; // Reset input
+        return;
+      }
+      
       setSelectedFiles((prev) => [...prev, ...files]);
       const newPreviews = files.map((file) => URL.createObjectURL(file));
       setPreviews((prev) => [...prev, ...newPreviews]);
     }
+    e.target.value = ''; // Reset input to allow re-selecting same file
   };
 
   const removeFile = (index: number) => {
@@ -48,22 +57,17 @@ export const CartModal = ({
   };
 
   const handleCheckoutClick = async () => {
-    setIsUploading(true);
+    setIsSubmitting(true);
     try {
-      const imageUrls: string[] = [];
-      for (const file of selectedFiles) {
-        const url = await uploadToCloudinary(file);
-        imageUrls.push(url);
-      }
-      onCheckout(imageUrls.length > 0 ? imageUrls : undefined);
+      await onCheckout(selectedFiles.length > 0 ? selectedFiles : undefined);
       // Reset state if successful
       setSelectedFiles([]);
       setPreviews([]);
     } catch (error) {
-      console.error("Image upload failed:", error);
-      // Maybe show a toast notification here
+      console.error("Checkout failed:", error);
+      // Error handling - maybe show a toast notification here
     } finally {
-      setIsUploading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -161,7 +165,7 @@ export const CartModal = ({
                     accept="image/*"
                     multiple
                     onChange={handleFileChange}
-                    disabled={isUploading}
+                    disabled={isSubmitting}
                   />
                 </label>
               </div>
@@ -182,19 +186,19 @@ export const CartModal = ({
               variant="outline"
               onClick={() => onOpenChange(false)}
               className="w-full sm:w-auto"
-              disabled={cartItems.length === 0 || isUploading}
+              disabled={cartItems.length === 0 || isSubmitting}
             >
               Back
             </Button>
             <Button
               onClick={handleCheckoutClick}
               className="w-full sm:w-auto"
-              disabled={cartItems.length === 0 || isUploading}
+              disabled={cartItems.length === 0 || isSubmitting}
             >
-              {isUploading ? (
+              {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Uploading...
+                  Processing...
                 </>
               ) : (
                 "Proceed to Checkout"

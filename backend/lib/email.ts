@@ -3,6 +3,7 @@ import type {Attachment} from 'nodemailer/lib/mailer';
 import {readFileSync} from 'fs';
 import path from 'path';
 import {envConfig} from '../config/env.config';
+import { IOrderItem, OrderStatus } from '../interfaces/manager/IOrder';
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -12,51 +13,95 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-export interface OrderData {
+export interface OrderEmailData {
+  orderId: string;
+  managerId: string;
   name: string;
-  address: string;
-  orderDetails: string;
-  // add new fields here if new changes in the frontend
+  email: string;
+  items: IOrderItem[];
+  totalAmount: number;
+  status: OrderStatus | string;
 }
 
 interface SendOrderEmailParams {
-  orderData: OrderData;
+  orderData: OrderEmailData;
   imageAttachments: Attachment[];
   recipientEmail: string;
 }
 
-function getEmailTemplate(orderData: OrderData): string {
-  // Resolve template path - works in both dev (ts-node) and production (compiled)
+function formatItems(items: IOrderItem[]): string {
+  return items.map((item, index) => {
+    const itemLines = [
+      `Item ${index + 1}: ${item.name}`,
+      `  Price: $${item.price.toFixed(2)}`,
+      `  Quantity: ${item.quantity}`,
+    ];
+    
+    if (item.details) {
+      itemLines.push(`  Details: ${item.details}`);
+    }
+    
+    return itemLines.join('\n');
+  }).join('\n\n');
+}
+
+function getEmailTemplate(orderData: OrderEmailData, imageCount: number): string {
   const templatePath = path.resolve(
-    process.cwd(),
-    'api',
-    'templates',
-    'order-email.html'
+    __dirname,
+    "../templates/order-email.html",
   );
 
   try {
-    let template = readFileSync(templatePath, 'utf-8');
-    // Replace placeholders with actual data
-    template = template.replace(/{{name}}/g, escapeHtml(orderData.name));
-    template = template.replace(/{{address}}/g, escapeHtml(orderData.address));
+    let template = readFileSync(templatePath, "utf-8");
+
+    template = template.replace(/{{orderId}}/g, escapeHtml(orderData.orderId));
     template = template.replace(
-      /{{orderDetails}}/g,
-      escapeHtml(orderData.orderDetails)
+      /{{managerId}}/g,
+      escapeHtml(orderData.managerId),
     );
+    template = template.replace(/{{name}}/g, escapeHtml(orderData.name));
+    template = template.replace(/{{email}}/g, escapeHtml(orderData.email));
+    template = template.replace(/{{status}}/g, escapeHtml(orderData.status));
+    template = template.replace(
+      /{{totalAmount}}/g,
+      escapeHtml(orderData.totalAmount.toFixed(2)),
+    );
+    
+    // Format items as readable list
+    const formattedItems = formatItems(orderData.items);
+    template = template.replace(
+      /{{items}}/g,
+      escapeHtml(formattedItems),
+    );
+    
+    // Handle images - show count and note they're attached
+    const imageText = imageCount > 0 
+      ? `${imageCount} image(s) attached to this email`
+      : 'No images provided';
+    template = template.replace(
+      /{{images}}/g,
+      escapeHtml(imageText),
+    );
+
     return template;
   } catch (error) {
-    console.error('Error reading email template, using fallback:', error);
-    // Fallback HTML template
+    console.error("Error reading email template, using fallback:", error);
+
     return `
       <h2>New Order Received</h2>
+      <p><strong>Order ID:</strong> ${escapeHtml(orderData.orderId)}</p>
+      <p><strong>Manager ID:</strong> ${escapeHtml(orderData.managerId)}</p>
       <p><strong>Name:</strong> ${escapeHtml(orderData.name)}</p>
-      <p><strong>Address:</strong> ${escapeHtml(orderData.address)}</p>
-      <p><strong>Order Details:</strong> ${escapeHtml(
-        orderData.orderDetails
-      )}</p>
+      <p><strong>Email:</strong> ${escapeHtml(orderData.email)}</p>
+      <p><strong>Status:</strong> ${escapeHtml(orderData.status)}</p>
+      <p><strong>Total Amount:</strong> $${escapeHtml(orderData.totalAmount.toFixed(2))}</p>
+      <p><strong>Items:</strong></p>
+      <pre>${escapeHtml(formatItems(orderData.items))}</pre>
+      <p><strong>Images:</strong> ${imageCount} attached</p>
     `;
   }
 }
+
 
 function escapeHtml(text: string): string {
   const map: Record<string, string> = {
@@ -69,16 +114,23 @@ function escapeHtml(text: string): string {
   return text.replace(/[&<>"']/g, m => map[m]);
 }
 
-function getEmailText(orderData: OrderData): string {
+function getEmailText(orderData: OrderEmailData, imageCount: number): string {
+  const formattedItems = formatItems(orderData.items);
+  
   return `
     New Order Received
     
-    Order Details:
+    Order ID: ${orderData.orderId}
+    Manager ID: ${orderData.managerId}
     Name: ${orderData.name}
-    Address: ${orderData.address}
-    Order Details: ${orderData.orderDetails}
+    Email: ${orderData.email}
+    Status: ${orderData.status}
+    Total Amount: $${orderData.totalAmount.toFixed(2)}
     
-    Testing email from node mailer
+    Items:
+    ${formattedItems}
+    
+    Images: ${imageCount} image(s) attached
   `;
 }
 
@@ -87,12 +139,13 @@ export async function sendOrderEmail({
   imageAttachments,
   recipientEmail
 }: SendOrderEmailParams): Promise<void> {
-  const emailContent = getEmailText(orderData);
-  const emailHtml = getEmailTemplate(orderData);
+  const imageCount = imageAttachments.length;
+  const emailContent = getEmailText(orderData, imageCount);
+  const emailHtml = getEmailTemplate(orderData, imageCount);
 
   await transporter.sendMail({
     from: envConfig.EMAIL_USER,
-    to: recipientEmail, // Fixed recipient email
+    to: recipientEmail,
     subject: `New Order from ${orderData.name}`,
     text: emailContent,
     html: emailHtml,

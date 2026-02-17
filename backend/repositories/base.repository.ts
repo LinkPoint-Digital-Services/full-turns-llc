@@ -1,7 +1,5 @@
 import { Model, Document, UpdateQuery, QueryOptions } from 'mongoose';
 
-type Filter<T> = Parameters<Model<T>['find']>[0];
-
 export abstract class BaseRepository<T extends Document> {
   constructor(protected readonly model: Model<T>) {}
 
@@ -14,12 +12,12 @@ export abstract class BaseRepository<T extends Document> {
     return this.model.findById(id, projection).exec();
   }
 
-  async findOne(filter?: Filter<T>): Promise<T | null> {
+  async findOne(filter?: any): Promise<T | null> {
     return this.model.findOne(filter).exec();
   }
 
   async find(
-    filter?: Filter<T>,
+    filter?: any,
     projection?: any,
     options?: QueryOptions
   ): Promise<T[]> {
@@ -38,7 +36,7 @@ export abstract class BaseRepository<T extends Document> {
     return this.model.findByIdAndDelete(id).exec();
   }
 
-  async count(filter?: Filter<T>): Promise<number> {
+  async count(filter?: any): Promise<number> {
     return this.model.countDocuments(filter).exec();
   }
 }

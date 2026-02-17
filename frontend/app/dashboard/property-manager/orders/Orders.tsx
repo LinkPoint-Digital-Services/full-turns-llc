@@ -69,9 +69,9 @@ export default function OrdersPage() {
     setStep("MENU");
   };
 
-  const handleCheckout = async (images?: string[]) => {
+  const handleCheckout = async (files?: File[]) => {
     try {
-      await checkout(images);
+      await checkout(files);
       setShowCartModal(false);
       setStep("MENU");
     } catch (error) {
