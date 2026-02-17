@@ -47,10 +47,11 @@ export const useCart = () => {
       console.log('Order created successfully:', result);
       clearCart();
       return result;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Checkout failed:", error);
       // Re-throw with more context
-      throw new Error(error?.message || "Failed to create order. Please try again.");
+      const errorMessage = error instanceof Error ? error.message : "Failed to create order. Please try again.";
+      throw new Error(errorMessage);
     }
   };
 

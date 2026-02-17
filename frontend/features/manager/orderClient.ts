@@ -1,9 +1,16 @@
 import { api } from '@/features/lib/axios/instance';
 import { Endpoint } from '@/features/lib/endpoints';
-import { CreateOrderRequest } from './types/order.types';
+import { CreateOrderRequest, BackendOrder, OrderStatus } from './types/order.types';
+import { AxiosError } from 'axios';
+
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  message?: string;
+}
 
 export const orderClient = {
-  createOrder: async (payload: CreateOrderRequest, files?: File[]) => {
+  createOrder: async (payload: CreateOrderRequest, files?: File[]): Promise<ApiResponse<BackendOrder>> => {
     try {
       // Create FormData to send files
       const formData = new FormData();
@@ -28,20 +35,23 @@ export const orderClient = {
       });
       
       // Don't set Content-Type header - axios will set it automatically with boundary
-      const response = await api.post(Endpoint.orders.create, formData);
+      const response = await api.post<ApiResponse<BackendOrder>>(Endpoint.orders.create, formData);
       return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Order creation error:', error);
-      throw error;
+      if (error instanceof AxiosError && error.response?.data) {
+        throw new Error(error.response.data.message || 'Failed to create order');
+      }
+      throw error instanceof Error ? error : new Error('Unknown error occurred');
     }
   },
 
-  getMyOrders: () =>
-    api.get(Endpoint.orders.myOrders).then((res) => res.data),
+  getMyOrders: async (): Promise<ApiResponse<BackendOrder[]>> =>
+    api.get<ApiResponse<BackendOrder[]>>(Endpoint.orders.myOrders).then((res) => res.data),
 
-  getAllOrders: () =>
-    api.get(Endpoint.orders.allOrders).then((res) => res.data),
+  getAllOrders: async (): Promise<ApiResponse<BackendOrder[]>> =>
+    api.get<ApiResponse<BackendOrder[]>>(Endpoint.orders.allOrders).then((res) => res.data),
 
-  updateOrderStatus: (orderId: string, status: string) =>
-    api.patch(Endpoint.orders.updateStatus, { orderId, status }).then((res) => res.data),
+  updateOrderStatus: async (orderId: string, status: OrderStatus): Promise<ApiResponse<BackendOrder>> =>
+    api.patch<ApiResponse<BackendOrder>>(Endpoint.orders.updateStatus, { orderId, status }).then((res) => res.data),
 };
