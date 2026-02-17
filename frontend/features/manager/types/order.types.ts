@@ -35,6 +35,8 @@ export interface OrderSummary {
     details?: string;
   }[];
   images?: string[];
+  managerName?:string;
+  managerEmail?: string;
 }
 
 export interface BackendOrderItem {

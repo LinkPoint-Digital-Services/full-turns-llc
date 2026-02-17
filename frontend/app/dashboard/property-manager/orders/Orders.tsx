@@ -9,18 +9,21 @@ import {
   CartModal,
   AddItemConfirmModal,
 } from "@/features/manager/components";
-import {OrderItem} from "@/features/manager/types/order.types";
+import {OrderItem, OrderSummary} from "@/features/manager/types/order.types";
 import {useCart} from "@/features/manager/hooks/useCart";
+import OrderReceipt from "@/features/manager/components/OrderReceipt";
 
 export default function OrdersPage() {
   const [step, setStep] = useState<"MENU" | "SERVICE">("MENU");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingItem, setPendingItem] = useState<Item | null>(null);
   const [showCartModal, setShowCartModal] = useState(false);
+  const [showReceipt, setShowReceipt] = useState(false);
   const [activeServiceId, setActiveServiceId] =
     useState<string | undefined>(undefined);
+  const [lastOrder, setLastOrder] = useState<OrderSummary | null>(null);
 
-  const {cartItems, cartTotal, addItem, removeItem, clearCart, checkout} =
+  const {cartItems, cartTotal, addItem, removeItem, clearCart, checkout, generateOrderSummary} =
     useCart();
 
   const handleSimpleItemSelect = (item: Item) => {
@@ -71,9 +74,11 @@ export default function OrdersPage() {
 
   const handleCheckout = async (files?: File[]) => {
     try {
+      const summary = generateOrderSummary(files);
+      setLastOrder(summary);
       await checkout(files);
       setShowCartModal(false);
-      setStep("MENU");
+      setShowReceipt(true)
     } catch (error) {
       console.error(error);
     }
@@ -118,6 +123,12 @@ export default function OrdersPage() {
         cartTotal={cartTotal}
         onRemoveItem={removeItem}
         onCheckout={handleCheckout}
+      />
+
+      <OrderReceipt 
+        open={showReceipt} 
+        onOpenChange={setShowReceipt} 
+        order={lastOrder || generateOrderSummary()} 
       />
     </div>
   );
