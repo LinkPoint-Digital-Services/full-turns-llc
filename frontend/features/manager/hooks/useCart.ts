@@ -22,8 +22,10 @@ export const useCart = () => {
     setCartItems([]);
   };
 
-  const checkout = async (images?: string[]) => {
-    if (cartItems.length === 0) return;
+  const checkout = async (files?: File[]) => {
+    if (cartItems.length === 0) {
+      throw new Error("Cart is empty");
+    }
  
     const totalAmount = cartItems.reduce(
       (sum, item) => sum + item.price * item.quantity,
@@ -31,7 +33,7 @@ export const useCart = () => {
     );
  
     try {
-      await orderClient.createOrder({
+      const result = await orderClient.createOrder({
         items: cartItems.map((item) => ({
           itemId: item.serviceId, // In OrderItem, serviceId is used for the catalog item ID
           name: item.name,
@@ -40,12 +42,15 @@ export const useCart = () => {
           details: item.details,
         })),
         totalAmount,
-        images,
-      });
+      }, files);
+      
+      console.log('Order created successfully:', result);
       clearCart();
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       console.error("Checkout failed:", error);
-      throw error;
+      // Re-throw with more context
+      throw new Error(error?.message || "Failed to create order. Please try again.");
     }
   };
 
