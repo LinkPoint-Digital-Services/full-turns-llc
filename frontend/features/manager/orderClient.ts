@@ -35,7 +35,9 @@ export const orderClient = {
       });
       
       // Don't set Content-Type header - axios will set it automatically with boundary
-      const response = await api.post<ApiResponse<BackendOrder>>(Endpoint.orders.create, formData);
+      const response = await api.post<ApiResponse<BackendOrder>>(Endpoint.orders.create, formData, {
+        timeout: 60000 // Increase timeout to 60s for file uploads and email sending
+      });
       return response.data;
     } catch (error: unknown) {
       console.error('Order creation error:', error);

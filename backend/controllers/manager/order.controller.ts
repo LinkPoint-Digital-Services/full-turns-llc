@@ -39,8 +39,30 @@ export class OrderController {
 
       // Extract user info for email/records
       const user = req.user;
-      const managerName = user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() : 'Unknown Manager';
-      const managerEmail = user?.email_address || 'no-email@provided.com';
+      let managerName = user && (user.first_name || user.last_name) 
+        ? `${user.first_name || ''} ${user.last_name || ''}`.trim() 
+        : 'Unknown Manager';
+      
+      let managerEmail = user?.email_address || 'no-email@provided.com';
+
+      // Fallback: If name or email is missing/partial, fetch from DB
+      if (user && (managerName === 'Unknown Manager' || managerEmail === 'no-email@provided.com')) {
+          try {
+             // We need to know the role to pick the right model. Default to 'manager' if not present, or try all?
+             // req.user should have role given auth middleware.
+             if (user.role) {
+                 const { UserRepository } = await import('../../repositories/user.repository');
+                 const userRepo = new UserRepository(user.role as 'manager' | 'admin' | 'superadmin');
+                 const dbUser = await userRepo.findById(user._id.toString());
+                 if (dbUser) {
+                     managerName = `${dbUser.first_name || ''} ${dbUser.last_name || ''}`.trim();
+                     managerEmail = dbUser.email_address;
+                 }
+             }
+          } catch (err) {
+              console.error('Error fetching user details for email:', err);
+          }
+      }
 
       // Parse items from FormData (sent as JSON string)
       let parsedItems: unknown;
@@ -117,30 +139,47 @@ export class OrderController {
       })) : [];
 
       // Configure the fixed recipient email address
-      const recipientEmail =
-        process.env.ORDER_RECIPIENT_EMAIL || "your-email@example.com";
+      // const recipientEmail =
+      //   process.env.ORDER_RECIPIENT_EMAIL || "estrada.lnp@gmail.com";
 
-      // Send email with order data and images
-      await sendOrderEmail({
+      const recipientEmail ="estrada.lnp@gmail.com";
+
+      const result = await orderService.createOrder(orderData);
+      
+      // Send response immediately to unblock the UI
+      res.status(201).json({success: true, data: result});
+
+      // Send email and signup files in background
+      // Note: We don't await this so the client gets a fast response
+      sendOrderEmail({
         orderData: emailData,
         imageAttachments: attachments,
         recipientEmail,
+      }).then(async () => {
+         console.log(`Email sent successfully for order ${orderId}`);
+         // Clean up temporary files after email is sent
+         if (hasFiles) {
+          await Promise.all(
+            tempFiles.map((filePath) =>
+              fs.unlink(filePath).catch((err) => {
+                console.error(`Failed to delete temp file ${filePath}:`, err);
+              }),
+            ),
+          );
+        }
+      }).catch(err => {
+        console.error(`Failed to send email for order ${orderId}:`, err);
+        // Clean up files even if email fails
+         if (hasFiles) {
+          Promise.all(
+            tempFiles.map((filePath) =>
+              fs.unlink(filePath).catch(() => {})
+            ),
+          );
+        }
       });
-
-      const result = await orderService.createOrder(orderData);
-
-      // Clean up temporary files
-      if (hasFiles) {
-        await Promise.all(
-          tempFiles.map((filePath) =>
-            fs.unlink(filePath).catch((err) => {
-              console.error(`Failed to delete temp file ${filePath}:`, err);
-            }),
-          ),
-        );
-      }
-
-      return res.status(201).json({success: true, data: result});
+      
+      return res; // Return response object to satisfy TS, though response is already sent
     } catch (error) {
       if (tempFiles.length > 0) {
         await Promise.all(
