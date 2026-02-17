@@ -3,7 +3,7 @@
 
 import {ColumnDef} from "@tanstack/react-table";
 import {ArrowUpDown} from "lucide-react";
-import {OrderSummary} from "./types";
+import {OrderStatus, OrderSummary} from "./types";
 import {Button} from "@/components/ui/button";
 import {orderClient} from "@/features/manager/orderClient";
 import {
@@ -183,7 +183,7 @@ export const columns: ColumnDef<OrderSummary>[] = [
     header: "Status",
     cell: ({row}) => {
       const order = row.original;
-      const handleStatusChange = async (value: string) => {
+      const handleStatusChange = async (value: OrderStatus) => {
         try {
           if (order.dbId) {
             await orderClient.updateOrderStatus(order.dbId, value);

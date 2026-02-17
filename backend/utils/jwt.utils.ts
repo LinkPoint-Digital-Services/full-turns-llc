@@ -6,6 +6,9 @@ const ACCESSTOKEN_EXPIRES_IN = '60d' // 60 days
 interface TokenPayload {
   userId: string;
   email: string;
+  role: string;
+  first_name?: string;
+  last_name?: string;
 }
 
 export const generateAccessToken = (paylaod: TokenPayload): string => {
