@@ -23,6 +23,8 @@ export default function ViewOrders() {
           managerName: order.managerName || "Unknown",
           managerEmail: order.managerEmail,
           images: order.images,
+          notes: order.notes,
+          googleDriveLink: order.googleDriveLink,
           items: order.items.map((item: BackendOrderItem) => ({
             name: item.name,
             price: item.price,

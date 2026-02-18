@@ -72,11 +72,11 @@ export default function OrdersPage() {
     setStep("MENU");
   };
 
-  const handleCheckout = async (files?: File[]) => {
+  const handleCheckout = async (files?: File[], notes?: string, link?: string) => {
     try {
-      const summary = generateOrderSummary(files);
+      const summary = generateOrderSummary(files, notes, link);
       setLastOrder(summary);
-      await checkout(files);
+      await checkout(files, notes, link);
       setShowCartModal(false);
       setShowReceipt(true)
     } catch (error) {

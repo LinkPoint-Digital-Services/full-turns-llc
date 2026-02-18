@@ -24,7 +24,7 @@ export const useCart = () => {
     setCartItems([]);
   };
 
-  const checkout = async (files?: File[]) => {
+  const checkout = async (files?: File[], notes?: string, googleDriveLink?: string) => {
     if (cartItems.length === 0) {
       throw new Error("Cart is empty");
     }
@@ -44,6 +44,8 @@ export const useCart = () => {
           details: item.details,
         })),
         totalAmount,
+        notes: notes || "",
+        googleDriveLink: googleDriveLink || ""
       }, files);
       
       console.log('Order created successfully:', result);
@@ -57,7 +59,7 @@ export const useCart = () => {
     }
   };
 
-  const generateOrderSummary = (files?: File[]): OrderSummary => {
+  const generateOrderSummary = (files?: File[], notes?: string, googleDriveLink?: string): OrderSummary => {
     const user = userData?.user;
     return {
       id: `preview-${Date.now()}`,
@@ -74,6 +76,8 @@ export const useCart = () => {
       images: files ? files.map((file) => URL.createObjectURL(file)) : [],
       managerName: user ? `${user.first_name} ${user.last_name}` : undefined,
       managerEmail: user?.email_address,
+      notes,
+      googleDriveLink
     };
   };
 

@@ -18,6 +18,8 @@ export const orderClient = {
       // Add order data as JSON string
       formData.append('items', JSON.stringify(payload.items));
       formData.append('totalAmount', payload.totalAmount.toString());
+      formData.append('notes', payload.notes || '');
+      formData.append('googleDriveLink', payload.googleDriveLink || '');
       
       // Add image files if provided
       if (files && files.length > 0) {

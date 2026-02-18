@@ -44,6 +44,8 @@ export default function MyOrdersPage() {
             images: order.images,
             managerName: order.managerName,
             managerEmail: order.managerEmail,
+            notes: order.notes,
+            googleDriveLink: order.googleDriveLink,
             items: order.items.map((item: BackendOrderItem) => ({
               name: item.name,
               price: item.price,
