@@ -16,7 +16,7 @@ export default function ViewOrders() {
         const mappedOrders: OrderSummary[] = response.data.map((order: BackendOrder) => ({
           id: order.orderId,
           dbId: order._id, // Keep the DB ID for updates
-          date: new Date(order.created_at).toLocaleDateString(),
+          date: new Date(order.created_at).toISOString(),
           status: order.status,
           total: order.totalAmount,
           itemsCount: order.items.length,
