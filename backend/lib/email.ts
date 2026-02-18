@@ -21,6 +21,8 @@ export interface OrderEmailData {
   items: IOrderItem[];
   totalAmount: number;
   status: OrderStatus | string;
+  notes?: string;
+  googleDriveLink?: string;
 }
 
 interface SendOrderEmailParams {
@@ -83,6 +85,16 @@ function getEmailTemplate(orderData: OrderEmailData, imageCount: number): string
       escapeHtml(imageText),
     );
 
+    const linkHtml = orderData.googleDriveLink 
+      ? `<div class="order-field"><strong>Google Drive Link:</strong> <a href="${escapeHtml(orderData.googleDriveLink)}">${escapeHtml(orderData.googleDriveLink)}</a></div>`
+      : '';
+    template = template.replace(/{{googleDriveLink}}/g, linkHtml);
+
+    const notesHtml = orderData.notes 
+      ? `<div class="order-field"><strong>Notes:</strong> ${escapeHtml(orderData.notes)}</div>`
+      : '';
+    template = template.replace(/{{notes}}/g, notesHtml);
+
     return template;
   } catch (error) {
     console.error("Error reading email template, using fallback:", error);
@@ -98,6 +110,8 @@ function getEmailTemplate(orderData: OrderEmailData, imageCount: number): string
       <p><strong>Items:</strong></p>
       <pre>${escapeHtml(formatItems(orderData.items))}</pre>
       <p><strong>Images:</strong> ${imageCount} attached</p>
+      ${orderData.googleDriveLink ? `<p><strong>Google Drive Link:</strong> <a href="${escapeHtml(orderData.googleDriveLink)}">${escapeHtml(orderData.googleDriveLink)}</a></p>` : ''}
+      ${orderData.notes ? `<p><strong>Notes:</strong> ${escapeHtml(orderData.notes)}</p>` : ''}
     `;
   }
 }
@@ -131,6 +145,10 @@ function getEmailText(orderData: OrderEmailData, imageCount: number): string {
     ${formattedItems}
     
     Images: ${imageCount} image(s) attached
+    
+    ${orderData.googleDriveLink ? `Google Drive Link: ${orderData.googleDriveLink}` : ''}
+    
+    ${orderData.notes ? `Notes: ${orderData.notes}` : ''}
   `;
 }
 

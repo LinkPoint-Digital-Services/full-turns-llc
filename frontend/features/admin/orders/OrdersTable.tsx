@@ -28,7 +28,12 @@ export function OrdersTable({ orders }: OrdersTableProps) {
   return (
     <>
       <div className="w-full">
-        <DataTable columns={columns} data={orders} searchKey="managerName" />
+        <DataTable 
+          columns={columns} 
+          data={orders} 
+          searchKey="managerName" 
+          initialSorting={[{ id: "date", desc: true }]}
+        />
       </div>
       
       {selectedOrder && (

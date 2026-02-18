@@ -20,6 +20,8 @@ export interface CreateOrderItem {
 export interface CreateOrderRequest {
   items: CreateOrderItem[];
   totalAmount: number;
+  notes: string;
+  googleDriveLink: string;
 }
 
 export interface OrderSummary {
@@ -37,6 +39,8 @@ export interface OrderSummary {
   images?: string[];
   managerName?:string;
   managerEmail?: string;
+  notes?: string;
+  googleDriveLink?: string;
 }
 
 export interface BackendOrderItem {
@@ -58,5 +62,7 @@ export interface BackendOrder {
   managerId?: string;
   managerName?: string;
   managerEmail?: string;
+  googleDriveLink: string;
+  notes: string
 }
 

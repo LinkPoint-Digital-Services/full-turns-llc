@@ -5,6 +5,7 @@ import {useMe} from '@/features/auth/hooks/useMe';
 import {useAppMutation} from '@/features/shared/hooks/useAppMutation';
 import {managerClient} from '@/features/manager/managerClient';
 import {useQueryClient} from '@tanstack/react-query';
+import {Button} from '@/components/ui/button';
 
 export default function SettingsPage() {
   const {data: userData, isLoading} = useMe();
@@ -141,12 +142,9 @@ export default function SettingsPage() {
             </div>
           )}
 
-          <button
-            type="submit"
-            className="px-4 py-2 bg-primary text-white rounded-md hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          >
+          <Button variant={"default"}>
             {updateProfileMutation.isPending ? 'Saving...' : 'Save Changes'}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

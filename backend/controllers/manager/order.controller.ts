@@ -115,6 +115,8 @@ export class OrderController {
         totalAmount: Number(totalAmount),
         status: "Pending",
         images: [], // No longer storing image URLs in database
+        notes: req.body.notes || '',
+        googleDriveLink: req.body.googleDriveLink || ''
       };
 
       const emailData: OrderEmailData = {
@@ -125,6 +127,8 @@ export class OrderController {
         items,
         totalAmount: Number(totalAmount),
         status: "Pending",
+        notes: req.body.notes || '',
+        googleDriveLink: req.body.googleDriveLink || ''
       };
       
       if (orderData.totalAmount === undefined || orderData.totalAmount === null || isNaN(orderData.totalAmount)) {

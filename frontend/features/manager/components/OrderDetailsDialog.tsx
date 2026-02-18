@@ -61,6 +61,31 @@ export default function OrderDetailsDialog({
             </div>
           )}
 
+          {(order.notes || order.googleDriveLink) && (
+             <div className="mt-6 space-y-3 text-sm border-t pt-4">
+               <h3 className="font-semibold mb-1">Additional Information</h3>
+               {order.googleDriveLink && (
+                 <div className="bg-blue-50 p-3 rounded-md border border-blue-100">
+                   <p className="font-semibold text-blue-900 mb-1">Google Drive Link:</p>
+                   <a 
+                     href={order.googleDriveLink} 
+                     target="_blank" 
+                     rel="noopener noreferrer"
+                     className="text-blue-600 underline break-all hover:text-blue-800"
+                   >
+                     {order.googleDriveLink}
+                   </a>
+                 </div>
+               )}
+               {order.notes && (
+                 <div className="bg-gray-50 p-3 rounded-md border border-gray-200">
+                   <p className="font-semibold text-gray-900 mb-1">Notes:</p>
+                   <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{order.notes}</p>
+                 </div>
+               )}
+             </div>
+          )}
+
           {/* Items Table - Clean Minimal Style */}
           <div className="mt-6 border-t pt-4 max-h-60 overflow-y-auto">
             <h3 className="font-semibold mb-3 text-sm">Order Items</h3>

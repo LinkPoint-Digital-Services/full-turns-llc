@@ -19,5 +19,7 @@ export interface IOrder {
   status: OrderStatus;
   images?: string[];
   createdAt?: Date;
+  notes?: string;
+  googleDriveLink?: string;
   updatedAt?: Date;
 }

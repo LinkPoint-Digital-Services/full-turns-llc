@@ -42,6 +42,10 @@ export const columns: ColumnDef<OrderSummary>[] = [
         </Button>
       );
     },
+    cell: ({row}) => {
+      const date = new Date(row.getValue("date"));
+      return <div className="pl-4">{date.toLocaleDateString()}</div>;
+    },
   },
   {
     accessorKey: "itemsCount",

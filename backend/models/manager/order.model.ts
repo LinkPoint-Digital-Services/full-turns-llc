@@ -22,7 +22,9 @@ const OrderSchema = new Schema<IOrder>(
       enum: ['Pending', 'Processing', 'Completed', 'Cancelled'],
       default: 'Pending'
     },
-    images: [{ type: String }]
+    images: [{ type: String }],
+    notes: { type: String },
+    googleDriveLink: { type: String }
   },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );

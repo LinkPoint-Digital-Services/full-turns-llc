@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {OrderItem} from "../types/order.types";
+import {Input} from "@/components/ui/input";
 
 interface CartModalProps {
   open: boolean;
@@ -17,7 +18,7 @@ interface CartModalProps {
   cartItems: OrderItem[];
   cartTotal: number;
   onRemoveItem: (itemId: string) => void;
-  onCheckout: (files?: File[]) => void;
+  onCheckout: (files?: File[], notes?: string, googleDriveLink?: string) => void;
 }
 
 export const CartModal = ({
@@ -31,6 +32,8 @@ export const CartModal = ({
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [link, setLink] = useState<string | null>(null);
+  const [notes, setNotes] = useState<string>("")
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -59,10 +62,16 @@ export const CartModal = ({
   const handleCheckoutClick = async () => {
     setIsSubmitting(true);
     try {
-      await onCheckout(selectedFiles.length > 0 ? selectedFiles : undefined);
+      await onCheckout(
+        selectedFiles.length > 0 ? selectedFiles : undefined,
+        notes,
+        link || undefined
+      );
       // Reset state if successful
       setSelectedFiles([]);
       setPreviews([]);
+      setNotes("");
+      setLink(null);
     } catch (error) {
       console.error("Checkout failed:", error);
       // Error handling - maybe show a toast notification here
@@ -82,7 +91,7 @@ export const CartModal = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto space-y-6 py-4 px-1">
+        <div className="flex-1 overflow-y-auto space-y-6 px-1">
           {/* Cart Items */}
           <div className="space-y-3">
             {cartItems.length === 0 ? (
@@ -130,11 +139,19 @@ export const CartModal = ({
           {cartItems.length > 0 && (
             <div className="border-t pt-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Add Images (Optional)
+                Add Images or paste a Google Drive Link (Optional)
                 <p className="text-xs text-gray-500 font-normal">
                   Upload any relevant photos for this order
                 </p>
               </label>
+
+              {selectedFiles.length == 0 && previews.length == 0 && (
+                <Input
+                  onChange={(e) => setLink(e.target.value)}
+                  className="mt-3 mb-5"
+                  placeholder="Google Drive Link"
+                ></Input>
+              )}
 
               <div className="flex flex-wrap gap-3 mb-3">
                 {previews.map((preview, index) => (
@@ -156,26 +173,42 @@ export const CartModal = ({
                   </div>
                 ))}
 
-                <label className="w-20 h-20 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md hover:border-primary hover:bg-primary/5 cursor-pointer transition-all">
-                  <ImagePlus className="w-6 h-6 text-gray-400 mb-1" />
-                  <span className="text-[10px] text-gray-500">Add Photo</span>
-                  <input
-                    type="file"
-                    className="hidden"
-                    accept="image/*"
-                    multiple
-                    onChange={handleFileChange}
-                    disabled={isSubmitting}
-                  />
-                </label>
+                {!link && (
+                  <label className="w-20 h-20 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md hover:border-primary hover:bg-primary/5 cursor-pointer transition-all">
+                    <ImagePlus className="w-6 h-6 text-gray-400 mb-1" />
+                    <span className="text-[10px] text-gray-500">Add Photo</span>
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept="image/*"
+                      multiple
+                      onChange={handleFileChange}
+                      disabled={isSubmitting}
+                    />
+                  </label>
+                )}
               </div>
             </div>
           )}
         </div>
 
-        <div className="border-t pt-4 space-y-4">
+        <div className="border-t pt-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Additional Notes
+          </label>
+
+          <Input
+            onChange={(e) => setNotes(e.target.value)}
+            className="mt-3 mb-5"
+            placeholder="Notes"
+          ></Input>
+        </div>
+
+        <div className="border-t space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-lg font-semibold text-gray-900">Total:</span>
+            <span className="text-lg font-semibold text-gray-900 mt-6">
+              Total:
+            </span>
             <span className="text-2xl font-bold text-primary">
               ${cartTotal.toFixed(2)}
             </span>
