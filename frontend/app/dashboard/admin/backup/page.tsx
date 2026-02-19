@@ -1,7 +1,13 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Database, Download, Calendar, Package, FileSpreadsheet } from 'lucide-react';
+import React from "react";
+import {
+  Database,
+  Download,
+  Calendar,
+  Package,
+  FileSpreadsheet,
+} from "lucide-react";
 
 export default function BackupPage() {
   return (
@@ -72,7 +78,10 @@ export default function BackupPage() {
             "Service details and pricing",
             "Timestamps for all transactions",
           ].map((item) => (
-            <li key={item} className="flex items-start gap-2 text-sm text-gray-600">
+            <li
+              key={item}
+              className="flex items-start gap-2 text-sm text-gray-600"
+            >
               <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
               {item}
             </li>
