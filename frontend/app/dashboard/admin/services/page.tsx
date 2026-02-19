@@ -7,7 +7,8 @@ import {
   ServicesHeader, 
   ServiceList, 
   ServiceModal, 
-  ItemModal 
+  ItemModal,
+  DeleteConfirmModal,
 } from "@/features/admin/services/components";
 
 export default function ServicesPage(): JSX.Element {
@@ -22,10 +23,13 @@ export default function ServicesPage(): JSX.Element {
     setOpenServiceId,
     serviceModal,
     itemModal,
+    pendingDelete,
     handleSaveService,
     handleDeleteService,
     handleSaveItem,
     handleDeleteItem,
+    confirmDelete,
+    cancelDelete,
     openNewServiceModal,
     openEditServiceModal,
     openNewItemModal,
@@ -44,10 +48,16 @@ export default function ServicesPage(): JSX.Element {
         openServiceId={openServiceId}
         onToggleService={(id) => setOpenServiceId(openServiceId === id ? null : id)}
         onEditService={openEditServiceModal}
-        onDeleteService={handleDeleteService}
+        onDeleteService={(id) => {
+          const svc = services.find((s) => s._id === id);
+          handleDeleteService(id, svc?.serviceName);
+        }}
         onAddItem={openNewItemModal}
         onEditItem={openEditItemModal}
-        onDeleteItem={handleDeleteItem}
+        onDeleteItem={(id) => {
+          const item = items.find((i) => i.itemId === id);
+          handleDeleteItem(id, item?.name);
+        }}
       />
 
       {serviceModal && (
@@ -65,6 +75,22 @@ export default function ServicesPage(): JSX.Element {
           onClose={closeItemModal}
         />
       )}
+
+      <DeleteConfirmModal
+        open={!!pendingDelete}
+        title={
+          pendingDelete?.type === "service"
+            ? "Delete Service"
+            : "Delete Item"
+        }
+        description={
+          pendingDelete?.type === "service"
+            ? `Are you sure you want to delete "${pendingDelete?.label}"? This will also permanently remove all items under this service.`
+            : `Are you sure you want to delete "${pendingDelete?.label}"? This action cannot be undone.`
+        }
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+      />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import {ShoppingCart, X, ImagePlus, Loader2} from "lucide-react";
+import {toast} from "sonner";
 import {Button} from "@/components/ui/button";
 import {useState} from "react";
 import {
@@ -42,7 +43,7 @@ export const CartModal = ({
       
       // Limit to 3 images maximum
       if (totalFiles > 3) {
-        alert(`You can only upload a maximum of 3 images. Currently selected: ${selectedFiles.length}`);
+        toast.warning(`You can only upload a maximum of 3 images. You already have ${selectedFiles.length} selected.`);
         e.target.value = ''; // Reset input
         return;
       }
@@ -74,7 +75,7 @@ export const CartModal = ({
       setLink(null);
     } catch (error) {
       console.error("Checkout failed:", error);
-      // Error handling - maybe show a toast notification here
+      toast.error("Checkout failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

@@ -145,10 +145,8 @@ export class OrderController {
       })) : [];
 
       // Configure the fixed recipient email address
-      // const recipientEmail =
-      //   process.env.ORDER_RECIPIENT_EMAIL || "estrada.lnp@gmail.com";
-
-      const recipientEmail ="estrada.lnp@gmail.com";
+      const recipientEmail =
+        process.env.ORDER_RECIPIENT_EMAIL || "your@email.com";
 
       const result = await orderService.createOrder(orderData);
       

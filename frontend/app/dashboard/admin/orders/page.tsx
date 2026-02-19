@@ -4,6 +4,7 @@ import {OrdersTable, OrderSummary} from "@/features/admin/orders/OrdersTable";
 import React, { useEffect, useState } from "react";
 import { orderClient } from "@/features/manager/orderClient";
 import { BackendOrder, BackendOrderItem } from "@/features/manager/types/order.types";
+import {toast} from "sonner";
 
 export default function ViewOrders() {
   const [orders, setOrders] = useState<OrderSummary[]>([]);
@@ -35,6 +36,7 @@ export default function ViewOrders() {
         setOrders(mappedOrders);
       } catch (error) {
         console.error("Failed to fetch all orders:", error);
+        toast.error("Failed to load orders. Please refresh the page.");
       } finally {
         setLoading(false);
       }
