@@ -25,6 +25,11 @@ export function useServiceManagement(adminId: string) {
   const [itemModal, setItemModal] = useState<Item | null>(null);
   const [isNewItem, setIsNewItem] = useState(false);
   const [isNewService, setIsNewService] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState<{
+    id: string;
+    type: "service" | "item";
+    label: string;
+  } | null>(null);
 
   // Fetch services from API
   const { data: servicesData, isLoading: isLoadingServices } = useQuery<GetServicesResponse>({
@@ -129,14 +134,8 @@ export function useServiceManagement(adminId: string) {
     setIsNewService(false);
   };
 
-  const handleDeleteService = (id: string) => {
-    if (!confirm("Delete service and all items?")) return;
-
-    deleteServiceMutation.mutate({
-      admin_id: adminId,
-      service_id: id,
-    });
-    deleteService(id);
+  const handleDeleteService = (id: string, name?: string) => {
+    setPendingDelete({ id, type: "service", label: name || "this service" });
   };
 
   const handleSaveItem = (item: Item) => {
@@ -166,15 +165,23 @@ export function useServiceManagement(adminId: string) {
     setIsNewItem(false);
   };
 
-  const handleDeleteItem = (id: string) => {
-    if (!confirm("Delete item?")) return;
-
-    deleteItemMutation.mutate({
-      admin_id: adminId,
-      item_id: id,
-    });
-    deleteItem(id);
+  const handleDeleteItem = (id: string, name?: string) => {
+    setPendingDelete({ id, type: "item", label: name || "this item" });
   };
+
+  const confirmDelete = () => {
+    if (!pendingDelete) return;
+    if (pendingDelete.type === "service") {
+      deleteServiceMutation.mutate({ admin_id: adminId, service_id: pendingDelete.id });
+      deleteService(pendingDelete.id);
+    } else {
+      deleteItemMutation.mutate({ admin_id: adminId, item_id: pendingDelete.id });
+      deleteItem(pendingDelete.id);
+    }
+    setPendingDelete(null);
+  };
+
+  const cancelDelete = () => setPendingDelete(null);
 
   const openNewServiceModal = () => {
     setServiceModal({
@@ -231,12 +238,15 @@ export function useServiceManagement(adminId: string) {
     itemModal,
     isNewService,
     isNewItem,
+    pendingDelete,
 
     // Handlers
     handleSaveService,
     handleDeleteService,
     handleSaveItem,
     handleDeleteItem,
+    confirmDelete,
+    cancelDelete,
     openNewServiceModal,
     openEditServiceModal,
     openNewItemModal,
