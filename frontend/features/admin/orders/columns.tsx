@@ -5,6 +5,7 @@ import {ArrowUpDown} from "lucide-react";
 import {OrderStatus, OrderSummary} from "./types";
 import {Button} from "@/components/ui/button";
 import {orderClient} from "@/features/manager/orderClient";
+import {toast} from "sonner";
 import {
   Select,
   SelectContent,
@@ -125,12 +126,11 @@ export const columns: ColumnDef<OrderSummary>[] = [
         try {
           if (order.dbId) {
             await orderClient.updateOrderStatus(order.dbId, value);
-            // Ideally we'd refresh the table here, but this is a cell component.
-            // For now, we'll just log it. A better way would be using a state manager or refresh callback.
-            console.log(`Order ${order.id} status changed to ${value}`);
+            toast.success(`Order status updated to "${value}"`);
           }
         } catch (error) {
           console.error("Failed to update status:", error);
+          toast.error("Failed to update order status. Please try again.");
         }
       };
 
