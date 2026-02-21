@@ -4,6 +4,7 @@ import {useState} from 'react';
 import Image from 'next/image';
 import {useForm} from 'react-hook-form';
 import emailjs from 'emailjs-com';
+import {toast} from 'sonner';
 import {
   Form,
   FormControl,
@@ -57,12 +58,14 @@ export default function Contact() {
         publicKey
       );
       setSubmitted(true);
+      toast.success("Message sent! We'll get back to you soon.");
       setTimeout(() => {
         setSubmitted(false);
         form.reset();
       }, 3000);
     } catch (error) {
       console.error('EmailJS error:', error);
+      toast.error('Failed to send message. Please try again or contact us directly.');
     } finally {
       setIsSending(false);
     }

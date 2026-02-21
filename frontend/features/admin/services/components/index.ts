@@ -5,3 +5,4 @@ export { ItemModal } from "./ItemModal";
 export { ServiceCard } from "./ServiceCard";
 export { ServiceList } from "./ServiceList";
 export { ServiceModal } from "./ServiceModal";
+export { DeleteConfirmModal } from "./DeleteConfirmModal";

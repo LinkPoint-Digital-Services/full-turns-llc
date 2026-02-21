@@ -12,6 +12,7 @@ import {
 import {OrderItem, OrderSummary} from "@/features/manager/types/order.types";
 import {useCart} from "@/features/manager/hooks/useCart";
 import OrderReceipt from "@/features/manager/components/OrderReceipt";
+import {toast} from "sonner";
 
 export default function OrdersPage() {
   const [step, setStep] = useState<"MENU" | "SERVICE">("MENU");
@@ -81,6 +82,7 @@ export default function OrdersPage() {
       setShowReceipt(true)
     } catch (error) {
       console.error(error);
+      toast.error("Failed to place your order. Please try again.");
     }
   };
 

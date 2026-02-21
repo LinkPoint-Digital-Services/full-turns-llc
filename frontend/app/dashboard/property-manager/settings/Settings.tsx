@@ -50,7 +50,6 @@ export default function SettingsPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!userData?.user._id) return;
-    console.log(userData.user.company_name)
 
     updateProfileMutation.mutate({
       manager_id: userData.user._id,

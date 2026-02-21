@@ -1,6 +1,7 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import {ChevronRight, Package, Calendar} from "lucide-react";
+import {toast} from "sonner";
 import type {
   OrderSummary,
   BackendOrder,
@@ -57,6 +58,7 @@ export default function MyOrdersPage() {
         setOrders(mappedOrders);
       } catch (error) {
         console.error("Failed to fetch orders:", error);
+        toast.error("Failed to load your orders. Please refresh the page.");
       } finally {
         setLoading(false);
       }
