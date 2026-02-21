@@ -149,7 +149,7 @@ export const columns: ColumnDef<OrderSummary>[] = [
 
       return (
         <Select defaultValue={order.status} onValueChange={handleStatusChange}>
-          <SelectTrigger className="w-[140px] h-8 border-none bg-transparent focus:ring-0 shadow-none p-0">
+          <SelectTrigger className="w-35 h-8 border-none bg-transparent focus:ring-0 shadow-none p-0">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
