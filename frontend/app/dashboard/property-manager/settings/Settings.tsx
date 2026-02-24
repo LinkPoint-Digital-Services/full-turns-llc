@@ -49,17 +49,17 @@ export default function SettingsPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userData?.user._id) return;
+    if (!process.env.NEXT_PUBLIC_VENN_ADMIN_ID) return;
 
     updateProfileMutation.mutate({
-      manager_id: userData.user._id,
+      manager_id: process.env.NEXT_PUBLIC_VENN_ADMIN_ID,
       updateData: {
         first_name: formData.firstName,
         last_name: formData.lastName,
         email_address: formData.email,
         contact_no: formData.contactNumber,
-        company_name: formData.companyName
-      }
+        company_name: formData.companyName,
+      },
     });
   };
 

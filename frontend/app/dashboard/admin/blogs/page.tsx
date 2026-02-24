@@ -2,7 +2,6 @@
 
 import React, {useState} from 'react';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {useMe} from '@/features/auth/hooks/useMe';
 import {useAppMutation} from '@/features/shared/hooks/useAppMutation';
 import {adminClient} from '@/features/admin/adminClient';
 import {GetBlogResponse} from '@/features/shared/types/api.types';
@@ -20,11 +19,11 @@ export default function BlogsPage() {
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
 
   const queryClient = useQueryClient();
-  const {data: userData} = useMe();
 
   const {data: blogs, isLoading} = useQuery<GetBlogResponse>({
-    queryKey: ['blogs', userData?.user._id],
-    queryFn: () => adminClient.getBlog(userData?.user._id || '')
+    queryKey: ["blogs", process.env.NEXT_PUBLIC_VENN_ADMIN_ID], //userData?.user._id
+    queryFn: () =>
+      adminClient.getBlog(process.env.NEXT_PUBLIC_VENN_ADMIN_ID || ""),
   });
 
   const addBlogMutation = useAppMutation({
@@ -76,20 +75,20 @@ export default function BlogsPage() {
 
     if (selectedBlog) {
       updateBlogMutation.mutate({
-        admin_id: userData?.user._id || '',
+        admin_id: process.env.NEXT_PUBLIC_VENN_ADMIN_ID || "",
         blogId: selectedBlog.blog_id,
-        updateData: {title, description, content, featured_image: imageUrl}
+        updateData: {title, description, content, featured_image: imageUrl},
       });
     } else {
       addBlogMutation.mutate({
-        admin_id: userData?.user._id || '',
+        admin_id: process.env.NEXT_PUBLIC_VENN_ADMIN_ID || "",
         blog: {
           blog_id: crypto.randomUUID(),
           featured_image: imageUrl,
           title,
           description,
-          content
-        }
+          content,
+        },
       });
     }
   };
@@ -121,15 +120,15 @@ export default function BlogsPage() {
       <BlogTable
         blogs={blogs?.data || []}
         isLoading={isLoading}
-        onEdit={blog => {
+        onEdit={(blog) => {
           setSelectedBlog(blog);
           setPreviewImage(null);
           setIsBlogModalOpen(true);
         }}
-        onDelete={blogId =>
+        onDelete={(blogId) =>
           deleteBlogMutation.mutate({
-            admin_id: userData?.user._id || '',
-            blog_id: blogId
+            admin_id: process.env.NEXT_PUBLIC_VENN_ADMIN_ID || "",
+            blog_id: blogId,
           })
         }
       />

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { JSX } from "react";
-import { useMe } from "@/features/auth/hooks/useMe";
 import { useServiceManagement } from "@/features/admin/services/hooks/useServiceManagement";
 import { 
   ServicesHeader, 
@@ -12,8 +11,7 @@ import {
 } from "@/features/admin/services/components";
 
 export default function ServicesPage(): JSX.Element {
-  const { data: userData } = useMe();
-  const adminId = userData?.user._id || "";
+  const adminId = process.env.NEXT_PUBLIC_VENN_ADMIN_ID || "";
 
   // Use custom hook for all service management logic
   const {
