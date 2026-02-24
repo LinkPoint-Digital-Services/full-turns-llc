@@ -46,7 +46,7 @@ export default function ViewOrders() {
   }, []);
 
   if (loading) {
-     return <div className="p-10 text-center flex flex-col items-center justify-center min-h-[400px]">
+     return <div className="p-10 text-center flex flex-col items-center justify-center min-h-100">
        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
        <p className="text-gray-500">Loading orders...</p>
      </div>;

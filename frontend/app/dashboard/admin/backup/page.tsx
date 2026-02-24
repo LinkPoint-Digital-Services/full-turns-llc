@@ -1,15 +1,98 @@
-"use client";
+'use client';
 
-import React from "react";
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   Database,
   Download,
   Calendar,
   Package,
-  FileSpreadsheet,
-} from "lucide-react";
+  FileSpreadsheet
+} from 'lucide-react';
+import {orderClient} from '@/features/manager/orderClient';
+import {
+  BackendOrder,
+  BackendOrderItem
+} from '@/features/manager/types/order.types';
+import type {OrderSummary} from '@/features/admin/orders/types';
+import {toast} from 'sonner';
+import * as XLSX from 'xlsx';
 
 export default function BackupPage() {
+  const [orders, setOrders] = useState<OrderSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [lastExportAt, setLastExportAt] = useState<Date | null>(null);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await orderClient.getAllOrders();
+        const mappedOrders: OrderSummary[] = response.data.map(
+          (order: BackendOrder) => ({
+            id: order.orderId,
+            dbId: order._id,
+            date: new Date(order.created_at).toISOString(),
+            status: order.status,
+            total: order.totalAmount,
+            itemsCount: order.items.length,
+            managerName: order.managerName || 'Unknown',
+            managerEmail: order.managerEmail,
+            images: order.images,
+            notes: order.notes,
+            googleDriveLink: order.googleDriveLink,
+            items: order.items.map((item: BackendOrderItem) => ({
+              name: item.name,
+              price: item.price,
+              quantity: item.quantity,
+              details: item.details
+            }))
+          })
+        );
+        setOrders(mappedOrders);
+      } catch (error) {
+        console.error('Failed to fetch all orders:', error);
+        toast.error('Failed to load orders. Please refresh the page.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  const totalOrders = useMemo(() => orders.length, [orders]);
+
+  const handleExport = () => {
+    if (loading) {
+      toast.message('Orders are still loading. Please wait.');
+      return;
+    }
+
+    if (orders.length === 0) {
+      toast.error('No orders available to export.');
+      return;
+    }
+
+    const rows = orders.map(order => ({
+      'Order ID': order.id,
+      Date: new Date(order.date).toLocaleString(),
+      Items: order.itemsCount,
+      Manager: order.managerName || '—',
+      Total: order.total,
+      Status: order.status
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Orders');
+
+    const dateTag = new Date().toISOString().slice(0, 10);
+    XLSX.writeFile(workbook, `fullturn_data_${dateTag}.xlsx`, {
+      compression: true
+    });
+    setLastExportAt(new Date());
+    toast.success('Export started.');
+  };
+
   return (
     <main className="mt-5 space-y-6">
       {/* Page Title */}
@@ -23,7 +106,7 @@ export default function BackupPage() {
       <div className="rounded-xl border-2 border-primary bg-primary/10 p-5 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-start gap-4">
           {/* Icon */}
-          <div className="flex-shrink-0 w-11 h-11 rounded-lg bg-primary/20 flex items-center justify-center">
+          <div className="shrink-0 w-11 h-11 rounded-lg bg-primary/20 flex items-center justify-center">
             <Database className="w-5 h-5 text-primary" />
           </div>
 
@@ -41,11 +124,12 @@ export default function BackupPage() {
             <div className="flex flex-wrap gap-x-5 gap-y-1 mt-3 text-sm text-gray-600">
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4 text-primary" />
-                Last Export: Never
+                Last Export:{' '}
+                {lastExportAt ? lastExportAt.toLocaleString() : 'Never'}
               </span>
               <span className="flex items-center gap-1.5">
                 <Package className="w-4 h-4 text-primary" />
-                Total Orders: 0
+                Total Orders: {loading ? '...' : totalOrders}
               </span>
             </div>
 
@@ -53,6 +137,7 @@ export default function BackupPage() {
             <button
               id="export-data-btn"
               className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-semibold transition-colors duration-200 active:scale-[0.98]"
+              onClick={handleExport}
             >
               <Download className="w-4 h-4" />
               Export Data Now
@@ -73,16 +158,16 @@ export default function BackupPage() {
 
         <ul className="mt-4 space-y-2">
           {[
-            "All property manager orders",
-            "Order status and tracking information",
-            "Service details and pricing",
-            "Timestamps for all transactions",
-          ].map((item) => (
+            'All property manager orders',
+            'Order status and tracking information',
+            'Service details and pricing',
+            'Timestamps for all transactions'
+          ].map(item => (
             <li
               key={item}
               className="flex items-start gap-2 text-sm text-gray-600"
             >
-              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
+              <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
               {item}
             </li>
           ))}
@@ -92,7 +177,7 @@ export default function BackupPage() {
       {/* Backup File Format Info Box */}
       <div className="rounded-xl border border-gray-200 bg-gray-50 p-5 sm:p-6">
         <div className="flex items-start gap-3">
-          <FileSpreadsheet className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+          <FileSpreadsheet className="w-5 h-5 text-primary mt-0.5 shrink-0" />
           <div>
             <h3 className="text-sm font-bold text-gray-900">
               Backup File Format
