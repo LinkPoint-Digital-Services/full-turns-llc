@@ -57,18 +57,11 @@ export default function Blogs() {
   };
 
   if (isLoading) {
-    return (
-      <section
-        id="blogs"
-        className="text-white bg-[#262626] py-40 px-4 md:px-10"
-      >
-        <div className="mx-auto container flex flex-col items-center w-full">
-          <SectionHeader title="Latest Insights" style="top-1" />
-          <p className="text-center mt-10">Loading blogs...</p>
-        </div>
-      </section>
-    );
-  }
+    return <div className="p-10 text-center flex flex-col items-center justify-center min-h-100">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+      <p className="text-gray-500">Loading orders...</p>
+    </div>;
+ }
 
   if (!blog) {
     return (

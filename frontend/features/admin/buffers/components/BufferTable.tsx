@@ -14,7 +14,14 @@ export default function BufferTable({
   isLoading,
   onDelete
 }: BufferTableProps) {
-  if (isLoading) return <p>Loading buffers...</p>;
+  if (isLoading) {
+    return (
+      <div className="p-10 text-center flex flex-col items-center justify-center min-h-100">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+        <p className="text-gray-500">Loading buffers...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-x-auto rounded-md border">
