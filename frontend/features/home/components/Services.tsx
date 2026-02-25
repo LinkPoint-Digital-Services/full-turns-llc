@@ -52,14 +52,14 @@ export default function Services() {
         className={`absolute inset-0 z-50 bg-[#1a1a1a] flex flex-col items-center justify-center
           ${startWipe ? "animate-wipe-horizontal" : ""}`}
       >
-        <h1 className="text-primary text-4xl md:text-7xl font-bold tracking-wide relative">
+        <h2 className="text-primary text-4xl md:text-7xl font-bold tracking-wide relative">
           SERVICES
           {/* Line underneath the title */}
           <span
             className={`block h-1 bg-primary mt-2 w-0 transition-all duration-1000 ease-in-out
               ${lineWipe ? "w-full" : ""}`}
           />
-        </h1>
+        </h2>
       </div>
 
       {/* SERVICES CONTENT */}
@@ -81,6 +81,7 @@ export default function Services() {
 
           <div className="flex flex-col items-center md:items-start md:flex-row justify-between relative p-10 md:px-10 md:p-32">
             <div className="flex md:flex-col leading-none text-3xl md:text-4xl lg:text-5xl items-center font-bold text-primary z-20">
+              <h3 className="sr-only">{service.title}</h3>
               {service.title
                 .toUpperCase()
                 .split("")

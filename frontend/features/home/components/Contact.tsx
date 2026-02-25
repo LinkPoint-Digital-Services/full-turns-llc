@@ -168,7 +168,7 @@ export default function Contact() {
                           <FormLabel>Message</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="I’d like to get in touch regarding your services…"
+                              placeholder="I'd like to get in touch regarding your services..."
                               {...field}
                             />
                           </FormControl>
@@ -191,7 +191,7 @@ export default function Contact() {
           <div className="flex flex-col gap-8 order-1 md:max-w-xl h-full backdrop-blur-md bg-[#1a1a1a]/20 p-7 rounded-md">
             <div data-aos="fade-right">
               <h3 className="text-white font-bold text-5xl">
-                Let’s Work Together on Your Next{" "}
+                Let's Work Together on Your Next{" "}
                 <span className="text-primary">Unit Turnover</span>.
               </h3>
             </div>

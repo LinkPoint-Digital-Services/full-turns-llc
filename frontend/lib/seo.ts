@@ -3,7 +3,7 @@ import type {Metadata} from 'next';
 export const siteName = 'Full Turns LLC';
 export const siteTagline =
   'From repairs to renovations, quality you can count on.';
-export const siteUrl = 'https://full-turns-llc.vercel.app';
+export const siteUrl = 'https://www.fullturnsllc.com';
 export const ogImage = '/assets/images/homepage/logo_for_darks.png';
 
 type BuildMetadataInput = {

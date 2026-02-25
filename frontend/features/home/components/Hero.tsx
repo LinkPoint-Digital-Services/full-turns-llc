@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function Hero() {
   return (
     <section
-      id="hero"
+      id="home"
       className="h-screen min-h-140 md:min-h-230 md:px-10 bg-cover bg-center bg-[#1a1a1a] flex items-center relative before:absolute before:inset-0 before:bg-black/30 overflow-hidden"
       style={{backgroundImage: `url(${bg.src})`}}
     >
