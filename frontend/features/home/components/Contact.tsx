@@ -123,11 +123,12 @@ export default function Contact() {
                     <FormField
                       control={form.control}
                       name="name"
+                      rules={{required: 'First name is required.'}}
                       render={({field}) => (
                         <FormItem className="flex flex-col gap-2">
                           <FormLabel>First Name</FormLabel>
                           <FormControl>
-                            <Input placeholder="John" {...field} />
+                            <Input placeholder="John" required {...field} />
                           </FormControl>
                         </FormItem>
                       )}
@@ -135,11 +136,12 @@ export default function Contact() {
                     <FormField
                       control={form.control}
                       name="surname"
+                      rules={{required: 'Last name is required.'}}
                       render={({field}) => (
                         <FormItem className="flex flex-col gap-2">
                           <FormLabel>Last Name</FormLabel>
                           <FormControl>
-                            <Input placeholder="Doe" {...field} />
+                            <Input placeholder="Doe" required {...field} />
                           </FormControl>
                         </FormItem>
                       )}
@@ -147,6 +149,7 @@ export default function Contact() {
                     <FormField
                       control={form.control}
                       name="email"
+                      rules={{required: 'Email is required.'}}
                       render={({field}) => (
                         <FormItem className="flex flex-col gap-2">
                           <FormLabel>Email</FormLabel>
@@ -154,6 +157,7 @@ export default function Contact() {
                             <Input
                               type="email"
                               placeholder="johndoe@email.com"
+                              required
                               {...field}
                             />
                           </FormControl>
@@ -163,12 +167,14 @@ export default function Contact() {
                     <FormField
                       control={form.control}
                       name="message"
+                      rules={{required: 'Message is required.'}}
                       render={({field}) => (
                         <FormItem className="flex flex-col gap-2">
                           <FormLabel>Message</FormLabel>
                           <FormControl>
                             <Textarea
                               placeholder="I'd like to get in touch regarding your services..."
+                              required
                               {...field}
                             />
                           </FormControl>
@@ -191,7 +197,7 @@ export default function Contact() {
           <div className="flex flex-col gap-8 order-1 md:max-w-xl h-full backdrop-blur-md bg-[#1a1a1a]/20 p-7 rounded-md">
             <div data-aos="fade-right">
               <h3 className="text-white font-bold text-5xl">
-                Let's Work Together on Your Next{" "}
+                Let&apos;s Work Together on Your Next{" "}
                 <span className="text-primary">Unit Turnover</span>.
               </h3>
             </div>
