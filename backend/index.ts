@@ -17,7 +17,8 @@ const ALLOWED_ORIGINS = [
   'http://127.0.0.1:3000',
   'http://127.0.0.1:3001',
   'http://127.0.0.1:5173',
-  'https://full-turns-llc.vercel.app'
+  'https://full-turns-llc.vercel.app',
+  'https://www.fullturnsllc.com/'
 ];
 
 app.use(cors({
