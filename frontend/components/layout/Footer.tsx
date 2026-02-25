@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {Mail} from 'lucide-react';
 import toolboxman from '@/public/assets/images/contact/toolboxman.png';
 import whatsapplogo from '@/public/assets/images/contact/whatsapp-logo.svg'
+import FullturnLogo from '@/public/assets/images/homepage/logo_for_oranges.png'
 
 export default function Footer() {
   const generalLinks = [
@@ -23,7 +24,7 @@ export default function Footer() {
           <div className="flex flex-col items-center sm:items-start justify-center mb-6 sm:mb-0 text-center sm:text-left">
             <Link href="/" className="mb-4 transition-opacity hover:opacity-80">
               <Image
-                src="/assets/images/homepage/logo_for_orange.png"
+                src={FullturnLogo}
                 alt="Full Turns LLC Logo"
                 width={270}
                 height={50}
