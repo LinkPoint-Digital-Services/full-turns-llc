@@ -226,7 +226,7 @@ export default function Contact() {
             >
               <Mail className="w-5 h-5 text-primary " />
               <span className="font-medium text-primary text-[18px]">
-                david@fullturns.com
+                orders@fullturns.com
               </span>
             </div>
 
